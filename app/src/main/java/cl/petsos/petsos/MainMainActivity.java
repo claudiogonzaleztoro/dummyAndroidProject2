@@ -38,8 +38,12 @@ public class MainMainActivity extends AppCompatActivity
     private User user;
     private TextView btnLogout;
 
-    private HashMap<String,String> genderMap = new HashMap<String,String>();
+    private HashMap<String,String> genderMap;
+    private HashMap<String,List<String>> regionMap = new HashMap<String,List<String>>();
+    private HashMap<String,List<String>> comunaMap = new HashMap<String,List<String>>();
     private Spinner mGenderSpinner;
+    private Spinner mRegionSpinner;
+    private Spinner mComunaSpinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,19 +75,96 @@ public class MainMainActivity extends AppCompatActivity
         if(user.getName() != null && !user.getName().trim().equals("")){
             usernameEditText = (TextView)findViewById(R.id.nameUserEditText);
             usernameEditText.setText(user.getName());
-
-            addItemsOnGenderSpinner();
-
-
         }
-
 
         emailEditText = (TextView)findViewById(R.id.emailUserEditText);
         emailEditText.setText(user.getEmail());
+
+        addItemsOnGenderSpinner();
+        addItemsOnRegionSpinner();
+
         linLay.setVisibility(View.VISIBLE);
 
         //setContentView(linLay);
     }
+
+    private void addItemsOnRegionSpinner() {
+
+        //init populate region comunas
+        List<String> comunas = new ArrayList<String>();
+        comunas.add("Seleccione");
+        regionMap.put("Seleccione",comunas);
+
+        comunas = new ArrayList<String>();
+        comunas.add("Seleccione");
+        comunas.add("Arica");
+        comunas.add("General Lagos");
+
+        regionMap.put("Arica y Parinacota",comunas);
+
+        comunas = new ArrayList<String>();
+        comunas.add("Seleccione");
+        comunas.add("Providencia");
+        comunas.add("Santiago");
+        comunas.add("Las Condes");
+        regionMap.put("Santiago",comunas);
+
+        List<String> regionList = new ArrayList<String>();
+        for(String regionName: regionMap.keySet()){
+            regionList.add(regionName);
+        }
+        //end populate region comunas
+
+        mRegionSpinner = (Spinner) findViewById(R.id.regionList);
+        mRegionSpinner.setOnItemSelectedListener(regionListener);
+        mComunaSpinner = (Spinner) findViewById(R.id.comunaList);
+        mComunaSpinner.setOnItemSelectedListener(comunaListener);
+
+        ArrayAdapter<String> regionAdapter = new ArrayAdapter<String>(MainMainActivity.this,
+                android.R.layout.simple_spinner_item, regionList);
+        regionAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mRegionSpinner.setAdapter(regionAdapter);
+
+        if ( user.getUserComunas().size() > 0 ) {
+          //  int spinnerPosition = dataAdapter.getPosition((String)genderMap.get(user.getGender()));
+          //  mGenderSpinner.setSelection(spinnerPosition);
+        }
+        else{
+            int spinnerPosition = regionAdapter.getPosition("0");
+            mRegionSpinner.setSelection(spinnerPosition);
+        }
+    }
+
+    private AdapterView.OnItemSelectedListener regionListener = new AdapterView.OnItemSelectedListener() {
+        @Override
+        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+            String selectedCountry = (String) adapterView.getItemAtPosition(i);
+            List<String> comunaList = new ArrayList<String>();
+            comunaList = regionMap.get(selectedCountry);
+
+            ArrayAdapter<String> comunasAdapter = new ArrayAdapter<String>(MainMainActivity.this,
+                   android.R.layout.simple_spinner_item, comunaList);
+            comunasAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            mComunaSpinner.setAdapter(comunasAdapter);
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> adapterView) {
+
+        }
+    };
+
+    private AdapterView.OnItemSelectedListener comunaListener = new AdapterView.OnItemSelectedListener() {
+        @Override
+        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> adapterView) {
+
+        }
+    };
 
     private void addItemsOnGenderSpinner() {
         mGenderSpinner = (Spinner)findViewById(R.id.genderList);
@@ -91,23 +172,20 @@ public class MainMainActivity extends AppCompatActivity
         genders.add("Seleccione");
         genders.add("Femenino");
         genders.add("Masculino");
-        //mGenderSpinner.setOnItemSelectedListener(genderListener);
-
-        // getGenderList(user.getGender());
 
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, genders);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mGenderSpinner.setAdapter(dataAdapter);
-       // mGenderSpinner.setOnItemSelectedListener();
-        HashMap genderMap = new HashMap();
+
+        HashMap<String,String> genderMap = new HashMap<String,String>();
         genderMap.put("Selection", genders.get(0));
         genderMap.put("female", genders.get(1));
         genderMap.put("male", genders.get(2));
-        if (!user.getGender().equals(null)) {
 
+        //setting the gender coming from facebook
+        if (!user.getGender().equals(null)) {
             int spinnerPosition = dataAdapter.getPosition((String)genderMap.get(user.getGender()));
-            System.out.println("the position:"+spinnerPosition+"user.getGender():"+user.getGender());
             mGenderSpinner.setSelection(spinnerPosition);
         }
 
@@ -129,32 +207,6 @@ public class MainMainActivity extends AppCompatActivity
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
-    }
-
-    private void getGenderList(String userGender) {
-        /*ArrayAdapter<String> genderAdapter;
-        genderMap.clear();
-
-
-        genderMap.put("none", "Seleccione Genero");
-        genderMap.put("female", "Femenino");
-        genderMap.put("male", "Masculino");
-
-
-        genderAdapter = new ArrayAdapter<String>(MainMainActivity.this,
-                android.R.layout.simple_spinner_item, (List<String>) genderMap.values());
-        genderAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mGenderSpinner.setAdapter(genderAdapter);*/
-
-     //   for(String keygender: genderMap.values()){
-       //     if(keygender.equals(userGender)){
-
-
-
-       // mGenderList = (Spinner) findViewById(R.id.genderList);
-       // mGenderList.setOnItemSelectedListener(genderListener);
-
-
     }
 
     @Override
@@ -219,27 +271,5 @@ public class MainMainActivity extends AppCompatActivity
             }
         });
     }
-
-    private AdapterView.OnItemSelectedListener genderListener = new AdapterView.OnItemSelectedListener(){
-
-        @Override
-        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                String selectedGender = (String)adapterView.getItemAtPosition(i);
-                if(selectedGender.equals("female")){
-                    System.out.println("female");
-                }
-                else if (selectedGender.equals("male")){
-                    System.out.println("male");
-                }
-                else{
-                    System.out.println("No male");
-                }
-        }
-
-        @Override
-        public void onNothingSelected(AdapterView<?> adapterView) {
-
-        }
-    };
 
 }
