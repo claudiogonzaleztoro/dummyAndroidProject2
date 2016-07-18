@@ -7,8 +7,10 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
  import com.facebook.login.LoginManager;
@@ -18,12 +20,13 @@ import android.widget.TextView;
  import java.net.URL;
 
 
- public class LogoutActivity extends Activity {
+ public class LogoutActivity extends AppCompatActivity {
 
  private TextView btnLogout;
  private User user;
  private ImageView profileImage;
  Bitmap bitmap;
+ private TextView usernameTextView;
  @Override
  protected void onCreate(Bundle savedInstanceState) {
 
@@ -31,22 +34,27 @@ import android.widget.TextView;
      setContentView(R.layout.activity_logout);
      user=PrefUtils.getCurrentUser(LogoutActivity.this);
      profileImage= (ImageView) findViewById(R.id.profileImage);
+     RelativeLayout rView = (RelativeLayout)findViewById(R.id.relLayLogout);
 
+     usernameTextView = (TextView)findViewById(R.id.user1);
+     usernameTextView.setText(user.getName());
+
+     setContentView(rView);
  // fetching facebook's profile picture
  new AsyncTask<Void,Void,Void>(){
  @Override
  protected Void doInBackground(Void... params) {
  URL imageURL = null;
+  try {
+      imageURL = new URL("https://graph.facebook.com/" + "415313148637614" + "/picture?type=large");
+  } catch (MalformedURLException e) {
+      e.printStackTrace();
+  }
  try {
- imageURL = new URL("https://graph.facebook.com/" + "415313148637614" + "/picture?type=large");
- } catch (MalformedURLException e) {
- e.printStackTrace();
- }
- try {
- bitmap  = BitmapFactory.decodeStream(imageURL.openConnection().getInputStream());
+      bitmap  = BitmapFactory.decodeStream(imageURL.openConnection().getInputStream());
 
  } catch (IOException e) {
- e.printStackTrace();
+      e.printStackTrace();
  }
  return null;
  }

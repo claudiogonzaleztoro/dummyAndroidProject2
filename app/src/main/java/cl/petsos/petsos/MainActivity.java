@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,6 +19,8 @@ import com.facebook.login.widget.LoginButton;
 
 import org.json.JSONObject;
 
+import cl.petsos.petsos.utils.PetSOSUtility;
+
 public class MainActivity extends AppCompatActivity {
 
     private CallbackManager callbackManager;
@@ -31,12 +32,24 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        if(PrefUtils.getCurrentUser(MainActivity.this) != null){
-            Intent homeIntent = new Intent(MainActivity.this, LogoutActivity.class);
-            startActivity(homeIntent);
+
+        //process Current User to give to him a suitable screen
+        User currentUser = PrefUtils.getCurrentUser(MainActivity.this);
+        if(currentUser != null){
+            //get if this user has completed his details
+            //check if the User Object comes complete or exists in DB
+            boolean registroUsuarioCompleto = PetSOSUtility.getPetSOSUtility().isUserRegisterComplete(currentUser);
+            if(registroUsuarioCompleto){
+                Intent homeIntent = new Intent(MainActivity.this, LogoutActivity.class);
+                startActivity(homeIntent);
+            }else{
+                Intent homeIntent = new Intent(MainActivity.this, MainMainActivity.class);
+                startActivity(homeIntent);
+            }
+
+
             finish();
         }
     }
@@ -82,16 +95,16 @@ public class MainActivity extends AppCompatActivity {
                             Log.e("response: ", response + "");
                             try {
                                 user = new User();
-                                user.facebookID = object.getString("id").toString();
-                                user.email = object.getString("email").toString();
-                                user.name = object.getString("name").toString();
-                                user.gender = object.getString("gender").toString();
+                                user.setFacebookID(object.getString("id").toString());
+                                user.setEmail(object.getString("email").toString());
+                                user.setName(object.getString("name").toString());
+                                user.setGender(object.getString("gender").toString());
                                 PrefUtils.setCurrentUser(user,MainActivity.this);
                             }catch (Exception e){
                                 e.printStackTrace();
                             }
-                            Toast.makeText(MainActivity.this,"welcome "+user.name,Toast.LENGTH_LONG).show();
-                            Intent intent=new Intent(MainActivity.this,LogoutActivity.class);
+                            Toast.makeText(MainActivity.this,"welcome "+user.getName(),Toast.LENGTH_LONG).show();
+                            Intent intent=new Intent(MainActivity.this,MainMainActivity.class);
                             startActivity(intent);
                             finish();
                         }
