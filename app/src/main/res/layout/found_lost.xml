@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="#FFFFFF"
+    android:paddingTop="10dp"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    >
+
+
+    <!--<TextView
+        android:id="@+id/textViewListado"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:text=""
+        android:textColor="#6E6E6E"
+        android:gravity="left"
+        android:textSize="16dp"
+
+        />-->
+
+    <LinearLayout
+        
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="38dp"
+
+        >
+        <TextView
+            android:id="@+id/comunaUserTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Listar"
+            android:layout_marginBottom="10dp"
+            android:textColor="#000000"
+            android:textSize="15sp"
+            android:orientation="horizontal"/>
+        <Spinner
+            style="@style/Base.Widget.AppCompat.Spinner.Underlined"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:spinnerMode="dropdown"
+            android:id="@+id/petTypeSpinner"
+            >
+        </Spinner>
+        <Spinner
+            style="@style/Base.Widget.AppCompat.Spinner.Underlined"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:spinnerMode="dropdown"
+            android:id="@+id/petGenderSpinner"
+            ></Spinner>
+
+
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="38dp"
+        >
+
+        <TextView
+            android:id="@+id/relationshipTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="que poseen "
+            android:layout_marginBottom="10dp"
+            android:textColor="#000000"
+            android:textSize="15sp"
+            android:orientation="horizontal"/>
+
+        <Spinner
+            style="@style/Base.Widget.AppCompat.Spinner.Underlined"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:spinnerMode="dropdown"
+            android:id="@+id/relationshipSpinner"
+            ></Spinner>
+        <TextView
+        android:id="@+id/regionTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="de la región"
+        android:layout_marginBottom="10dp"
+        android:textColor="#000000"
+        android:textSize="15sp"
+        android:orientation="horizontal"/>
+    <Spinner
+        style="@style/Base.Widget.AppCompat.Spinner.Underlined"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:spinnerMode="dropdown"
+        android:id="@+id/regionSpinner"
+        >
+    </Spinner>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="38dp"
+        >
+
+        <TextView
+            android:id="@+id/comunaTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="de la comuna"
+            android:layout_marginBottom="10dp"
+            android:textColor="#000000"
+            android:textSize="15sp"
+            android:orientation="horizontal"/>
+        <Spinner
+            style="@style/Base.Widget.AppCompat.Spinner.Underlined"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:spinnerMode="dropdown"
+            android:id="@+id/comunaSpinner"
+            >
+        </Spinner>
+
+        <TextView
+            android:id="@+id/colorTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="de color"
+            android:layout_marginBottom="10dp"
+            android:textColor="#000000"
+            android:textSize="15sp"
+            android:orientation="horizontal"/>
+        <Spinner
+            style="@style/Base.Widget.AppCompat.Spinner.Underlined"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:spinnerMode="dropdown"
+            android:id="@+id/colorPetSpinner"
+            >
+        </Spinner>
+        <TextView
+            android:id="@+id/sizePetTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="de tamaño"
+            android:layout_marginBottom="10dp"
+            android:textColor="#000000"
+            android:textSize="15sp"
+            android:orientation="horizontal"/>
+        <Spinner
+            style="@style/Base.Widget.AppCompat.Spinner.Underlined"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:spinnerMode="dropdown"
+            android:id="@+id/sizePetSpinner"
+            >
+        </Spinner>
+    </LinearLayout>
+    <LinearLayout
+        
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="38dp"
+        >
+        <TextView
+            android:id="@+id/buildTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="de contextura"
+            android:layout_marginBottom="10dp"
+            android:textColor="#000000"
+            android:textSize="15sp"
+            android:orientation="horizontal"/>
+        <Spinner
+            style="@style/Base.Widget.AppCompat.Spinner.Underlined"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:spinnerMode="dropdown"
+            android:id="@+id/buildPetSpinner"
+            >
+        </Spinner>
+        <TextView
+            android:id="@+id/breedTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="de raza"
+            android:layout_marginBottom="10dp"
+            android:textColor="#000000"
+            android:textSize="15sp"
+            android:orientation="horizontal"/>
+        <Spinner
+            style="@style/Base.Widget.AppCompat.Spinner.Underlined"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:spinnerMode="dropdown"
+            android:id="@+id/breedPetSpinner"
+            >
+        </Spinner>
+    </LinearLayout>
+    <LinearLayout
+
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        >
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            />
+        <android.support.v7.widget.AppCompatButton
+
+        android:id="@+id/btn_filtrar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="24dp"
+        android:padding="12dp"
+        android:textColor="#FFFFFF"
+        android:background="@color/com_facebook_blue"
+        android:text="Filtrar"/>
+    </LinearLayout>
+
+    <!--<LinearLayout
+        
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#ffffff">
+        <Spinner
+            style="@style/Base.Widget.AppCompat.Spinner.Underlined"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:spinnerMode="dropdown"
+            android:id="@+id/petGenderSpinner"
+            >
+        </Spinner>
+    </LinearLayout>-->
+
+    <ListView
+        android:paddingTop="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="6dp"
+        android:id="@+id/listView"
+        android:divider="#00000000"
+        android:dividerHeight="6dp"
+        android:layout_below="@+id/button"
+        android:layout_centerHorizontal="true" />
+
+
+</LinearLayout>

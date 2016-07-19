@@ -234,11 +234,11 @@ public class MainMainActivity extends AppCompatActivity
             findViewById(R.id.profile).setVisibility(View.VISIBLE);
             findViewById(R.id.foundlist).setVisibility(View.GONE);
             // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        } /*else if (id == R.id.nav_gallery) {
             findViewById(R.id.profile).setVisibility(View.GONE);
             findViewById(R.id.foundlist).setVisibility(View.VISIBLE);
 
-        } else if (id == R.id.nav_slideshow) {
+        }*/ else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_manage) {
 
@@ -246,10 +246,16 @@ public class MainMainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_send) {
 
+        }else if (id == R.id.foundLostItem) {
+
+            Intent i = new Intent(MainMainActivity.this,FoundLostActivity.class);
+            startActivity(i);
         }
 
+        /*
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
+        */
         return true;
     }
 

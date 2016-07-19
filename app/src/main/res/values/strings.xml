@@ -4,6 +4,57 @@
     <string name="app_id">1082007991872035</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-
+    <string-array name="pet_type">
+        <item>Perros</item>
+        <item>Gatos</item>
+    </string-array>
+    <string-array name="pet_gender">
+        <item>Machos</item>
+        <item>Hembras</item>
+    </string-array>
+    <string-array name="pet_relationship">
+        <item>Con Dueño</item>
+        <item>Sin Dueño</item>
+    </string-array>
+    <string-array name="region">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>RM</item>
+    </string-array>
+    <string-array name="comuna">
+        <item>San Miguel</item>
+        <item>Ñuñoa</item>
+        <item>Santiago</item>
+    </string-array>
+    <string-array name="pet_color">
+        <item>Blanco</item>
+        <item>Negro</item>
+        <item>Amarillo</item>
+    </string-array>
+    <string-array name="pet_size">
+        <item>Grande</item>
+        <item>Mediano</item>
+        <item>Chico</item>
+    </string-array>
+    <string-array name="pet_build">
+        <item>Grueso</item>
+        <item>Normal</item>
+        <item>Delgado</item>
+    </string-array>
+    <string-array name="pet_breed">
+        <item>Kiltro</item>
+        <item>Raza 1</item>
+        <item>Raza 2</item>
+        <item>Raza 3</item>
+    </string-array>
 
 </resources>

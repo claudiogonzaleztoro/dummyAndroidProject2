@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="#FFFFFF"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/image_dog"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:src="@drawable/dog_icon"
+        />
+    <TextView
+        android:layout_alignParentRight="true"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:paddingLeft="40dp"
+        android:paddingBottom="20dp"
+        android:text="HOLALALALLALA"
+
+        android:id="@+id/textView2"
+        android:textColor="@color/colorPrimary"
+
+         />
+    <View
+        android:layout_below="@+id/textView2"
+        android:layout_marginTop="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:background="#c0c0c0"/>
+
+
+</RelativeLayout>

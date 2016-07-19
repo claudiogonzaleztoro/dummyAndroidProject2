@@ -31,6 +31,7 @@
             android:label="Registro de Usuario" />
         <activity android:name=".LogoutActivity"
             android:label="Logout" />
+        <activity android:name=".FoundLostActivity" />
     </application>
 
 </manifest>

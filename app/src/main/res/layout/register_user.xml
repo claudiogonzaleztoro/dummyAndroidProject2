@@ -4,10 +4,11 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:visibility="gone"
     android:id="@+id/linLayRegUser">
 
     <LinearLayout
+
+        android:layout_marginTop="10dp"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -19,11 +20,12 @@
             android:layout_height="wrap_content"
             android:text="Name"
             android:layout_marginBottom="10dp"
-            android:textStyle="bold"
             android:textColor="#000000"
-            android:textSize="20sp"
+            android:textSize="15sp"
             android:orientation="horizontal"/>
         <EditText
+            android:paddingLeft="10dp"
+            android:textSize="15dp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.8"
@@ -32,6 +34,7 @@
             />
     </LinearLayout>
     <LinearLayout
+        android:layout_marginTop="10dp"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -43,11 +46,12 @@
             android:layout_height="wrap_content"
             android:text="Correo"
             android:layout_marginBottom="10dp"
-            android:textStyle="bold"
             android:textColor="#000000"
-            android:textSize="20sp"
+            android:textSize="15sp"
             android:orientation="horizontal"/>
         <EditText
+            android:paddingLeft="10dp"
+            android:textSize="15dp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.8"
@@ -56,6 +60,7 @@
             />
     </LinearLayout>
     <LinearLayout
+        android:layout_marginTop="10dp"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -67,11 +72,12 @@
             android:layout_height="wrap_content"
             android:text="Clave"
             android:layout_marginBottom="10dp"
-            android:textStyle="bold"
             android:textColor="#000000"
-            android:textSize="20sp"
+            android:textSize="15sp"
             android:orientation="horizontal"/>
         <EditText
+            android:paddingLeft="10dp"
+            android:textSize="15dp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.8"
@@ -81,6 +87,7 @@
             />
     </LinearLayout>
     <LinearLayout
+        android:layout_marginTop="10dp"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -93,11 +100,11 @@
             android:layout_height="wrap_content"
             android:text="Genero"
             android:layout_marginBottom="10dp"
-            android:textStyle="bold"
             android:textColor="#000000"
-            android:textSize="20sp"
+            android:textSize="15sp"
             android:orientation="horizontal"/>
         <Spinner
+            android:paddingLeft="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:spinnerMode="dropdown"
@@ -113,6 +120,7 @@
             />-->
     </LinearLayout>
     <LinearLayout
+        android:layout_marginTop="10dp"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -124,11 +132,11 @@
             android:layout_height="wrap_content"
             android:text="Region"
             android:layout_marginBottom="10dp"
-            android:textStyle="bold"
             android:textColor="#000000"
-            android:textSize="20sp"
+            android:textSize="15sp"
             android:orientation="horizontal"/>
         <Spinner
+            android:paddingLeft="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:spinnerMode="dropdown"
@@ -144,6 +152,7 @@
             />-->
     </LinearLayout>
     <LinearLayout
+        android:layout_marginTop="10dp"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -155,11 +164,11 @@
             android:layout_height="wrap_content"
             android:text="Comuna"
             android:layout_marginBottom="10dp"
-            android:textStyle="bold"
             android:textColor="#000000"
-            android:textSize="20sp"
+            android:textSize="15sp"
             android:orientation="horizontal"/>
         <Spinner
+            android:paddingLeft="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:spinnerMode="dropdown"
@@ -178,19 +187,25 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:background="#ffffff">
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Guardar Cambios"
             android:id="@+id/button_save_user_reg"
+            android:textColor="#FFFFFF"
             android:layout_margin="6dp"
             android:background="#FFFFFF"
-            android:backgroundTint="@color/colorSoftBlue"
+            android:backgroundTint="@color/com_facebook_blue"
             android:layout_alignParentTop="true"
             android:gravity="center_vertical"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            />
         <TextView android:text="Logout from Facebook"
+
             android:layout_marginTop="16dp"
             android:id="@+id/btnLogout"
             android:layout_centerHorizontal="true"
