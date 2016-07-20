@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.login.LoginManager;
 
@@ -84,11 +85,14 @@ public class MainMainActivity extends AppCompatActivity
         @Override
         public void onClick(View view) {
             //check if we have all the information before save
-            validateDataIsCompleted();
-            //TODO save user
-            Button addPetButton = (Button)findViewById(R.id.button_add_pet);
+            if(validateDataIsCompleted()) {
+                //TODO save user
+                Button addPetButton = (Button) findViewById(R.id.button_add_pet);
 
-            addPetButton.setVisibility(View.VISIBLE);
+                addPetButton.setVisibility(View.VISIBLE);
+
+                Toast.makeText(MainMainActivity.this,"Nombre: " + PrefUtils.getCurrentUser(MainMainActivity.this).getName(), Toast.LENGTH_SHORT).show();
+            }
         }
     };
 
@@ -114,10 +118,10 @@ public class MainMainActivity extends AppCompatActivity
 
         if(userName != null && !userName.trim().equals("")
                 && email != null && !email.trim().equals("")
-                && genderMapped != null && !genderMapped.trim().equals("")
+                && genderMapped != null && !genderMapped.trim().equals("") && !genderMapped.trim().equals("Seleccione")
                 && pass != null && !pass.trim().equals("")
-                && userReg != null && !userReg.trim().equals("")
-                && userComuna != null && !userComuna.trim().equals("")){
+                && userReg != null && !userReg.trim().equals("") && !userReg.trim().equals("Seleccione")
+                && userComuna != null && !userComuna.trim().equals("") && !userComuna.trim().equals("Seleccione")){
 
             setDataUser(userName,email, genderMapped, pass, userReg, userComuna );
 
