@@ -7,6 +7,10 @@
             android:icon="@drawable/ic_menu_camera"
             android:title="Profile" />
         <item
+            android:id="@+id/nav_camera2"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="Datos de Usuario" />
+        <item
             android:id="@+id/foundLostItem"
             android:icon="@drawable/ic_menu_gallery"
             android:title="Found or Lost" />

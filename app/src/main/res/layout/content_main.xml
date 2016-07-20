@@ -24,6 +24,16 @@
 
     <RelativeLayout
         android:visibility="gone"
+        android:id="@+id/datos_usuario_lay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+       >
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:visibility="gone"
         android:id="@+id/profile"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -38,7 +48,6 @@
             android:textSize="48sp" />
 
     </RelativeLayout>
-
 
     <RelativeLayout
         android:visibility="gone"

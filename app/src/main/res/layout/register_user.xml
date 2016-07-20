@@ -183,7 +183,7 @@
             android:id="@+id/comunadUserEditText"
             />-->
     </LinearLayout>
-    <RelativeLayout
+    <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -204,6 +204,29 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Agregar Mascota"
+            android:id="@+id/button_add_pet"
+            android:textColor="#FFFFFF"
+            android:layout_margin="6dp"
+            android:background="#FFFFFF"
+            android:backgroundTint="@color/com_facebook_blue"
+            android:layout_alignParentTop="true"
+            android:gravity="center_vertical"
+            android:layout_centerHorizontal="true"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:visibility="gone"
+            />
+        </LinearLayout>
+    <RelativeLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="#ffffff">
         <TextView android:text="Logout from Facebook"
 
             android:layout_marginTop="16dp"

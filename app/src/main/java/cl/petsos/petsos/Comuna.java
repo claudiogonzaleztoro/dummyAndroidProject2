@@ -4,16 +4,16 @@ package cl.petsos.petsos;
  * Created by root on 18-07-16.
  */
 public class Comuna {
-    private int id_comuna;
+    private int idComuna;
     private String comuna;
-    private int id_region;
+    private int idRegion;
 
-    public int getId_comuna() {
-        return id_comuna;
+    public int getIdComuna() {
+        return idComuna;
     }
 
-    public void setId_comuna(int id_comuna) {
-        this.id_comuna = id_comuna;
+    public void setIdComuna(int idComuna) {
+        this.idComuna = idComuna;
     }
 
     public String getComuna() {
@@ -24,11 +24,11 @@ public class Comuna {
         this.comuna = comuna;
     }
 
-    public int getId_region() {
-        return id_region;
+    public int getIdRegion() {
+        return idRegion;
     }
 
-    public void setId_region(int id_region) {
-        this.id_region = id_region;
+    public void setIdRegion(int idRegion) {
+        this.idRegion = idRegion;
     }
 }

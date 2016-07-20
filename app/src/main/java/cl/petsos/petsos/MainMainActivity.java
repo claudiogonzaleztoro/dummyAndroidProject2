@@ -13,6 +13,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -21,7 +23,11 @@ import com.facebook.login.LoginManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+
+import cl.petsos.petsos.utils.PetSOSUtility;
 
 /**
  * Created by root on 13-07-16.
@@ -29,12 +35,13 @@ import java.util.List;
 public class MainMainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private TextView usernameEditText;
-    private TextView emailEditText;
-    private TextView passwordEditText;
+    private EditText usernameEditText;
+    private EditText emailEditText;
+    private EditText passwordEditText;
 
     private User user;
     private TextView btnLogout;
+    private Button saveUserDataButton;
 
     private HashMap<String,String> genderMap;
     private HashMap<String,List<String>> regionMap = new HashMap<String,List<String>>();
@@ -49,7 +56,7 @@ public class MainMainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main_main);
 
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        /*Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -59,13 +66,87 @@ public class MainMainActivity extends AppCompatActivity
         toggle.syncState();
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
+*/
 
 
         //process Current User to give to him a suitable screen
         setUserInformation();
+        addListenerOnButtonSaveUserData();
         logoutManager();
     }
+
+    private void addListenerOnButtonSaveUserData() {
+        saveUserDataButton = (Button) findViewById(R.id.button_save_user_reg);
+        saveUserDataButton.setOnClickListener(saveUserDataButtonListener);
+    }
+
+    private View.OnClickListener saveUserDataButtonListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            //check if we have all the information before save
+            validateDataIsCompleted();
+            //TODO save user
+            Button addPetButton = (Button)findViewById(R.id.button_add_pet);
+
+            addPetButton.setVisibility(View.VISIBLE);
+        }
+    };
+
+    private boolean validateDataIsCompleted(){
+        //name
+        String userName = usernameEditText.getText().toString();
+        //email
+        String email = emailEditText.getText().toString();
+        //password
+        passwordEditText = (EditText)findViewById(R.id.passwordUserEditText); //()passwordEditText
+        String pass = passwordEditText.getText().toString();
+
+        //gender
+        String gender= mGenderSpinner.getSelectedItem().toString();
+        String genderMapped = "";
+        //transform the gender as facebook way (female/male)
+        genderMapped = PetSOSUtility.getPetSOSUtility().getGenderMapper(gender, genderMapped);
+
+        //region
+        String userReg= mRegionSpinner.getSelectedItem().toString();
+        //comuna
+        String userComuna= mComunaSpinner.getSelectedItem().toString();
+
+        if(userName != null && !userName.trim().equals("")
+                && email != null && !email.trim().equals("")
+                && genderMapped != null && !genderMapped.trim().equals("")
+                && pass != null && !pass.trim().equals("")
+                && userReg != null && !userReg.trim().equals("")
+                && userComuna != null && !userComuna.trim().equals("")){
+
+            setDataUser(userName,email, genderMapped, pass, userReg, userComuna );
+
+            return true;
+        }
+        return false;
+    }
+
+    private void setDataUser(String userName, String email, String genderMapped, String pass, String userReg, String userComuna ){
+
+            user=PrefUtils.getCurrentUser(MainMainActivity.this);
+            user.setName(userName);
+            user.setEmail(email);
+            user.setGender(genderMapped);
+            user.setPassword(pass);
+
+            int userRegId = PetSOSUtility.getPetSOSUtility().getIdRegionByRegioName(userReg);
+            int userComunaId = PetSOSUtility.getPetSOSUtility().getIdComunaByComunaName(userComuna);
+            UserComuna mUserComuna = new UserComuna();
+            mUserComuna.setIdComuna(userComunaId);
+            mUserComuna.setIdPerson(1);
+            List<UserComuna> mUserComunas = new ArrayList<UserComuna>();
+            mUserComunas.add(mUserComuna);
+            user.setUserComunas(mUserComunas);
+            user.setId_person(1);
+
+            PrefUtils.setCurrentUser(user,MainMainActivity.this);
+    }
+
 
     private void setUserInformation() {
 
@@ -75,11 +156,11 @@ public class MainMainActivity extends AppCompatActivity
         //set User fields
 
         if(user.getName() != null && !user.getName().trim().equals("")){
-            usernameEditText = (TextView)findViewById(R.id.nameUserEditText);
+            usernameEditText = (EditText) findViewById(R.id.nameUserEditText);
             usernameEditText.setText(user.getName());
         }
 
-        emailEditText = (TextView)findViewById(R.id.emailUserEditText);
+        emailEditText = (EditText)findViewById(R.id.emailUserEditText);
         emailEditText.setText(user.getEmail());
 
         addItemsOnGenderSpinner();
@@ -132,7 +213,7 @@ public class MainMainActivity extends AppCompatActivity
           //  mGenderSpinner.setSelection(spinnerPosition);
         }
         else{
-            int spinnerPosition = regionAdapter.getPosition("0");
+            int spinnerPosition = regionAdapter.getPosition("Seleccione");
             mRegionSpinner.setSelection(spinnerPosition);
         }
     }
@@ -194,6 +275,7 @@ public class MainMainActivity extends AppCompatActivity
     }
 
 
+
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -207,7 +289,7 @@ public class MainMainActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
@@ -234,15 +316,26 @@ public class MainMainActivity extends AppCompatActivity
 
         if (id == R.id.nav_camera) {
             findViewById(R.id.profile).setVisibility(View.VISIBLE);
+            LinearLayout linLay = (LinearLayout)findViewById(R.id.linLayRegUser);
+            linLay.setVisibility(View.GONE);
             findViewById(R.id.foundlist).setVisibility(View.GONE);
             // Handle the camera action
-        } /*else if (id == R.id.nav_gallery) {
+        }
+        if (id == R.id.nav_camera2) {
+            findViewById(R.id.datos_usuario_lay).setVisibility(View.VISIBLE);
+            LinearLayout linLay = (LinearLayout)findViewById(R.id.linLayRegUser);
+            linLay.setVisibility(View.VISIBLE);
+            findViewById(R.id.foundlist).setVisibility(View.GONE);
             findViewById(R.id.profile).setVisibility(View.GONE);
+            // Handle the camera action
+        }/*else if (id == R.id.nav_gallery) {
+            findViewById(R.id.datos_usuario_lay).setVisibility(View.GONE);
             findViewById(R.id.foundlist).setVisibility(View.VISIBLE);
 
         }*/ else if (id == R.id.nav_slideshow) {
 
-        } else if (id == R.id.nav_manage) {
+        }
+        else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.nav_share) {
 
