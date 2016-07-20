@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
             //check if the User Object comes complete or exists in DB
             boolean registroUsuarioCompleto = PetSOSUtility.getPetSOSUtility().isUserRegisterComplete(currentUser);
             if(registroUsuarioCompleto){
-                Intent homeIntent = new Intent(MainActivity.this, LogoutActivity.class);
+                Intent homeIntent = new Intent(MainActivity.this, FoundLostActivity.class);
                 startActivity(homeIntent);
             }else{
                 Intent homeIntent = new Intent(MainActivity.this, MainMainActivity.class);

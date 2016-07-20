@@ -43,6 +43,7 @@ public class MainMainActivity extends AppCompatActivity
     private User user;
     private TextView btnLogout;
     private Button saveUserDataButton;
+    private TextView searchPetsLinkTextView;
 
     private HashMap<String,String> genderMap;
     private HashMap<String,List<String>> regionMap = new HashMap<String,List<String>>();
@@ -73,8 +74,24 @@ public class MainMainActivity extends AppCompatActivity
         //process Current User to give to him a suitable screen
         setUserInformation();
         addListenerOnButtonSaveUserData();
+        addListenerOnSearchPetsLink();
         logoutManager();
     }
+
+    private void addListenerOnSearchPetsLink() {
+        searchPetsLinkTextView = (TextView)findViewById(R.id.searchPetsLink);
+        searchPetsLinkTextView.setOnClickListener(searchPetsLinkListener);
+
+    }
+
+    private View.OnClickListener searchPetsLinkListener = new View.OnClickListener(){
+
+        @Override
+        public void onClick(View view) {
+            Intent homeIntent = new Intent(MainMainActivity.this, FoundLostActivity.class);
+            startActivity(homeIntent);
+        }
+    };
 
     private void addListenerOnButtonSaveUserData() {
         saveUserDataButton = (Button) findViewById(R.id.button_save_user_reg);
