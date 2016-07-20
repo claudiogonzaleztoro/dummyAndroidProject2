@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class FoundLostActivity extends AppCompatActivity {
+public class FoundLostSearchActivity extends AppCompatActivity {
 
 
     private String PET_URL = "http://10.0.2.2:8080/pets/list";
@@ -44,7 +44,92 @@ public class FoundLostActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         System.out.println("onCreate");
-        setContentView(R.layout.found_lost);
+        setContentView(R.layout.found_lost_search);
+
+        /*LLenar petType*/
+        Thread tPetType = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                fillPetTypeSpinner(fetchPetType());
+            }
+        });
+        tPetType.start();
+
+        /*LLenar petGender*/
+        Thread tPetGender = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                fillPetGenderSpinner(fetchPetGender());
+            }
+        });
+        tPetGender.start();
+
+
+        /*LLenar relationship*/
+        Thread tRelationship = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                fillRelationshipSpinner(fetchRelationship());
+            }
+        });
+        tRelationship.start();
+
+
+        /*LLenar region*/
+        Thread tRegion = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                fillRegionSpinner(fetchRegion());
+            }
+        });
+        tRegion.start();
+
+        /*LLenar comuna*/
+        Thread tComuna = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                fillComunaSpinner(fetchComuna());
+            }
+        });
+        tComuna.start();
+
+        /*LLenar color*/
+        Thread tColor = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                fillColorSpinner(fetchColor());
+            }
+        });
+        tColor.start();
+
+        /*LLenar size*/
+        Thread tSize = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                fillSizeSpinner(fetchSize());
+            }
+        });
+        tSize.start();
+
+        /*LLenar contexture*/
+        Thread tContexture = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                fillContextureSpinner(fetchContexture());
+            }
+        });
+        tContexture.start();
+
+        /*LLenar breed*/
+        Thread tBreed = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                fillBreedSpinner(fetchBreed());
+            }
+        });
+        tBreed.start();
+
+        /*Cargar ListView*/
 
         Thread t = new Thread(new Runnable() {
             @Override
@@ -54,45 +139,8 @@ public class FoundLostActivity extends AppCompatActivity {
         });
         t.start();
 
-        //Click event item ListView
-        ListView lv = (ListView)findViewById(R.id.listView);
-        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(FoundLostActivity.this, PetDetailActivity.class);
-                Toast.makeText(FoundLostActivity.this,"position: " + position, Toast.LENGTH_SHORT).show();
-                PetResponse petResponse = (PetResponse)parent.getAdapter().getItem(position);
-                intent.putExtra("name", petResponse.name);
-                intent.putExtra("idColor", petResponse.idColor);
-                intent.putExtra("idSize", petResponse.idSize);
-                intent.putExtra("idBreed", petResponse.idBreed);
-                intent.putExtra("idPetType", petResponse.idPetType);
-                intent.putExtra("idPetGender", petResponse.idPetGender);
-                intent.putExtra("idContexture", petResponse.idContexture);
-                startActivity(intent);
-            }
-        });
-
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        int id = item.getItemId();
-
-        switch (id) {
-            case R.id.searchPetItem:
-                Intent i = new Intent(FoundLostActivity.this,FoundLostSearchActivity.class);
-                startActivity(i);
-                return true;
-            case R.id.profileItem:
-                i = new Intent(FoundLostActivity.this,MainMainActivity.class);
-                startActivity(i);
-                return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -399,17 +447,31 @@ public class FoundLostActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+
+        switch (id) {
+            case R.id.listPetsItem:
+                Intent i = new Intent(FoundLostSearchActivity.this,FoundLostActivity.class);
+                startActivity(i);
+                return true;
+
+            case R.id.profileItem:
+                i = new Intent(FoundLostSearchActivity.this,MainMainActivity.class);
+                startActivity(i);
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
     }
 
     private void backToMainThreadWithResponse(final List<PetResponse> response){
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override
-            public void run() {
-                updateListView(response);
-            }
-        });
 
     }
 
@@ -615,19 +677,9 @@ public class FoundLostActivity extends AppCompatActivity {
                 urlString += current;
             }
 
-
-
-            //return Utils.fromJson(urlString,PetItemResponse[].class);
-
             PetResponse[] petArray = (PetResponse[])Utils.fromJson(urlString,PetResponse[].class);
             List<PetResponse> videoList = Arrays.asList(petArray);
             return videoList;
-
-
-
-//            JSONObject xmlJSONObj = XML.toJSONObject(urlString);
-//            xmlJSONObj = xmlJSONObj.getJSONObject("rss").getJSONObject("channel");
-//            return (PetResponse)Utils.fromJson(xmlJSONObj.toString(),PetResponse.class);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -635,20 +687,5 @@ public class FoundLostActivity extends AppCompatActivity {
         return null;
     }
 
-    private void updateListView(List<PetResponse> response){
-        // draw the items
-        ListView listview = (ListView)findViewById(R.id.listView);
-        MyListViewAdapter adapter = new MyListViewAdapter(this);
 
-        listview.setAdapter(adapter);
-        adapter.setData(response);
-    }
-
-    /*
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.actions, menu);
-        return true;
-    }
-    */
 }

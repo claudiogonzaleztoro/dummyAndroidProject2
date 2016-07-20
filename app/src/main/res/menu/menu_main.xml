@@ -8,9 +8,21 @@
         android:title="Refrescar">
     </item>
     <item
-        android:id="@+id/miProfile"
-        android:icon="@drawable/abc_ic_search_api_mtrl_alpha"
+        android:id="@+id/profileItem"
+        android:icon="@drawable/user_icon_profile"
         app:showAsAction="ifRoom|withText"
         android:title="Profile">
+    </item>
+    <item
+        android:id="@+id/listPetsItem"
+        android:icon="@drawable/list_icon"
+        app:showAsAction="ifRoom|withText"
+        android:title="Lista perdidos">
+    </item>
+    <item
+        android:id="@+id/searchPetItem"
+        android:icon="@drawable/abc_ic_search_api_mtrl_alpha"
+        app:showAsAction="ifRoom|withText"
+        android:title="Busqueda">
     </item>
 </menu>

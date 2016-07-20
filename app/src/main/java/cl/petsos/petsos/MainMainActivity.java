@@ -68,7 +68,8 @@ public class MainMainActivity extends AppCompatActivity
         toggle.syncState();
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-*/
+        */
+
 
 
         //process Current User to give to him a suitable screen
@@ -296,7 +297,6 @@ public class MainMainActivity extends AppCompatActivity
     }
 
 
-
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -316,15 +316,20 @@ public class MainMainActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        // if (id == R.id.action_settings) {
-        //   return true;
-        //}
+        switch (id) {
+            case R.id.listPetsItem:
+                Intent i = new Intent(MainMainActivity.this,FoundLostActivity.class);
+                startActivity(i);
+                return true;
+            case R.id.searchPetItem:
+                i = new Intent(MainMainActivity.this,FoundLostSearchActivity.class);
+                startActivity(i);
+                return true;
+
+        }
 
         return super.onOptionsItemSelected(item);
     }

@@ -29,12 +29,14 @@
             android:label="@string/app_name" />
         <activity android:name=".MainMainActivity"
             android:label="Pets SOS" />
-        <activity android:name=".RegisterUser"
+        <activity android:name=".RegisterUserActivity"
             android:label="Registro de Usuario" />
         <activity android:name=".LogoutActivity"
             android:label="Logout" />
         <activity android:name=".FoundLostActivity"
-            android:label="WAK SOS"/>
+            android:label="Listado perdidos"/>
+        <activity android:name=".FoundLostSearchActivity"
+            android:label="Filtros perdidos"/>
         <activity android:name=".PetDetailActivity" />
     </application>
 
