@@ -1,12 +1,16 @@
 package cl.petsos.petsos;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -25,11 +29,17 @@ public class FoundLostActivity extends AppCompatActivity {
     private String PET_GENDER_URL = "http://10.0.2.2:8080/petGender/list";
     private String RELATIONSHIP_URL = "http://10.0.2.2:8080/relationship/list";
     private String REGION_URL = "http://10.0.2.2:8080/regions/list";
+    private String COMUNA_URL = "http://10.0.2.2:8080/comunas/list";
+    private String COLOR_URL = "http://10.0.2.2:8080/colors/list";
+    private String SIZE_URL = "http://10.0.2.2:8080/sizes/list";
+    private String CONTEXTURE_URL = "http://10.0.2.2:8080/contextures/list";
+    private String BREED_URL = "http://10.0.2.2:8080/breeds/list";
     //private String PET_URL = "http://127.0.0.1:8080/pets/list";
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         System.out.println("onCreate");
         setContentView(R.layout.found_lost);
@@ -63,45 +73,74 @@ public class FoundLostActivity extends AppCompatActivity {
         tRelationship.start();
 
 
+        //LLenar region
+        Thread tRegion = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                fillRegionSpinner(fetchRegion());
+            }
+        });
+        tRegion.start();
+
+        //LLenar comuna
+        Thread tComuna = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                fillComunaSpinner(fetchComuna());
+            }
+        });
+        tComuna.start();
+
+        //LLenar color
+        Thread tColor = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                fillColorSpinner(fetchColor());
+            }
+        });
+        tColor.start();
+
+        //LLenar size
+        Thread tSize = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                fillSizeSpinner(fetchSize());
+            }
+        });
+        tSize.start();
+
+        //LLenar contexture
+        Thread tContexture = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                fillContextureSpinner(fetchContexture());
+            }
+        });
+        tContexture.start();
+
+        //LLenar breed
+        Thread tBreed = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                fillBreedSpinner(fetchBreed());
+            }
+        });
+        tBreed.start();
+
+
 
         /*
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.pet_type, android.R.layout.simple_spinner_item);
-        Spinner petRelationshipSpinner = (Spinner)findViewById(R.id.petRelationshipSpinner);
-        adapter = ArrayAdapter.createFromResource(this, R.array.pet_relationship, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        petRelationshipSpinner.setAdapter(adapter);
-
-        Spinner regionSpinner = (Spinner)findViewById(R.id.regionSpinner);
-        adapter = ArrayAdapter.createFromResource(this, R.array.region, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        regionSpinner.setAdapter(adapter);
-
-        Spinner comunaSpinner = (Spinner)findViewById(R.id.comunaSpinner);
-        adapter = ArrayAdapter.createFromResource(this, R.array.comuna, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        comunaSpinner.setAdapter(adapter);
-
-        Spinner colorPetSpinner = (Spinner)findViewById(R.id.colorPetSpinner);
-        adapter = ArrayAdapter.createFromResource(this, R.array.pet_color, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        colorPetSpinner.setAdapter(adapter);
-
-        Spinner sizePetSpinner = (Spinner)findViewById(R.id.sizePetSpinner);
-        adapter = ArrayAdapter.createFromResource(this, R.array.pet_size, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        sizePetSpinner.setAdapter(adapter);
-
-        Spinner buildPetSpinner = (Spinner)findViewById(R.id.buildPetSpinner);
-        adapter = ArrayAdapter.createFromResource(this, R.array.pet_build, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        buildPetSpinner.setAdapter(adapter);
-
         Spinner breedPetSpinner = (Spinner)findViewById(R.id.breedPetSpinner);
         adapter = ArrayAdapter.createFromResource(this, R.array.pet_breed, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         breedPetSpinner.setAdapter(adapter);
+
         */
+
+        //Cargar ListView
+
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -109,6 +148,26 @@ public class FoundLostActivity extends AppCompatActivity {
             }
         });
         t.start();
+
+
+        //Click event item ListView
+        ListView lv = (ListView)findViewById(R.id.listView);
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(FoundLostActivity.this, PetDetailActivity.class);
+                //Toast.makeText(FoundLostActivity.this,"position: " + position, Toast.LENGTH_SHORT).show();
+                PetResponse petResponse = (PetResponse)parent.getAdapter().getItem(position);
+                intent.putExtra("name", petResponse.name);
+                intent.putExtra("idColor", petResponse.idColor);
+                intent.putExtra("idSize", petResponse.idSize);
+                intent.putExtra("idBreed", petResponse.idBreed);
+                intent.putExtra("idPetType", petResponse.idPetType);
+                intent.putExtra("idPetGender", petResponse.idPetGender);
+                intent.putExtra("idContexture", petResponse.idContexture);
+                startActivity(intent);
+            }
+        });
 
     }
 
@@ -212,6 +271,204 @@ public class FoundLostActivity extends AppCompatActivity {
         return null;
     }
 
+    private RegionResponse[] fetchRegion() {
+
+        try {
+
+            URL url = new URL(REGION_URL);
+            URLConnection urlConnection = url.openConnection();
+            HttpURLConnection connection = null;
+
+            if (urlConnection instanceof HttpURLConnection) {
+                connection = (HttpURLConnection) urlConnection;
+            } else {
+                System.out.println("Please enter an HTTP URL.");
+                return null;
+            }
+            String urlString = "";
+            BufferedReader in = new BufferedReader(
+                    new InputStreamReader(connection.getInputStream()));
+
+            String current;
+            while ((current = in.readLine()) != null) {
+                urlString += current;
+            }
+
+
+            RegionResponse[] regionArray = (RegionResponse[])Utils.fromJson(urlString,RegionResponse[].class);
+            return regionArray;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private ComunaResponse[] fetchComuna() {
+
+        try {
+
+            URL url = new URL(COMUNA_URL);
+            URLConnection urlConnection = url.openConnection();
+            HttpURLConnection connection = null;
+
+            if (urlConnection instanceof HttpURLConnection) {
+                connection = (HttpURLConnection) urlConnection;
+            } else {
+                System.out.println("Please enter an HTTP URL.");
+                return null;
+            }
+            String urlString = "";
+            BufferedReader in = new BufferedReader(
+                    new InputStreamReader(connection.getInputStream()));
+
+            String current;
+            while ((current = in.readLine()) != null) {
+                urlString += current;
+            }
+
+
+            ComunaResponse[] comunaArray = (ComunaResponse[])Utils.fromJson(urlString,ComunaResponse[].class);
+            return comunaArray;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private ColorResponse[] fetchColor() {
+
+        try {
+
+            URL url = new URL(COLOR_URL);
+            URLConnection urlConnection = url.openConnection();
+            HttpURLConnection connection = null;
+
+            if (urlConnection instanceof HttpURLConnection) {
+                connection = (HttpURLConnection) urlConnection;
+            } else {
+                System.out.println("Please enter an HTTP URL.");
+                return null;
+            }
+            String urlString = "";
+            BufferedReader in = new BufferedReader(
+                    new InputStreamReader(connection.getInputStream()));
+
+            String current;
+            while ((current = in.readLine()) != null) {
+                urlString += current;
+            }
+
+
+            ColorResponse[] colorArray = (ColorResponse[])Utils.fromJson(urlString,ColorResponse[].class);
+            return colorArray;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private SizeResponse[] fetchSize() {
+
+        try {
+
+            URL url = new URL(SIZE_URL);
+            URLConnection urlConnection = url.openConnection();
+            HttpURLConnection connection = null;
+
+            if (urlConnection instanceof HttpURLConnection) {
+                connection = (HttpURLConnection) urlConnection;
+            } else {
+                System.out.println("Please enter an HTTP URL.");
+                return null;
+            }
+            String urlString = "";
+            BufferedReader in = new BufferedReader(
+                    new InputStreamReader(connection.getInputStream()));
+
+            String current;
+            while ((current = in.readLine()) != null) {
+                urlString += current;
+            }
+
+
+            SizeResponse[] sizeArray = (SizeResponse[])Utils.fromJson(urlString,SizeResponse[].class);
+            return sizeArray;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private ContextureResponse[] fetchContexture() {
+
+        try {
+
+            URL url = new URL(CONTEXTURE_URL);
+            URLConnection urlConnection = url.openConnection();
+            HttpURLConnection connection = null;
+
+            if (urlConnection instanceof HttpURLConnection) {
+                connection = (HttpURLConnection) urlConnection;
+            } else {
+                System.out.println("Please enter an HTTP URL.");
+                return null;
+            }
+            String urlString = "";
+            BufferedReader in = new BufferedReader(
+                    new InputStreamReader(connection.getInputStream()));
+
+            String current;
+            while ((current = in.readLine()) != null) {
+                urlString += current;
+            }
+
+
+            ContextureResponse[] contextureArray = (ContextureResponse[])Utils.fromJson(urlString,ContextureResponse[].class);
+            return contextureArray;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private BreedResponse[] fetchBreed() {
+
+        try {
+
+            URL url = new URL(BREED_URL);
+            URLConnection urlConnection = url.openConnection();
+            HttpURLConnection connection = null;
+
+            if (urlConnection instanceof HttpURLConnection) {
+                connection = (HttpURLConnection) urlConnection;
+            } else {
+                System.out.println("Please enter an HTTP URL.");
+                return null;
+            }
+            String urlString = "";
+            BufferedReader in = new BufferedReader(
+                    new InputStreamReader(connection.getInputStream()));
+
+            String current;
+            while ((current = in.readLine()) != null) {
+                urlString += current;
+            }
+
+
+            BreedResponse[] breedArray = (BreedResponse[])Utils.fromJson(urlString,BreedResponse[].class);
+            return breedArray;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -247,16 +504,16 @@ public class FoundLostActivity extends AppCompatActivity {
         });
     }
 
-    private void fillPetGenderSpinner(final PetGenderResponse[] petTypeResponse){
+    private void fillPetGenderSpinner(final PetGenderResponse[] petGenderResponse){
 
         final Spinner petGenderSpinner = (Spinner)findViewById(R.id.petGenderSpinner);
-        List<String> petType = new ArrayList<String>();
+        List<String> petGender = new ArrayList<String>();
 
-        for(int i = 0; i < petTypeResponse.length; i++){
-            petType.add(petTypeResponse[i].petGender);
+        for(int i = 0; i < petGenderResponse.length; i++){
+            petGender.add(petGenderResponse[i].petGender);
         }
 
-        final ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, petType);
+        final ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, petGender);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         runOnUiThread(new Runnable() {
@@ -267,22 +524,142 @@ public class FoundLostActivity extends AppCompatActivity {
         });
     }
 
-    private void fillRelationshipSpinner(final RelationshipResponse[] petTypeResponse){
+    private void fillRelationshipSpinner(final RelationshipResponse[] relationshipResponse){
 
         final Spinner relationshipSpinner = (Spinner)findViewById(R.id.relationshipSpinner);
-        List<String> petType = new ArrayList<String>();
+        List<String> relationship = new ArrayList<String>();
 
-        for(int i = 0; i < petTypeResponse.length; i++){
-            petType.add(petTypeResponse[i].relationship);
+        for(int i = 0; i < relationshipResponse.length; i++){
+            relationship.add(relationshipResponse[i].relationship);
         }
 
-        final ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, petType);
+        final ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, relationship);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 relationshipSpinner.setAdapter(dataAdapter);
+            }
+        });
+    }
+
+    private void fillRegionSpinner(final RegionResponse[] regionResponse){
+
+        final Spinner regionSpinner = (Spinner)findViewById(R.id.regionSpinner);
+        List<String> region = new ArrayList<String>();
+
+        for(int i = 0; i < regionResponse.length; i++){
+            region.add(regionResponse[i].region);
+        }
+
+        final ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, region);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                regionSpinner.setAdapter(dataAdapter);
+            }
+        });
+    }
+
+    private void fillComunaSpinner(final ComunaResponse[] comunaResponse){
+
+        final Spinner regionSpinner = (Spinner)findViewById(R.id.comunaSpinner);
+        List<String> comuna = new ArrayList<String>();
+
+        for(int i = 0; i < comunaResponse.length; i++){
+            comuna.add(comunaResponse[i].comuna);
+        }
+
+        final ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, comuna);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                regionSpinner.setAdapter(dataAdapter);
+            }
+        });
+    }
+
+    private void fillColorSpinner(final ColorResponse[] colorResponse){
+
+        final Spinner regionSpinner = (Spinner)findViewById(R.id.colorPetSpinner);
+        List<String> color = new ArrayList<String>();
+
+        for(int i = 0; i < colorResponse.length; i++){
+            color.add(colorResponse[i].color);
+        }
+
+        final ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, color);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                regionSpinner.setAdapter(dataAdapter);
+            }
+        });
+    }
+
+    private void fillSizeSpinner(final SizeResponse[] sizeResponse){
+
+        final Spinner regionSpinner = (Spinner)findViewById(R.id.sizePetSpinner);
+        List<String> size = new ArrayList<String>();
+
+        for(int i = 0; i < sizeResponse.length; i++){
+            size.add(sizeResponse[i].size);
+        }
+
+        final ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, size);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                regionSpinner.setAdapter(dataAdapter);
+            }
+        });
+    }
+
+    private void fillContextureSpinner(final ContextureResponse[] contextureResponse){
+
+        final Spinner regionSpinner = (Spinner)findViewById(R.id.contextureSpinner);
+        List<String> contexture = new ArrayList<String>();
+
+        for(int i = 0; i < contextureResponse.length; i++){
+            contexture.add(contextureResponse[i].contexture);
+        }
+
+        final ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, contexture);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                regionSpinner.setAdapter(dataAdapter);
+            }
+        });
+    }
+
+    private void fillBreedSpinner(final BreedResponse[] breedResponse){
+
+        final Spinner regionSpinner = (Spinner)findViewById(R.id.breedPetSpinner);
+        List<String> breed = new ArrayList<String>();
+
+        for(int i = 0; i < breedResponse.length; i++){
+            breed.add(breedResponse[i].breed);
+        }
+
+        final ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, breed);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                regionSpinner.setAdapter(dataAdapter);
             }
         });
     }

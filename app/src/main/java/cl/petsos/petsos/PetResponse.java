@@ -9,11 +9,15 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PetResponse {
 
-    //public String status;
-    //public List<PetItemResponse> item;
-    //public String[] name;
-    //public List<String> name;
+    public String idPet;
     public String name;
+    public int idColor;
+    public int idSize;
+    public int idBreed;
+    public int idPetType;
+    public int idPetGender;
+    public int idContexture;
+    
     public PetResponse(){
 
     }

@@ -1,0 +1,94 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/relLayLogout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+    <!--<TextView
+        android:id="@+id/user1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        />-->
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/LayLogoutPetDetail"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+
+        android:layout_marginTop="60dp">
+
+        <ImageView
+            android:id="@+id/image_pet_detail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/dog_icon"
+            />
+
+        <TextView
+            android:id="@+id/textViewNamePet"
+            android:layout_centerHorizontal="true"
+            android:padding="16dp"
+            android:background="@color/abc_search_url_text_normal"
+            android:textColor="#fff"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/textViewIdColor"
+            android:layout_centerHorizontal="true"
+            android:padding="16dp"
+            android:background="@color/abc_search_url_text_normal"
+            android:textColor="#fff"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/textViewIdSize"
+            android:layout_centerHorizontal="true"
+            android:padding="16dp"
+            android:background="@color/abc_search_url_text_normal"
+            android:textColor="#fff"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/textViewIdBreed"
+            android:layout_centerHorizontal="true"
+            android:padding="16dp"
+            android:background="@color/abc_search_url_text_normal"
+            android:textColor="#fff"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/textViewIdPetType"
+            android:layout_centerHorizontal="true"
+            android:padding="16dp"
+            android:background="@color/abc_search_url_text_normal"
+            android:textColor="#fff"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/textViewIdPetGender"
+            android:layout_centerHorizontal="true"
+            android:padding="16dp"
+            android:background="@color/abc_search_url_text_normal"
+            android:textColor="#fff"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/textViewIdContexture"
+            android:layout_centerHorizontal="true"
+            android:padding="16dp"
+            android:background="@color/abc_search_url_text_normal"
+            android:textColor="#fff"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+
+</LinearLayout>
