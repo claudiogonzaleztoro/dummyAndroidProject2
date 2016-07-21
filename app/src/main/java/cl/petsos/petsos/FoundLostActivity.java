@@ -150,38 +150,6 @@ public class FoundLostActivity extends AppCompatActivity {
         return null;
     }
 
-    private PetGenderResponse[] fetchPetGender() {
-
-        try {
-
-            URL url = new URL(PET_GENDER_URL);
-            URLConnection urlConnection = url.openConnection();
-            HttpURLConnection connection = null;
-
-            if (urlConnection instanceof HttpURLConnection) {
-                connection = (HttpURLConnection) urlConnection;
-            } else {
-                System.out.println("Please enter an HTTP URL.");
-                return null;
-            }
-            String urlString = "";
-            BufferedReader in = new BufferedReader(
-                    new InputStreamReader(connection.getInputStream()));
-
-            String current;
-            while ((current = in.readLine()) != null) {
-                urlString += current;
-            }
-
-
-            PetGenderResponse[] petGenderArray = (PetGenderResponse[])Utils.fromJson(urlString,PetGenderResponse[].class);
-            return petGenderArray;
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
 
     private RelationshipResponse[] fetchRelationship() {
 

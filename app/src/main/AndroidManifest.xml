@@ -39,6 +39,8 @@
             android:label="Lost search filters"/>
         <activity android:name=".PetDetailActivity"
             android:label="Pet detail"/>
+        <activity android:name=".RegisterPetActivity"
+            android:label="Agregar Mascota"/>
     </application>
 
 </manifest>

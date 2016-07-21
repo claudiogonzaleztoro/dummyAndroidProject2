@@ -5,9 +5,7 @@ import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,9 +22,7 @@ import com.facebook.login.LoginManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import cl.petsos.petsos.utils.PetSOSUtility;
 
@@ -43,6 +39,7 @@ public class MainMainActivity extends AppCompatActivity
     private User user;
     private TextView btnLogout;
     private Button saveUserDataButton;
+    private Button addPetButton;
     private TextView searchPetsLinkTextView;
 
     private HashMap<String,String> genderMap;
@@ -75,9 +72,24 @@ public class MainMainActivity extends AppCompatActivity
         //process Current User to give to him a suitable screen
         setUserInformation();
         addListenerOnButtonSaveUserData();
+        addListenerOnButtonAddPet();
         addListenerOnSearchPetsLink();
         logoutManager();
     }
+
+    private void addListenerOnButtonAddPet() {
+        addPetButton = (Button)findViewById(R.id.button_add_pet);
+        addPetButton.setOnClickListener(addPetButtonListener);
+    }
+
+    private View.OnClickListener addPetButtonListener = new View.OnClickListener(){
+
+        @Override
+        public void onClick(View view) {
+            Intent homeIntent = new Intent(MainMainActivity.this, RegisterPetActivity.class);
+            startActivity(homeIntent);
+        }
+    };
 
     private void addListenerOnSearchPetsLink() {
         searchPetsLinkTextView = (TextView)findViewById(R.id.searchPetsLink);
@@ -106,9 +118,7 @@ public class MainMainActivity extends AppCompatActivity
             if(validateDataIsCompleted()) {
                 //TODO save user
                 Button addPetButton = (Button) findViewById(R.id.button_add_pet);
-
                 addPetButton.setVisibility(View.VISIBLE);
-
                 Toast.makeText(MainMainActivity.this,"Nombre: " + PrefUtils.getCurrentUser(MainMainActivity.this).getName(), Toast.LENGTH_SHORT).show();
             }
         }
@@ -127,7 +137,7 @@ public class MainMainActivity extends AppCompatActivity
         String gender= mGenderSpinner.getSelectedItem().toString();
         String genderMapped = "";
         //transform the gender as facebook way (female/male)
-        genderMapped = PetSOSUtility.getPetSOSUtility().getGenderMapper(gender, genderMapped);
+        genderMapped = PetSOSUtility.getPetSOSUtility().getGenderUserMapper(gender, genderMapped);
 
         //region
         String userReg= mRegionSpinner.getSelectedItem().toString();
@@ -273,20 +283,14 @@ public class MainMainActivity extends AppCompatActivity
 
     private void addItemsOnGenderSpinner() {
         mGenderSpinner = (Spinner)findViewById(R.id.genderList);
-        List<String> genders = new ArrayList<String>();
-        genders.add("Seleccione");
-        genders.add("Femenino");
-        genders.add("Masculino");
+        List<String> genders = PetSOSUtility.getPetSOSUtility().getGendersUser();
 
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, genders);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mGenderSpinner.setAdapter(dataAdapter);
 
-        HashMap<String,String> genderMap = new HashMap<String,String>();
-        genderMap.put("Selection", genders.get(0));
-        genderMap.put("female", genders.get(1));
-        genderMap.put("male", genders.get(2));
+        HashMap<String, String> genderMap = PetSOSUtility.getPetSOSUtility().getGendersUserHashMap(genders);
 
         //setting the gender coming from facebook
         if (!user.getGender().equals(null)) {
@@ -295,7 +299,6 @@ public class MainMainActivity extends AppCompatActivity
         }
 
     }
-
 
     @Override
     public void onBackPressed() {
