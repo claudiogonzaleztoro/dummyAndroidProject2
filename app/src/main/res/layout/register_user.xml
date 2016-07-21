@@ -218,7 +218,7 @@
             android:layout_centerHorizontal="true"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:visibility="gone"
+
             />
         </LinearLayout>
     <LinearLayout
@@ -236,7 +236,7 @@
             android:autoLink="web"/>
 
     </LinearLayout>
-    <!--<RelativeLayout
+    <RelativeLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -256,6 +256,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="40dp"
             android:layout_marginLeft="15dp"/>
-    </RelativeLayout>-->
+    </RelativeLayout>
 
 </LinearLayout>
