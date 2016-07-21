@@ -328,6 +328,16 @@ public class MainMainActivity extends AppCompatActivity
                 i = new Intent(MainMainActivity.this,FoundLostSearchActivity.class);
                 startActivity(i);
                 return true;
+            case R.id.logoutItem:
+                //Toast.makeText(MainMainActivity.this,"logout",Toast.LENGTH_SHORT).show();
+                //i = new Intent(MainMainActivity.this,FoundLostSearchActivity.class);
+                //startActivity(i);
+                PrefUtils.clearCurrentUser(MainMainActivity.this);
+                LoginManager.getInstance().logOut();
+                i= new Intent(MainMainActivity.this,MainActivity.class);
+                startActivity(i);
+                finish();
+                return true;
 
         }
 

@@ -219,7 +219,7 @@
         android:layout_marginBottom="24dp"
         android:padding="12dp"
         android:textColor="#FFFFFF"
-        android:background="@color/com_facebook_blue"
+        android:background="@color/colorPrimary"
         android:text="Filtrar"/>
     </LinearLayout>
 

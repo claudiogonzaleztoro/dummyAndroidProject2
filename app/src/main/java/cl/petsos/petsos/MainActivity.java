@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatButton;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -74,6 +75,17 @@ public class MainActivity extends AppCompatActivity {
                 loginButton.invalidate();
             }
         });
+
+        AppCompatButton appCompatButton = (AppCompatButton)findViewById(R.id.btn_login);
+        appCompatButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this, FoundLostActivity.class);
+                startActivity(i);
+            }
+        });
+
+
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

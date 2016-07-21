@@ -14,7 +14,7 @@ public class PetDetailActivity extends AppCompatActivity {
 protected void onCreate(Bundle savedInstanceState) {
 
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.pet_detail_logout);
+    setContentView(R.layout.pet_detail_layout);
 
     Intent intent = getIntent();
     Bundle bd = intent.getExtras();
@@ -23,7 +23,8 @@ protected void onCreate(Bundle savedInstanceState) {
     {
         String name = (String) bd.get("name");
         TextView textView = (TextView)findViewById(R.id.textViewNamePet);
-        textView.setText("Name:" + name);
+        textView.setText("Name: " + name);
+        //textView.setText(Html.fromHtml("Name   &nbsp;&nbsp;<u><b>perros</b></u>   &nbsp;&nbsp;<u><b>machos</b></u> &nbsp;&nbsp;<u><b>ConDueño</b></u> &nbsp;&nbsp;de <u><b>Ñuñoa</b></u> &nbsp;&nbsp;color &nbsp;&nbsp;<u><b>Blanco</b></u> &nbsp;&nbsp;tamaño &nbsp;&nbsp;<u><b>Chico</b></u> contextura &nbsp;&nbsp;<u><b>media</b></u> &nbsp;&nbsp;raza &nbsp;&nbsp;<u><b>Kiltro</b></u>"));
 
         int idColor =  (int)bd.get("idColor");
         TextView textViewIdColor = (TextView)findViewById(R.id.textViewIdColor);
