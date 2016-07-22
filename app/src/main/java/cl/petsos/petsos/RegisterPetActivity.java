@@ -170,10 +170,10 @@ public class RegisterPetActivity extends AppCompatActivity {
         int idPetColor = PetSOSUtility.getPetSOSUtility().getIdPetColorByPetColorName(pcolor);
         int idPetSize = PetSOSUtility.getPetSOSUtility().getIdPetSizeByPetSizeName(psize);
         int idPetBuild = PetSOSUtility.getPetSOSUtility().getIdPetBuildByPetBuildName(pbuild);
-
+        int idPetStatus = PetSOSUtility.getPetSOSUtility().getIdPetStatusByPetBuildName(pstatus);
 
         System.out.println("idPetGender:"+idPetGender+"- idPetRelationship:"+idPetRelationship+" idPetType:"+idPetType+" idPetBreed:"+idPetBreed+" idPetColor:"+idPetColor+" idPetSize:"+idPetSize);
-        System.out.println("idPetBuild:"+idPetBuild+" ");
+        System.out.println("idPetBuild:"+idPetBuild+" idPetStatus:"+idPetStatus);
         return true;
     }
 
