@@ -143,23 +143,30 @@ public class RegisterPetActivity extends AppCompatActivity {
         petTypeSpinner = (Spinner) findViewById(R.id.petTypeList);
         String ptype = petTypeSpinner.getSelectedItem().toString();
 
-        Toast.makeText(RegisterPetActivity.this,"Nombre: " +pPetName+ " "+pRelationship + " "+ptype, Toast.LENGTH_SHORT).show();
-        /*
-        private Spinner petRelationshipSpinner;
-        private Spinner petTypeSpinner;
-        private Spinner petBreedSpinner;
-        private Spinner petColorSpinner;
-        private Spinner petSizeSpinner;
-        private Spinner petBuildSpinner;
-        private Spinner petStatusSpinner;
-        */
+        petGenderSpinner = (Spinner) findViewById(R.id.petGeneroList);
+        String pgender = petGenderSpinner.getSelectedItem().toString();
 
+        petBreedSpinner = (Spinner) findViewById(R.id.petBreedList);
+        String pbreed = petBreedSpinner.getSelectedItem().toString();
+
+        petColorSpinner = (Spinner) findViewById(R.id.petColorList);
+        String pcolor = petColorSpinner.getSelectedItem().toString();
+
+        petSizeSpinner = (Spinner) findViewById(R.id.petSizeList);
+        String psize = petSizeSpinner.getSelectedItem().toString();
+
+        petBuildSpinner = (Spinner) findViewById(R.id.petBuildList);
+        String pbuild = petBuildSpinner.getSelectedItem().toString();
+
+        petStatusSpinner = (Spinner) findViewById(R.id.petStatusList);
+        String pstatus = petStatusSpinner.getSelectedItem().toString();
 
         //gender
        /* String gender= mGenderSpinner.getSelectedItem().toString();
         String genderMapped = "";
         //transform the gender as facebook way (female/male)
         genderMapped = PetSOSUtility.getPetSOSUtility().getGenderUserMapper(gender, genderMapped);*/
+        Toast.makeText(RegisterPetActivity.this,"Nombre: " +pPetName+ " "+pRelationship + " "+ptype+ " "+psize, Toast.LENGTH_SHORT).show();
         return true;
     }
 

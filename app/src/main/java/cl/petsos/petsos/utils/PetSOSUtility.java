@@ -202,13 +202,14 @@ public class PetSOSUtility {
     @NonNull
     public List<String> getGendersPet() {
         List<String> genders = new ArrayList<String>();
-        PetGenderResponse[] gendersResponse = new PetGenderResponse[]{};//fetchPetGender();
+        PetGenderResponse[] gendersResponse = fetchPetGender();
         genders.add(SELECTION);
-/*
-        for(int i = 1; i <= gendersResponse.length; i++){
-            genders.add(gendersResponse[i-1].petGender);
+
+        if(gendersResponse !=null && gendersResponse.length >0 ) {
+            for (int i = 1; i <= gendersResponse.length; i++) {
+                genders.add(gendersResponse[i - 1].petGender);
+            }
         }
-*/
         return genders;
     }
 
@@ -224,7 +225,6 @@ public class PetSOSUtility {
 
         return genderMap;
     }
-
     public PetGenderResponse[] fetchPetGender() {
 
         try {
@@ -383,13 +383,13 @@ public class PetSOSUtility {
 
     public List<String> getPetBreeds() {
         List<String> breeds = new ArrayList<String>();
-        BreedResponse[] breedResponse  = new BreedResponse[1];//fetchBreed();
+        BreedResponse[] breedResponse  = fetchBreed();
         breeds.add(SELECTION);
-/*
-        for(int i = 1; i <= breedResponse.length; i++){
-            breeds.add(breedResponse[i-1].breed);
+        if(breedResponse !=null && breedResponse.length >0 ) {
+            for (int i = 1; i <= breedResponse.length; i++) {
+                breeds.add(breedResponse[i - 1].breed);
+            }
         }
-*/
         return breeds;
     }
 
@@ -444,13 +444,13 @@ public class PetSOSUtility {
     //color
     public List<String> getPetColors() {
         List<String> colors = new ArrayList<String>();
-        ColorResponse[] colorResponse =  new ColorResponse[1];//fetchColor();
+        ColorResponse[] colorResponse =  fetchColor();
         colors.add(SELECTION);
-/*
-        for(int i = 1; i <= colorResponse.length; i++){
-            colors.add(colorResponse[i-1].color);
+        if(colorResponse !=null && colorResponse.length >0 ) {
+            for (int i = 1; i <= colorResponse.length; i++) {
+                colors.add(colorResponse[i - 1].color);
+            }
         }
-*/
         return colors;
     }
 
@@ -505,13 +505,13 @@ public class PetSOSUtility {
 
     public List<String> getPetSizes() {
         List<String> sizes = new ArrayList<String>();
-        SizeResponse[] sizesResponse = new SizeResponse[1];//fetchSize();
+        SizeResponse[] sizesResponse = fetchSize();
         sizes.add(SELECTION);
-/*
-        for(int i = 1; i <= sizesResponse.length; i++){
-            sizes.add(sizesResponse[i-1].size);
+        if(sizesResponse !=null && sizesResponse.length >0 ) {
+            for (int i = 1; i <= sizesResponse.length; i++) {
+                sizes.add(sizesResponse[i - 1].size);
+            }
         }
-*/
         return sizes;
     }
 
@@ -565,13 +565,13 @@ public class PetSOSUtility {
     //build
     public List<String> getPetBuilds() {
         List<String> builds = new ArrayList<String>();
-        ContextureResponse[] buildsResponse = new ContextureResponse[1];//fetchContexture();
+        ContextureResponse[] buildsResponse = fetchContexture();
         builds.add(SELECTION);
-/*
-        for(int i = 1; i <= buildsResponse.length; i++){
-            builds.add(buildsResponse[i-1].contexture);
+        if(buildsResponse !=null && buildsResponse.length >0 ) {
+            for (int i = 1; i <= buildsResponse.length; i++) {
+                builds.add(buildsResponse[i - 1].contexture);
+            }
         }
-*/
         return builds;
     }
 
