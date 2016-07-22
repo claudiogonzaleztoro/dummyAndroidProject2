@@ -161,18 +161,25 @@ public class RegisterPetActivity extends AppCompatActivity {
         petStatusSpinner = (Spinner) findViewById(R.id.petStatusList);
         String pstatus = petStatusSpinner.getSelectedItem().toString();
 
-        //gender
-       /* String gender= mGenderSpinner.getSelectedItem().toString();
-        String genderMapped = "";
-        //transform the gender as facebook way (female/male)
-        genderMapped = PetSOSUtility.getPetSOSUtility().getGenderUserMapper(gender, genderMapped);*/
         Toast.makeText(RegisterPetActivity.this,"Nombre: " +pPetName+ " "+pRelationship + " "+ptype+ " "+psize, Toast.LENGTH_SHORT).show();
+
+        int idPetGender = PetSOSUtility.getPetSOSUtility().getIdPetGenderByPetGenderName(pgender);
+        int idPetRelationship = PetSOSUtility.getPetSOSUtility().getIdPetRelationshipByPetRelationshipName(pRelationship);
+        int idPetType = PetSOSUtility.getPetSOSUtility().getIdPetTypeByPetTypeName(ptype);
+        int idPetBreed = PetSOSUtility.getPetSOSUtility().getIdPetBreedByPetBreedName(pbreed);
+        int idPetColor = PetSOSUtility.getPetSOSUtility().getIdPetColorByPetColorName(pcolor);
+        int idPetSize = PetSOSUtility.getPetSOSUtility().getIdPetSizeByPetSizeName(psize);
+        int idPetBuild = PetSOSUtility.getPetSOSUtility().getIdPetBuildByPetBuildName(pbuild);
+
+
+        System.out.println("idPetGender:"+idPetGender+"- idPetRelationship:"+idPetRelationship+" idPetType:"+idPetType+" idPetBreed:"+idPetBreed+" idPetColor:"+idPetColor+" idPetSize:"+idPetSize);
+        System.out.println("idPetBuild:"+idPetBuild+" ");
         return true;
     }
 
     private void addItemsOnPetStatusSpinner() {
         petStatusSpinner = (Spinner) findViewById(R.id.petStatusList);
-        String[] petStatus = PetSOSUtility.getPetSOSUtility().getPetStatus();
+        List<String> petStatus = PetSOSUtility.getPetSOSUtility().getPetStatus();
 
         final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, petStatus);

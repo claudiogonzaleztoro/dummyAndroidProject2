@@ -22,6 +22,7 @@ import cl.petsos.petsos.PetTypeResponse;
 import cl.petsos.petsos.Region;
 import cl.petsos.petsos.RelationshipResponse;
 import cl.petsos.petsos.SizeResponse;
+import cl.petsos.petsos.StatusPetResponse;
 import cl.petsos.petsos.User;
 import cl.petsos.petsos.Utils;
 
@@ -40,9 +41,18 @@ public class PetSOSUtility {
     private String COLOR_URL = SERVER_URL + "/colors/list";
     private String SIZE_URL = SERVER_URL + "/sizes/list";
     private String CONTEXTURE_URL = SERVER_URL + "/contextures/list";
+    private String STATUS_URL = SERVER_URL + "/states/list";
 
     public static final String SELECTION = "Seleccione"; //TODO get this dynamically at the beggining
 
+    PetGenderResponse[] gendersResponse;
+    BreedResponse[] breedResponse;
+    RelationshipResponse[] relationResponse;
+    PetTypeResponse[] typeResponse;
+    ColorResponse[] colorResponse;
+    SizeResponse[] sizesResponse;
+    ContextureResponse[] buildsResponse;
+    StatusPetResponse[] statusResponse;
 
     public  static PetSOSUtility getPetSOSUtility() {
         if (petUtility==null) {
@@ -202,7 +212,7 @@ public class PetSOSUtility {
     @NonNull
     public List<String> getGendersPet() {
         List<String> genders = new ArrayList<String>();
-        PetGenderResponse[] gendersResponse = fetchPetGender();
+        gendersResponse = fetchPetGender();
         genders.add(SELECTION);
 
         if(gendersResponse !=null && gendersResponse.length >0 ) {
@@ -213,16 +223,35 @@ public class PetSOSUtility {
         return genders;
     }
 
-    @NonNull
-    public HashMap<String, String> getGendersPetHashMap(List<String> genders) {
-        HashMap<String,String> genderMap = new HashMap<String,String>();
-        PetGenderResponse[] gendersResponse = fetchPetGender();
+    public int getIdPetGenderByPetGenderName(String name){
+        int id = 0;
 
-        genderMap.put("0",SELECTION);
-        for(int i = 1; i <= gendersResponse.length; i++){
-            genderMap.put(gendersResponse[i-1].idPetGender,gendersResponse[i-1].petGender);
+        HashMap<Integer, String> gendersPet = getGendersPetHashMap();
+
+        Iterator it = gendersPet.entrySet().iterator();
+
+        while(it.hasNext()){
+            Map.Entry e = (Map.Entry)it.next();
+            String pname = (String) e.getValue();
+            if(name.equals(pname)){
+                id = ((Integer)e.getKey()).intValue();
+                break;
+            }
         }
+        return id;
+    }
 
+    @NonNull
+    public HashMap<Integer, String> getGendersPetHashMap() {
+        HashMap<Integer,String> genderMap = new HashMap<Integer,String>();
+        //gendersResponse = fetchPetGender();
+
+        genderMap.put(0,SELECTION);
+        if(gendersResponse !=null && gendersResponse.length >0 ) {
+            for (int i = 1; i <= gendersResponse.length; i++) {
+                genderMap.put(gendersResponse[i - 1].idPetGender, gendersResponse[i - 1].petGender);
+            }
+        }
         return genderMap;
     }
     public PetGenderResponse[] fetchPetGender() {
@@ -262,27 +291,47 @@ public class PetSOSUtility {
     @NonNull
     public List<String> getRelationshipPet() {
         List<String> relationships = new ArrayList<String>();
-        RelationshipResponse[] relationshipResponse = fetchRelationship();
+        relationResponse = fetchRelationship();
         relationships.add(SELECTION);
 
-        if(relationshipResponse !=null && relationshipResponse.length >0 ) {
-            for (int i = 1; i <= relationshipResponse.length; i++) {
-                relationships.add(relationshipResponse[i - 1].relationship);
+        if(relationResponse !=null && relationResponse.length >0 ) {
+            for (int i = 1; i <= relationResponse.length; i++) {
+                relationships.add(relationResponse[i - 1].relationship);
             }
         }
         return relationships;
     }
 
-    @NonNull
-    public HashMap<String, String> getRelationshipPetHashMap(List<String> relationships) {
-        HashMap<String,String> relationMap = new HashMap<String,String>();
-        RelationshipResponse[] relationResponse = fetchRelationship();
+    public int getIdPetRelationshipByPetRelationshipName(String name){
+        int id = 0;
 
-        relationMap.put("0",SELECTION);
-        for(int i = 1; i <= relationResponse.length; i++){
-            relationMap.put(relationResponse[i-1].idRelationship,relationResponse[i-1].relationship);
+        HashMap<Integer, String> relPet = getRelationshipPetHashMap();
+
+        Iterator it = relPet.entrySet().iterator();
+
+        while(it.hasNext()){
+            Map.Entry e = (Map.Entry)it.next();
+            String pname = (String) e.getValue();
+            if(name.equals(pname)){
+                id = ((Integer)e.getKey()).intValue();
+                break;
+            }
         }
+        return id;
+    }
 
+
+    @NonNull
+    public HashMap<Integer, String> getRelationshipPetHashMap() {
+        HashMap<Integer,String> relationMap = new HashMap<Integer,String>();
+        //RelationshipResponse[] relationResponse = fetchRelationship();
+
+        relationMap.put(0,SELECTION);
+        if(relationResponse !=null && relationResponse.length >0 ) {
+            for (int i = 1; i <= relationResponse.length; i++) {
+                relationMap.put(relationResponse[i - 1].idRelationship, relationResponse[i - 1].relationship);
+            }
+        }
         return relationMap;
     }
 
@@ -321,7 +370,7 @@ public class PetSOSUtility {
     //init pet type
     public List<String> getPetTypes() {
         List<String> types = new ArrayList<String>();
-        PetTypeResponse[] typeResponse = fetchPetType();
+        typeResponse = fetchPetType();
         types.add(SELECTION);
 
         if(typeResponse !=null && typeResponse.length >0 ) {
@@ -332,16 +381,35 @@ public class PetSOSUtility {
         return types;
     }
 
-    @NonNull
-    public HashMap<String, String> getPetTypesHashMap(List<String> relationships) {
-        HashMap<String,String> typeMap = new HashMap<String,String>();
-        PetTypeResponse[] typeResponse = fetchPetType();
+    public int getIdPetTypeByPetTypeName(String name){
+        int id = 0;
 
-        typeMap.put("0",SELECTION);
-        for(int i = 1; i <= typeResponse.length; i++){
-            typeMap.put(typeResponse[i-1].idPetType,typeResponse[i-1].petType);
+        HashMap<Integer, String> relPet = getPetTypesHashMap();
+
+        Iterator it = relPet.entrySet().iterator();
+
+        while(it.hasNext()){
+            Map.Entry e = (Map.Entry)it.next();
+            String pname = (String) e.getValue();
+            if(name.equals(pname)){
+                id = ((Integer)e.getKey()).intValue();
+                break;
+            }
         }
+        return id;
+    }
 
+    @NonNull
+    public HashMap<Integer, String> getPetTypesHashMap() {
+        HashMap<Integer,String> typeMap = new HashMap<Integer,String>();
+        //PetTypeResponse[] typeResponse = fetchPetType();
+
+        typeMap.put(0,SELECTION);
+        if(typeResponse !=null && typeResponse.length >0 ) {
+            for (int i = 1; i <= typeResponse.length; i++) {
+                typeMap.put(typeResponse[i - 1].idPetType, typeResponse[i - 1].petType);
+            }
+        }
         return typeMap;
     }
 
@@ -383,7 +451,7 @@ public class PetSOSUtility {
 
     public List<String> getPetBreeds() {
         List<String> breeds = new ArrayList<String>();
-        BreedResponse[] breedResponse  = fetchBreed();
+        breedResponse  = fetchBreed();
         breeds.add(SELECTION);
         if(breedResponse !=null && breedResponse.length >0 ) {
             for (int i = 1; i <= breedResponse.length; i++) {
@@ -393,16 +461,35 @@ public class PetSOSUtility {
         return breeds;
     }
 
-    @NonNull
-    public HashMap<String, String> getPetBreedsHashMap(List<String> breeds) {
-        HashMap<String,String> breedMap = new HashMap<String,String>();
-        BreedResponse[] breedResponse = fetchBreed();
+    public int getIdPetBreedByPetBreedName(String name){
+        int id = 0;
 
-        breedMap.put("0",SELECTION);
-        for(int i = 1; i <= breedResponse.length; i++){
-            breedMap.put(breedResponse[i-1].idBreed,breedResponse[i-1].breed);
+        HashMap<Integer, String> relPet = getPetBreedsHashMap();
+
+        Iterator it = relPet.entrySet().iterator();
+
+        while(it.hasNext()){
+            Map.Entry e = (Map.Entry)it.next();
+            String pname = (String) e.getValue();
+            if(name.equals(pname)){
+                id = ((Integer)e.getKey()).intValue();
+                break;
+            }
         }
+        return id;
+    }
 
+    @NonNull
+    public HashMap<Integer, String> getPetBreedsHashMap() {
+        HashMap<Integer,String> breedMap = new HashMap<Integer,String>();
+        //BreedResponse[] breedResponse = fetchBreed();
+
+        breedMap.put(0,SELECTION);
+        if(breedResponse !=null && breedResponse.length >0 ) {
+            for (int i = 1; i <= breedResponse.length; i++) {
+                breedMap.put(breedResponse[i - 1].idBreed, breedResponse[i - 1].breed);
+            }
+        }
         return breedMap;
     }
 
@@ -444,7 +531,7 @@ public class PetSOSUtility {
     //color
     public List<String> getPetColors() {
         List<String> colors = new ArrayList<String>();
-        ColorResponse[] colorResponse =  fetchColor();
+        colorResponse =  fetchColor();
         colors.add(SELECTION);
         if(colorResponse !=null && colorResponse.length >0 ) {
             for (int i = 1; i <= colorResponse.length; i++) {
@@ -454,16 +541,35 @@ public class PetSOSUtility {
         return colors;
     }
 
-    @NonNull
-    public HashMap<String, String> getPetColorsHashMap(List<String> colors) {
-        HashMap<String,String> colorMap = new HashMap<String,String>();
-        ColorResponse[] colorResponse = fetchColor();
+    public int getIdPetColorByPetColorName(String name){
+        int id = 0;
 
-        colorMap.put("0",SELECTION);
-        for(int i = 1; i <= colorResponse.length; i++){
-            colorMap.put(colorResponse[i-1].idColor,colorResponse[i-1].color);
+        HashMap<Integer, String> relPet = getPetColorsHashMap();
+
+        Iterator it = relPet.entrySet().iterator();
+
+        while(it.hasNext()){
+            Map.Entry e = (Map.Entry)it.next();
+            String pname = (String) e.getValue();
+            if(name.equals(pname)){
+                id = ((Integer)e.getKey()).intValue();
+                break;
+            }
         }
+        return id;
+    }
 
+    @NonNull
+    public HashMap<Integer, String> getPetColorsHashMap() {
+        HashMap<Integer,String> colorMap = new HashMap<Integer,String>();
+        //ColorResponse[] colorResponse = fetchColor();
+
+        colorMap.put(0,SELECTION);
+        if(colorResponse !=null && colorResponse.length >0 ) {
+            for (int i = 1; i <= colorResponse.length; i++) {
+                colorMap.put(colorResponse[i - 1].idColor, colorResponse[i - 1].color);
+            }
+        }
         return colorMap;
     }
 
@@ -505,7 +611,7 @@ public class PetSOSUtility {
 
     public List<String> getPetSizes() {
         List<String> sizes = new ArrayList<String>();
-        SizeResponse[] sizesResponse = fetchSize();
+        sizesResponse = fetchSize();
         sizes.add(SELECTION);
         if(sizesResponse !=null && sizesResponse.length >0 ) {
             for (int i = 1; i <= sizesResponse.length; i++) {
@@ -515,16 +621,35 @@ public class PetSOSUtility {
         return sizes;
     }
 
-    @NonNull
-    public HashMap<String, String> getPetSizesHashMap(List<String> colors) {
-        HashMap<String,String> sizesMap = new HashMap<String,String>();
-        SizeResponse[] sizesResponse = fetchSize();
+    public int getIdPetSizeByPetSizeName(String name){
+        int id = 0;
 
-        sizesMap.put("0",SELECTION);
-        for(int i = 1; i <= sizesResponse.length; i++){
-            sizesMap.put(sizesResponse[i-1].idSize,sizesResponse[i-1].size);
+        HashMap<Integer, String> relPet = getPetSizesHashMap();
+
+        Iterator it = relPet.entrySet().iterator();
+
+        while(it.hasNext()){
+            Map.Entry e = (Map.Entry)it.next();
+            String pname = (String) e.getValue();
+            if(name.equals(pname)){
+                id = ((Integer)e.getKey()).intValue();
+                break;
+            }
         }
+        return id;
+    }
 
+    @NonNull
+    public HashMap<Integer, String> getPetSizesHashMap() {
+        HashMap<Integer,String> sizesMap = new HashMap<Integer,String>();
+        //SizeResponse[] sizesResponse = fetchSize();
+
+        sizesMap.put(0,SELECTION);
+        if(sizesResponse !=null && sizesResponse.length >0 ) {
+            for (int i = 1; i <= sizesResponse.length; i++) {
+                sizesMap.put(sizesResponse[i - 1].idSize, sizesResponse[i - 1].size);
+            }
+        }
         return sizesMap;
     }
 
@@ -565,7 +690,7 @@ public class PetSOSUtility {
     //build
     public List<String> getPetBuilds() {
         List<String> builds = new ArrayList<String>();
-        ContextureResponse[] buildsResponse = fetchContexture();
+        buildsResponse = fetchContexture();
         builds.add(SELECTION);
         if(buildsResponse !=null && buildsResponse.length >0 ) {
             for (int i = 1; i <= buildsResponse.length; i++) {
@@ -575,16 +700,35 @@ public class PetSOSUtility {
         return builds;
     }
 
-    @NonNull
-    public HashMap<String, String> getPetBuildsHashMap(List<String> colors) {
-        HashMap<String,String> buildsMap = new HashMap<String,String>();
-        ContextureResponse[] buildsResponse = fetchContexture();
+    public int getIdPetBuildByPetBuildName(String name){
+        int id = 0;
 
-        buildsMap.put("0",SELECTION);
-        for(int i = 1; i <= buildsResponse.length; i++){
-            buildsMap.put(buildsResponse[i-1].idContexture,buildsResponse[i-1].contexture);
+        HashMap<Integer, String> relPet = getPetBuildsHashMap();
+
+        Iterator it = relPet.entrySet().iterator();
+
+        while(it.hasNext()){
+            Map.Entry e = (Map.Entry)it.next();
+            String pname = (String) e.getValue();
+            if(name.equals(pname)){
+                id = ((Integer)e.getKey()).intValue();
+                break;
+            }
         }
+        return id;
+    }
 
+    @NonNull
+    public HashMap<Integer, String> getPetBuildsHashMap() {
+        HashMap<Integer,String> buildsMap = new HashMap<Integer,String>();
+        //ContextureResponse[] buildsResponse = fetchContexture();
+
+        buildsMap.put(0,SELECTION);
+        if(buildsResponse !=null && buildsResponse.length >0 ) {
+            for (int i = 1; i <= buildsResponse.length; i++) {
+                buildsMap.put(buildsResponse[i - 1].idContexture, buildsResponse[i - 1].contexture);
+            }
+        }
         return buildsMap;
     }
 
@@ -623,12 +767,56 @@ public class PetSOSUtility {
     }
 
     //status
-    public String[] getPetStatus() {
-             String[] status= {"Seleccione"};
-        /*
+
+    public List<String> getPetStatus() {
+        List<String> status = new ArrayList<String>();
+        statusResponse = fetchPetStatus();
+        status.add(SELECTION);
+        if(statusResponse !=null && statusResponse.length >0 ) {
+            for (int i = 1; i <= statusResponse.length; i++) {
+                status.add(statusResponse[i - 1].petState);
+            }
+        }
+        return status;
+    }
+
+    public int getIdPetStatusByPetBuildName(String name){
+        int id = 0;
+
+        HashMap<Integer, String> relPet = getPetStatusHashMap();
+
+        Iterator it = relPet.entrySet().iterator();
+
+        while(it.hasNext()){
+            Map.Entry e = (Map.Entry)it.next();
+            String pname = (String) e.getValue();
+            if(name.equals(pname)){
+                id = ((Integer)e.getKey()).intValue();
+                break;
+            }
+        }
+        return id;
+    }
+
+    @NonNull
+    public HashMap<Integer, String> getPetStatusHashMap() {
+        HashMap<Integer,String> statusMap = new HashMap<Integer,String>();
+        //ContextureResponse[] buildsResponse = fetchContexture();
+
+        statusMap.put(0,SELECTION);
+        if(statusResponse !=null && statusResponse.length >0 ) {
+            for (int i = 1; i <= statusResponse.length; i++) {
+                statusMap.put(statusResponse[i - 1].idState, statusResponse[i - 1].petState);
+            }
+        }
+        return statusMap;
+    }
+
+    public StatusPetResponse[] fetchPetStatus() {
+
         try {
 
-            URL url = new URL(CONTEXTURE_URL);
+            URL url = new URL(STATUS_URL);
             URLConnection urlConnection = url.openConnection();
             HttpURLConnection connection = null;
 
@@ -648,15 +836,15 @@ public class PetSOSUtility {
             }
 
 
-            ContextureResponse[] contextureArray = (ContextureResponse[])Utils.fromJson(urlString,ContextureResponse[].class);
-            return contextureArray;
+            StatusPetResponse[] statusArray = (StatusPetResponse[])Utils.fromJson(urlString,StatusPetResponse[].class);
+            return statusArray;
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;*/
+        return null;
 
-            return status;
+
     }
 
 }
