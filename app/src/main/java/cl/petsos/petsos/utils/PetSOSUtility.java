@@ -244,7 +244,6 @@ public class PetSOSUtility {
     @NonNull
     public HashMap<Integer, String> getGendersPetHashMap() {
         HashMap<Integer,String> genderMap = new HashMap<Integer,String>();
-        //gendersResponse = fetchPetGender();
 
         genderMap.put(0,SELECTION);
         if(gendersResponse !=null && gendersResponse.length >0 ) {
@@ -276,7 +275,6 @@ public class PetSOSUtility {
             while ((current = in.readLine()) != null) {
                 urlString += current;
             }
-
 
             PetGenderResponse[] petGenderArray = (PetGenderResponse[]) Utils.fromJson(urlString,PetGenderResponse[].class);
             return petGenderArray;
@@ -324,7 +322,6 @@ public class PetSOSUtility {
     @NonNull
     public HashMap<Integer, String> getRelationshipPetHashMap() {
         HashMap<Integer,String> relationMap = new HashMap<Integer,String>();
-        //RelationshipResponse[] relationResponse = fetchRelationship();
 
         relationMap.put(0,SELECTION);
         if(relationResponse !=null && relationResponse.length >0 ) {
@@ -402,7 +399,6 @@ public class PetSOSUtility {
     @NonNull
     public HashMap<Integer, String> getPetTypesHashMap() {
         HashMap<Integer,String> typeMap = new HashMap<Integer,String>();
-        //PetTypeResponse[] typeResponse = fetchPetType();
 
         typeMap.put(0,SELECTION);
         if(typeResponse !=null && typeResponse.length >0 ) {
@@ -482,7 +478,6 @@ public class PetSOSUtility {
     @NonNull
     public HashMap<Integer, String> getPetBreedsHashMap() {
         HashMap<Integer,String> breedMap = new HashMap<Integer,String>();
-        //BreedResponse[] breedResponse = fetchBreed();
 
         breedMap.put(0,SELECTION);
         if(breedResponse !=null && breedResponse.length >0 ) {
@@ -496,7 +491,6 @@ public class PetSOSUtility {
 
 
     private BreedResponse[] fetchBreed() {
-
         try {
 
             URL url = new URL(BREED_URL);
@@ -562,7 +556,6 @@ public class PetSOSUtility {
     @NonNull
     public HashMap<Integer, String> getPetColorsHashMap() {
         HashMap<Integer,String> colorMap = new HashMap<Integer,String>();
-        //ColorResponse[] colorResponse = fetchColor();
 
         colorMap.put(0,SELECTION);
         if(colorResponse !=null && colorResponse.length >0 ) {
@@ -575,7 +568,6 @@ public class PetSOSUtility {
 
 
     private ColorResponse[] fetchColor() {
-
         try {
 
             URL url = new URL(COLOR_URL);
@@ -642,7 +634,6 @@ public class PetSOSUtility {
     @NonNull
     public HashMap<Integer, String> getPetSizesHashMap() {
         HashMap<Integer,String> sizesMap = new HashMap<Integer,String>();
-        //SizeResponse[] sizesResponse = fetchSize();
 
         sizesMap.put(0,SELECTION);
         if(sizesResponse !=null && sizesResponse.length >0 ) {
@@ -721,7 +712,6 @@ public class PetSOSUtility {
     @NonNull
     public HashMap<Integer, String> getPetBuildsHashMap() {
         HashMap<Integer,String> buildsMap = new HashMap<Integer,String>();
-        //ContextureResponse[] buildsResponse = fetchContexture();
 
         buildsMap.put(0,SELECTION);
         if(buildsResponse !=null && buildsResponse.length >0 ) {
@@ -801,7 +791,6 @@ public class PetSOSUtility {
     @NonNull
     public HashMap<Integer, String> getPetStatusHashMap() {
         HashMap<Integer,String> statusMap = new HashMap<Integer,String>();
-        //ContextureResponse[] buildsResponse = fetchContexture();
 
         statusMap.put(0,SELECTION);
         if(statusResponse !=null && statusResponse.length >0 ) {
