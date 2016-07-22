@@ -25,19 +25,19 @@ import java.util.List;
 
 public class FoundLostSearchActivity extends AppCompatActivity {
 
+    private String SERVER_URL = "http://172.17.100.170";
+    private String PORT_URL   = "8080";
 
-    private String PET_URL = "http://10.0.2.2:8080/pets/list";
-    private String PET_TYPE_URL = "http://10.0.2.2:8080/petType/list";
-    private String PET_GENDER_URL = "http://10.0.2.2:8080/petGender/list";
-    private String RELATIONSHIP_URL = "http://10.0.2.2:8080/relationship/list";
-    private String REGION_URL = "http://10.0.2.2:8080/regions/list";
-    private String COMUNA_URL = "http://10.0.2.2:8080/comunas/list";
-    private String COLOR_URL = "http://10.0.2.2:8080/colors/list";
-    private String SIZE_URL = "http://10.0.2.2:8080/sizes/list";
-    private String CONTEXTURE_URL = "http://10.0.2.2:8080/contextures/list";
-    private String BREED_URL = "http://10.0.2.2:8080/breeds/list";
-    //private String PET_URL = "http://127.0.0.1:8080/pets/list";
-
+    private String PET_URL = SERVER_URL + ":" + PORT_URL + "/pets/list";
+    private String PET_TYPE_URL = SERVER_URL + ":" + PORT_URL + "/petType/list";
+    private String PET_GENDER_URL = SERVER_URL + ":" + PORT_URL + "/petGender/list";
+    private String RELATIONSHIP_URL = SERVER_URL + ":" + PORT_URL + "/relationship/list";
+    private String REGION_URL = SERVER_URL + ":" + PORT_URL + "/regions/list";
+    private String COMUNA_URL = SERVER_URL + ":" + PORT_URL + "/comunas/list";
+    private String COLOR_URL = SERVER_URL + ":" + PORT_URL + "/colors/list";
+    private String SIZE_URL = SERVER_URL + ":" + PORT_URL + "/sizes/list";
+    private String CONTEXTURE_URL = SERVER_URL + ":" + PORT_URL + "/contextures/list";
+    private String BREED_URL = SERVER_URL + ":" + PORT_URL + "/breeds/list";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

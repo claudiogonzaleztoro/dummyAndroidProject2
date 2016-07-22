@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">Pet Sos</string>
+    <string name="login_button_text_fc">Iniciar sesión con Facebook</string>
+    <string name="app_id">1082007991872035</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="pet_lost_list">Mascotas perdidas</string>
+    <string name="hint_text_input_email">Correo</string>
+    <string name="hint_text_input_password">Contraseña</string>
+    <string name="login_button_text">Iniciar sesión</string>
+    <string name="menu_profile">Preferencias</string>
+    <string name="menu_pet_lost_list">Lista de perdidos</string>
+    <string name="menu_lost_search_filters">Filtros de búsqueda</string>
+    <string name="menu_scan_qr_code">Escanear Qr</string>
+    <string name="menu_logout">Cerrar sesión</string>
+    <string name="message_lost">Perdido hace 2 días y 3 horas</string>
+    <string name="text_view_name_pet">Nombre</string>
+    <string name="text_view_color">Color</string>
+    <string name="text_view_size">Tamaño</string>
+    <string name="text_view_breed">Raza</string>
+    <string name="text_view_type">Tipo de mascota</string>
+    <string name="text_view_gender">Género</string>
+    <string name="text_view_contexture">Contextura</string>
+    <string name="report_pet_button">REPORTAR MASCOTA</string>
+</resources>

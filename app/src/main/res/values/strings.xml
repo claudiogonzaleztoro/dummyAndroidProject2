@@ -1,60 +1,25 @@
 <resources>
-    <string name="app_name">Pet Sossss</string>
-    <string name="login_button_text">Log in with Facebook</string>
+    <string name="app_name">Pet Sos</string>
+    <string name="login_button_text_fc">Log in with Facebook</string>
     <string name="app_id">1082007991872035</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string-array name="pet_type">
-        <item>Perros</item>
-        <item>Gatos</item>
-    </string-array>
-    <string-array name="pet_gender">
-        <item>Machos</item>
-        <item>Hembras</item>
-    </string-array>
-    <string-array name="pet_relationship">
-        <item>Con Dueño</item>
-        <item>Sin Dueño</item>
-    </string-array>
-    <string-array name="region">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-        <item>6</item>
-        <item>7</item>
-        <item>8</item>
-        <item>9</item>
-        <item>10</item>
-        <item>11</item>
-        <item>RM</item>
-    </string-array>
-    <string-array name="comuna">
-        <item>San Miguel</item>
-        <item>Ñuñoa</item>
-        <item>Santiago</item>
-    </string-array>
-    <string-array name="pet_color">
-        <item>Blanco</item>
-        <item>Negro</item>
-        <item>Amarillo</item>
-    </string-array>
-    <string-array name="pet_size">
-        <item>Grande</item>
-        <item>Mediano</item>
-        <item>Chico</item>
-    </string-array>
-    <string-array name="pet_build">
-        <item>Grueso</item>
-        <item>Normal</item>
-        <item>Delgado</item>
-    </string-array>
-    <string-array name="pet_breed">
-        <item>Kiltro</item>
-        <item>Raza 1</item>
-        <item>Raza 2</item>
-        <item>Raza 3</item>
-    </string-array>
-
+    <string name="pet_lost_list">Pet Lost List</string>
+    <string name="hint_text_input_email">Email</string>
+    <string name="hint_text_input_password">Password</string>
+    <string name="login_button_text">Login</string>
+    <string name="menu_profile">Profile</string>
+    <string name="menu_pet_lost_list">Pet lost list</string>
+    <string name="menu_lost_search_filters">Lost search filters</string>
+    <string name="menu_scan_qr_code">Scan Qr code</string>
+    <string name="menu_logout">Logout user</string>
+    <string name="message_lost">Lost since 2 days and 3 hours</string>
+    <string name="text_view_name_pet">Name</string>
+    <string name="text_view_color">Color</string>
+    <string name="text_view_size">Size</string>
+    <string name="text_view_breed">Breed</string>
+    <string name="text_view_type">Pet type</string>
+    <string name="text_view_gender">Gender</string>
+    <string name="text_view_contexture">Contexture</string>
+    <string name="report_pet_button">REPORT PET</string>
 </resources>

@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_marginLeft="90dp"
-        android:layout_marginTop="40dp">
+        android:layout_marginTop="20dp">
 
         <ImageView
             android:id="@+id/image_pet_detail"
@@ -21,69 +21,180 @@
             android:layout_centerHorizontal="true"
             />
 
-        <TextView
-            android:id="@+id/textViewNamePet"
-            android:layout_centerHorizontal="true"
-            android:textColor="#08AE9E"
-            android:textStyle="bold"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+            <TextView
+                android:id="@+id/textViewNamePet"
+                android:text="@string/text_view_name_pet"
+                android:textColor="#08AE9E"
+                android:textStyle="bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                />
 
-        <TextView
-            android:id="@+id/textViewIdColor"
-            android:layout_centerHorizontal="true"
-            android:textColor="#08AE9E"
-            android:textStyle="bold"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/textViewNamePetValue"
+                android:textStyle="bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
-        <TextView
-            android:id="@+id/textViewIdSize"
-            android:layout_centerHorizontal="true"
-            android:textColor="#08AE9E"
-            android:textStyle="bold"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+        </LinearLayout>
 
-        <TextView
-            android:id="@+id/textViewIdBreed"
-            android:layout_centerHorizontal="true"
-            android:textColor="#08AE9E"
-            android:textStyle="bold"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+            <TextView
+                android:id="@+id/textViewIdColor"
+                android:text="@string/text_view_color"
+                android:layout_centerHorizontal="true"
+                android:textColor="#08AE9E"
+                android:textStyle="bold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                />
 
-        <TextView
-            android:visibility="gone"
-            android:id="@+id/textViewIdPetType"
-            android:layout_centerHorizontal="true"
-            android:textColor="#08AE9E"
-            android:textStyle="bold"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/textViewIdColorValue"
+                android:textStyle="bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
-        <TextView
-            android:id="@+id/textViewIdPetGender"
-            android:layout_centerHorizontal="true"
-            android:textColor="#08AE9E"
-            android:textStyle="bold"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+        </LinearLayout>
 
-        <TextView
-            android:id="@+id/textViewIdContexture"
-            android:layout_centerHorizontal="true"
-            android:textColor="#08AE9E"
-            android:textStyle="bold"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+            <TextView
+                android:id="@+id/textViewIdSize"
+                android:text="@string/text_view_size"
+                android:layout_centerHorizontal="true"
+                android:textColor="#08AE9E"
+                android:textStyle="bold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                />
+
+            <TextView
+                android:id="@+id/textViewIdSizeValue"
+                android:textStyle="bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+            <TextView
+                android:id="@+id/textViewIdBreed"
+                android:text="@string/text_view_breed"
+                android:layout_centerHorizontal="true"
+                android:textColor="#08AE9E"
+                android:textStyle="bold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                />
+
+            <TextView
+                android:id="@+id/textViewIdBreedValue"
+                android:textStyle="bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+            <TextView
+                android:text="@string/text_view_type"
+                android:id="@+id/textViewIdPetType"
+                android:layout_centerHorizontal="true"
+                android:textColor="#08AE9E"
+                android:textStyle="bold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                />
+
+            <TextView
+                android:id="@+id/textViewIdPetTypeValue"
+                android:textStyle="bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+            <TextView
+                android:id="@+id/textViewIdPetGender"
+                android:text="@string/text_view_gender"
+                android:layout_centerHorizontal="true"
+                android:textColor="#08AE9E"
+                android:textStyle="bold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                />
+            <TextView
+                android:id="@+id/textViewIdPetGenderValue"
+                android:textStyle="bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+            <TextView
+                android:id="@+id/textViewIdContexture"
+                android:text="@string/text_view_contexture"
+                android:layout_centerHorizontal="true"
+                android:textColor="#08AE9E"
+                android:textStyle="bold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                />
+
+            <TextView
+                android:id="@+id/textViewIdContextureValue"
+                android:textStyle="bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
 
         <TextView
             android:layout_marginTop="20dp"
             android:id="@+id/textViewPetStatus"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Lost since 2 days and 3 hours"
+            android:text="@string/message_lost"
             />
 
         <android.support.v7.widget.AppCompatButton
@@ -95,7 +206,7 @@
             android:padding="12dp"
             android:textColor="#FFFFFF"
             android:background="@color/colorPrimary"
-            android:text="Report pet"/>
+            android:text="@string/report_pet_button"/>
 
 
 

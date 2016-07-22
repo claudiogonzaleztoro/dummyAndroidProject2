@@ -32,7 +32,7 @@
         android:layout_height="wrap_content"
         android:paddingLeft="40dp"
         android:paddingBottom="20dp"
-        android:text="Lost since 2 days and 3 hours"/>
+        android:text="@string/message_lost"/>
 
 
 

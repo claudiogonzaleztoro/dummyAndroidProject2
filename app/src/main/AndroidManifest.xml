@@ -34,7 +34,7 @@
         <activity android:name=".LogoutActivity"
             android:label="Logout" />
         <activity android:name=".FoundLostActivity"
-            android:label="Pet lost list"/>
+            android:label="@string/pet_lost_list"/>
         <activity android:name=".FoundLostSearchActivity"
             android:label="Lost search filters"/>
         <activity android:name=".PetDetailActivity"
