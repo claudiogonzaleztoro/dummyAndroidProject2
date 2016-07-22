@@ -117,6 +117,7 @@ public class FoundLostActivity extends AppCompatActivity {
     private List<PetResponse> fetchPetList() {
         try {
 
+
             URL url = new URL(PET_URL);
             URLConnection urlConnection = url.openConnection();
             HttpURLConnection connection = null;

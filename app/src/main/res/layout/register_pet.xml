@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:background="#ffffff">
         <TextView
-            android:id="@+id/namePetTextView"
+            android:id="@+id/petNameTextView"
             android:layout_width="0dp"
             android:layout_weight="0.2"
             android:layout_height="wrap_content"
@@ -27,9 +27,113 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.8"
             android:background="@drawable/rounded_edittext"
-            android:id="@+id/namePetEditText"
+            android:id="@+id/petNameEditText"
             />
     </LinearLayout>
+    <LinearLayout
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ffffff"
+        android:id="@+id/petRelationListLay">
+        <TextView
+            android:id="@+id/petRelationTextView"
+            android:layout_width="0dp"
+            android:layout_weight="0.2"
+            android:layout_height="wrap_content"
+            android:text="Relacion"
+            android:layout_marginBottom="10dp"
+            android:textColor="#000000"
+            android:textSize="15sp"
+            android:orientation="horizontal"/>
+        <Spinner
+            android:paddingLeft="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:spinnerMode="dropdown"
+            android:id="@+id/petRelationList"
+            >
+        </Spinner>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ffffff"
+        android:id="@+id/petTypeListLay">
+        <TextView
+            android:id="@+id/petTypeTextView"
+            android:layout_width="0dp"
+            android:layout_weight="0.2"
+            android:layout_height="wrap_content"
+            android:text="Tipo"
+            android:layout_marginBottom="10dp"
+            android:textColor="#000000"
+            android:textSize="15sp"
+            android:orientation="horizontal"/>
+        <Spinner
+            android:paddingLeft="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:spinnerMode="dropdown"
+            android:id="@+id/petTypeList"
+            >
+        </Spinner>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ffffff"
+        android:id="@+id/petGenderListLay">
+        <TextView
+            android:id="@+id/petGenderTextView"
+            android:layout_width="0dp"
+            android:layout_weight="0.2"
+            android:layout_height="wrap_content"
+            android:text="Genero"
+            android:layout_marginBottom="10dp"
+            android:textColor="#000000"
+            android:textSize="15sp"
+            android:orientation="horizontal"/>
+        <Spinner
+            android:paddingLeft="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:spinnerMode="dropdown"
+            android:id="@+id/petGeneroList"
+            ></Spinner>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ffffff"
+        android:id="@+id/petBreedListLay">
+        <TextView
+            android:id="@+id/petBreedTextView"
+            android:layout_width="0dp"
+            android:layout_weight="0.2"
+            android:layout_height="wrap_content"
+            android:text="Raza"
+            android:layout_marginBottom="10dp"
+            android:textColor="#000000"
+            android:textSize="15sp"
+            android:orientation="horizontal"/>
+        <Spinner
+            android:paddingLeft="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:spinnerMode="dropdown"
+            android:id="@+id/petBreedList"
+            >
+        </Spinner>
+    </LinearLayout>
+
     <LinearLayout
         android:layout_marginTop="10dp"
         android:orientation="horizontal"
@@ -62,9 +166,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#ffffff"
-        android:id="@+id/petHeightListLay">
+        android:id="@+id/petSizeListLay">
         <TextView
-            android:id="@+id/petHeightTextView"
+            android:id="@+id/petSizeTextView"
             android:layout_width="0dp"
             android:layout_weight="0.2"
             android:layout_height="wrap_content"
@@ -78,7 +182,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:spinnerMode="dropdown"
-            android:id="@+id/petHeightList"
+            android:id="@+id/petSizeList"
             >
         </Spinner>
     </LinearLayout>
@@ -134,29 +238,29 @@
             >
         </Spinner>
         </LinearLayout>
-        <LinearLayout
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="#ffffff">
+        <Button
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="#ffffff"
-            android:id="@+id/petGenderListLay">
-            <TextView
-                android:id="@+id/petGenderTextView"
-                android:layout_width="0dp"
-                android:layout_weight="0.2"
-                android:layout_height="wrap_content"
-                android:text="Genero"
-                android:layout_marginBottom="10dp"
-                android:textColor="#000000"
-                android:textSize="15sp"
-                android:orientation="horizontal"/>
-            <Spinner
-                android:paddingLeft="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:spinnerMode="dropdown"
-                android:id="@+id/petGeneroList"
-                ></Spinner>
+            android:text="Grabar"
+            android:id="@+id/button_save_pet_reg"
+            android:textColor="#FFFFFF"
+            android:layout_margin="6dp"
+            android:background="#FFFFFF"
+            android:backgroundTint="@color/com_facebook_blue"
+            android:layout_alignParentTop="true"
+            android:gravity="center_vertical"
+            android:layout_centerHorizontal="true"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            />
+
     </LinearLayout>
+
 </LinearLayout>

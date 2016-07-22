@@ -13,9 +13,15 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import cl.petsos.petsos.BreedResponse;
+import cl.petsos.petsos.ColorResponse;
 import cl.petsos.petsos.Comuna;
+import cl.petsos.petsos.ContextureResponse;
 import cl.petsos.petsos.PetGenderResponse;
+import cl.petsos.petsos.PetTypeResponse;
 import cl.petsos.petsos.Region;
+import cl.petsos.petsos.RelationshipResponse;
+import cl.petsos.petsos.SizeResponse;
 import cl.petsos.petsos.User;
 import cl.petsos.petsos.Utils;
 
@@ -25,9 +31,15 @@ import cl.petsos.petsos.Utils;
 public class PetSOSUtility {
     private static PetSOSUtility petUtility;
 
-    private String SERVER_URL = "http://172.17.100.170";
+    private String SERVER_URL = "https://petsos.herokuapp.com";
     private String PORT_URL   = "8080";
-    private String PET_GENDER_URL = SERVER_URL + ":" + PORT_URL + "/petGender/list";
+    private String PET_GENDER_URL = SERVER_URL +  "/petGender/list";
+    private String RELATIONSHIP_URL = SERVER_URL + "/relationship/list";
+    private String PET_TYPE_URL = SERVER_URL + "/petType/list";
+    private String BREED_URL = SERVER_URL + "/breeds/list";
+    private String COLOR_URL = SERVER_URL + "/colors/list";
+    private String SIZE_URL = SERVER_URL + "/sizes/list";
+    private String CONTEXTURE_URL = SERVER_URL + "/contextures/list";
 
     public static final String SELECTION = "Seleccione"; //TODO get this dynamically at the beggining
 
@@ -190,13 +202,13 @@ public class PetSOSUtility {
     @NonNull
     public List<String> getGendersPet() {
         List<String> genders = new ArrayList<String>();
-        PetGenderResponse[] gendersResponse = fetchPetGender();
+        PetGenderResponse[] gendersResponse = new PetGenderResponse[]{};//fetchPetGender();
         genders.add(SELECTION);
-
+/*
         for(int i = 1; i <= gendersResponse.length; i++){
             genders.add(gendersResponse[i-1].petGender);
         }
-
+*/
         return genders;
     }
 
@@ -244,6 +256,407 @@ public class PetSOSUtility {
             e.printStackTrace();
         }
         return null;
+    }
+
+    ///init Pet Relationship
+    @NonNull
+    public List<String> getRelationshipPet() {
+        List<String> relationships = new ArrayList<String>();
+        RelationshipResponse[] relationshipResponse = fetchRelationship();
+        relationships.add(SELECTION);
+
+        if(relationshipResponse !=null && relationshipResponse.length >0 ) {
+            for (int i = 1; i <= relationshipResponse.length; i++) {
+                relationships.add(relationshipResponse[i - 1].relationship);
+            }
+        }
+        return relationships;
+    }
+
+    @NonNull
+    public HashMap<String, String> getRelationshipPetHashMap(List<String> relationships) {
+        HashMap<String,String> relationMap = new HashMap<String,String>();
+        RelationshipResponse[] relationResponse = fetchRelationship();
+
+        relationMap.put("0",SELECTION);
+        for(int i = 1; i <= relationResponse.length; i++){
+            relationMap.put(relationResponse[i-1].idRelationship,relationResponse[i-1].relationship);
+        }
+
+        return relationMap;
+    }
+
+    public RelationshipResponse[] fetchRelationship() {
+
+        try {
+
+            URL url = new URL(RELATIONSHIP_URL);
+            URLConnection urlConnection = url.openConnection();
+            HttpURLConnection connection = null;
+
+            if (urlConnection instanceof HttpURLConnection) {
+                connection = (HttpURLConnection) urlConnection;
+            } else {
+                System.out.println("Please enter an HTTP URL.");
+                return null;
+            }
+            String urlString = "";
+            BufferedReader in = new BufferedReader(
+                    new InputStreamReader(connection.getInputStream()));
+
+            String current;
+            while ((current = in.readLine()) != null) {
+                urlString += current;
+            }
+
+            RelationshipResponse[] relationshipArray = (RelationshipResponse[])Utils.fromJson(urlString,RelationshipResponse[].class);
+            return relationshipArray;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    //init pet type
+    public List<String> getPetTypes() {
+        List<String> types = new ArrayList<String>();
+        PetTypeResponse[] typeResponse = fetchPetType();
+        types.add(SELECTION);
+
+        if(typeResponse !=null && typeResponse.length >0 ) {
+            for (int i = 1; i <= typeResponse.length; i++) {
+                types.add(typeResponse[i - 1].petType);
+            }
+        }
+        return types;
+    }
+
+    @NonNull
+    public HashMap<String, String> getPetTypesHashMap(List<String> relationships) {
+        HashMap<String,String> typeMap = new HashMap<String,String>();
+        PetTypeResponse[] typeResponse = fetchPetType();
+
+        typeMap.put("0",SELECTION);
+        for(int i = 1; i <= typeResponse.length; i++){
+            typeMap.put(typeResponse[i-1].idPetType,typeResponse[i-1].petType);
+        }
+
+        return typeMap;
+    }
+
+
+    private PetTypeResponse[] fetchPetType() {
+
+        try {
+
+            URL url = new URL(PET_TYPE_URL);
+            URLConnection urlConnection = url.openConnection();
+            HttpURLConnection connection = null;
+
+            if (urlConnection instanceof HttpURLConnection) {
+                connection = (HttpURLConnection) urlConnection;
+            } else {
+                System.out.println("Please enter an HTTP URL.");
+                return null;
+            }
+            String urlString = "";
+            BufferedReader in = new BufferedReader(
+                    new InputStreamReader(connection.getInputStream()));
+
+            String current;
+            while ((current = in.readLine()) != null) {
+                urlString += current;
+            }
+
+
+            PetTypeResponse[] petTypeArray = (PetTypeResponse[])Utils.fromJson(urlString,PetTypeResponse[].class);
+            return petTypeArray;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    //breeds
+
+    public List<String> getPetBreeds() {
+        List<String> breeds = new ArrayList<String>();
+        BreedResponse[] breedResponse  = new BreedResponse[1];//fetchBreed();
+        breeds.add(SELECTION);
+/*
+        for(int i = 1; i <= breedResponse.length; i++){
+            breeds.add(breedResponse[i-1].breed);
+        }
+*/
+        return breeds;
+    }
+
+    @NonNull
+    public HashMap<String, String> getPetBreedsHashMap(List<String> breeds) {
+        HashMap<String,String> breedMap = new HashMap<String,String>();
+        BreedResponse[] breedResponse = fetchBreed();
+
+        breedMap.put("0",SELECTION);
+        for(int i = 1; i <= breedResponse.length; i++){
+            breedMap.put(breedResponse[i-1].idBreed,breedResponse[i-1].breed);
+        }
+
+        return breedMap;
+    }
+
+
+
+    private BreedResponse[] fetchBreed() {
+
+        try {
+
+            URL url = new URL(BREED_URL);
+            URLConnection urlConnection = url.openConnection();
+            HttpURLConnection connection = null;
+
+            if (urlConnection instanceof HttpURLConnection) {
+                connection = (HttpURLConnection) urlConnection;
+            } else {
+                System.out.println("Please enter an HTTP URL.");
+                return null;
+            }
+            String urlString = "";
+            BufferedReader in = new BufferedReader(
+                    new InputStreamReader(connection.getInputStream()));
+
+            String current;
+            while ((current = in.readLine()) != null) {
+                urlString += current;
+            }
+
+
+            BreedResponse[] breedArray = (BreedResponse[])Utils.fromJson(urlString,BreedResponse[].class);
+            return breedArray;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    //color
+    public List<String> getPetColors() {
+        List<String> colors = new ArrayList<String>();
+        ColorResponse[] colorResponse =  new ColorResponse[1];//fetchColor();
+        colors.add(SELECTION);
+/*
+        for(int i = 1; i <= colorResponse.length; i++){
+            colors.add(colorResponse[i-1].color);
+        }
+*/
+        return colors;
+    }
+
+    @NonNull
+    public HashMap<String, String> getPetColorsHashMap(List<String> colors) {
+        HashMap<String,String> colorMap = new HashMap<String,String>();
+        ColorResponse[] colorResponse = fetchColor();
+
+        colorMap.put("0",SELECTION);
+        for(int i = 1; i <= colorResponse.length; i++){
+            colorMap.put(colorResponse[i-1].idColor,colorResponse[i-1].color);
+        }
+
+        return colorMap;
+    }
+
+
+    private ColorResponse[] fetchColor() {
+
+        try {
+
+            URL url = new URL(COLOR_URL);
+            URLConnection urlConnection = url.openConnection();
+            HttpURLConnection connection = null;
+
+            if (urlConnection instanceof HttpURLConnection) {
+                connection = (HttpURLConnection) urlConnection;
+            } else {
+                System.out.println("Please enter an HTTP URL.");
+                return null;
+            }
+            String urlString = "";
+            BufferedReader in = new BufferedReader(
+                    new InputStreamReader(connection.getInputStream()));
+
+            String current;
+            while ((current = in.readLine()) != null) {
+                urlString += current;
+            }
+
+
+            ColorResponse[] colorArray = (ColorResponse[])Utils.fromJson(urlString,ColorResponse[].class);
+            return colorArray;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    //Size
+
+    public List<String> getPetSizes() {
+        List<String> sizes = new ArrayList<String>();
+        SizeResponse[] sizesResponse = new SizeResponse[1];//fetchSize();
+        sizes.add(SELECTION);
+/*
+        for(int i = 1; i <= sizesResponse.length; i++){
+            sizes.add(sizesResponse[i-1].size);
+        }
+*/
+        return sizes;
+    }
+
+    @NonNull
+    public HashMap<String, String> getPetSizesHashMap(List<String> colors) {
+        HashMap<String,String> sizesMap = new HashMap<String,String>();
+        SizeResponse[] sizesResponse = fetchSize();
+
+        sizesMap.put("0",SELECTION);
+        for(int i = 1; i <= sizesResponse.length; i++){
+            sizesMap.put(sizesResponse[i-1].idSize,sizesResponse[i-1].size);
+        }
+
+        return sizesMap;
+    }
+
+    private SizeResponse[] fetchSize() {
+
+        try {
+
+            URL url = new URL(SIZE_URL);
+            URLConnection urlConnection = url.openConnection();
+            HttpURLConnection connection = null;
+
+            if (urlConnection instanceof HttpURLConnection) {
+                connection = (HttpURLConnection) urlConnection;
+            } else {
+                System.out.println("Please enter an HTTP URL.");
+                return null;
+            }
+            String urlString = "";
+            BufferedReader in = new BufferedReader(
+                    new InputStreamReader(connection.getInputStream()));
+
+            String current;
+            while ((current = in.readLine()) != null) {
+                urlString += current;
+            }
+
+
+            SizeResponse[] sizeArray = (SizeResponse[])Utils.fromJson(urlString,SizeResponse[].class);
+            return sizeArray;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+    //build
+    public List<String> getPetBuilds() {
+        List<String> builds = new ArrayList<String>();
+        ContextureResponse[] buildsResponse = new ContextureResponse[1];//fetchContexture();
+        builds.add(SELECTION);
+/*
+        for(int i = 1; i <= buildsResponse.length; i++){
+            builds.add(buildsResponse[i-1].contexture);
+        }
+*/
+        return builds;
+    }
+
+    @NonNull
+    public HashMap<String, String> getPetBuildsHashMap(List<String> colors) {
+        HashMap<String,String> buildsMap = new HashMap<String,String>();
+        ContextureResponse[] buildsResponse = fetchContexture();
+
+        buildsMap.put("0",SELECTION);
+        for(int i = 1; i <= buildsResponse.length; i++){
+            buildsMap.put(buildsResponse[i-1].idContexture,buildsResponse[i-1].contexture);
+        }
+
+        return buildsMap;
+    }
+
+
+    private ContextureResponse[] fetchContexture() {
+
+        try {
+
+            URL url = new URL(CONTEXTURE_URL);
+            URLConnection urlConnection = url.openConnection();
+            HttpURLConnection connection = null;
+
+            if (urlConnection instanceof HttpURLConnection) {
+                connection = (HttpURLConnection) urlConnection;
+            } else {
+                System.out.println("Please enter an HTTP URL.");
+                return null;
+            }
+            String urlString = "";
+            BufferedReader in = new BufferedReader(
+                    new InputStreamReader(connection.getInputStream()));
+
+            String current;
+            while ((current = in.readLine()) != null) {
+                urlString += current;
+            }
+
+
+            ContextureResponse[] contextureArray = (ContextureResponse[])Utils.fromJson(urlString,ContextureResponse[].class);
+            return contextureArray;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    //status
+    public String[] getPetStatus() {
+             String[] status= {"Seleccione"};
+        /*
+        try {
+
+            URL url = new URL(CONTEXTURE_URL);
+            URLConnection urlConnection = url.openConnection();
+            HttpURLConnection connection = null;
+
+            if (urlConnection instanceof HttpURLConnection) {
+                connection = (HttpURLConnection) urlConnection;
+            } else {
+                System.out.println("Please enter an HTTP URL.");
+                return null;
+            }
+            String urlString = "";
+            BufferedReader in = new BufferedReader(
+                    new InputStreamReader(connection.getInputStream()));
+
+            String current;
+            while ((current = in.readLine()) != null) {
+                urlString += current;
+            }
+
+
+            ContextureResponse[] contextureArray = (ContextureResponse[])Utils.fromJson(urlString,ContextureResponse[].class);
+            return contextureArray;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;*/
+
+            return status;
     }
 
 }
