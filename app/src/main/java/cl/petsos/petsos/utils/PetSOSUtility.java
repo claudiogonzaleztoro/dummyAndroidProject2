@@ -2,6 +2,15 @@ package cl.petsos.petsos.utils;
 
 import android.support.annotation.NonNull;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -866,11 +875,12 @@ public class PetSOSUtility {
         tcreateUser.start();
     }
 
-    @TargetApi(Build.VERSION_CODES.KITKAT)
+
     public Object createUser(User user) {
 
         try {
 
+            /*
             URL url = new URL(CREATE_USER_URL);
             String urlParameters  = "idPerson=claudita98@gmail.com";
             byte[] postData       = urlParameters.getBytes( StandardCharsets.UTF_8 );
@@ -887,9 +897,9 @@ public class PetSOSUtility {
             try( DataOutputStream wr = new DataOutputStream( conn.getOutputStream())) {
                 wr.write( postData );
             }
+            */
 
 
-            /*
             HttpClient httpclient = new DefaultHttpClient();
             HttpPost httppost = new HttpPost(CREATE_USER_URL);
             try {
@@ -906,7 +916,7 @@ public class PetSOSUtility {
             } catch (IOException e) {
                 // TODO Auto-generated catch block
             }
-            */
+
 
 
             return null;
