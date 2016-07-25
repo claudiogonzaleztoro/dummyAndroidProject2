@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ContextureResponse {
 
-    public String idContexture;
+    public int idContexture;
     public String contexture;
     public ContextureResponse(){
 

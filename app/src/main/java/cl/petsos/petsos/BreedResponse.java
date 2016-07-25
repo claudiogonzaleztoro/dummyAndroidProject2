@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class BreedResponse {
 
-    public String idBreed;
+    public int idBreed;
     public String breed;
     public BreedResponse(){
 
