@@ -42,6 +42,7 @@ public class PetDetailActivity extends AppCompatActivity {
             TextView textViewName = (TextView)findViewById(R.id.textViewNamePetValue);
             textViewName.setText(name);
 
+            
             /*
             int idColor =  (int)bd.get("idColor");
             TextView textViewIdColor = (TextView)findViewById(R.id.textViewIdColorValue);
