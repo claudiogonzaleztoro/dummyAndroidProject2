@@ -27,29 +27,35 @@ public class PetDetailActivity extends AppCompatActivity {
             TextView textViewName = (TextView)findViewById(R.id.textViewNamePetValue);
             textViewName.setText(name);
 
+            /*
             int idColor =  (int)bd.get("idColor");
             TextView textViewIdColor = (TextView)findViewById(R.id.textViewIdColorValue);
             textViewIdColor.setText((String.valueOf(idColor)));
+            */
 
-            int idSize =  (int)bd.get("idSize");
+            String color =  (String)bd.get("color");
+            TextView textViewIdColor = (TextView)findViewById(R.id.textViewIdColorValue);
+            textViewIdColor.setText((String.valueOf(color)));
+
+            String size =  (String)bd.get("size");
             TextView textViewIdSize = (TextView)findViewById(R.id.textViewIdSizeValue);
-            textViewIdSize.setText(String.valueOf(idSize));
+            textViewIdSize.setText(String.valueOf(size));
 
-            int idBreed =  (int)bd.get("idBreed");
+            String idBreed =  (String)bd.get("breed");
             TextView textViewIdBreed = (TextView)findViewById(R.id.textViewIdBreedValue);
             textViewIdBreed.setText(String.valueOf(idBreed));
 
-            int idPetType =  (int)bd.get("idPetType");
+            String petType =  (String)bd.get("petType");
             TextView textViewIdPetType = (TextView)findViewById(R.id.textViewIdPetTypeValue);
-            textViewIdPetType.setText(String.valueOf(idPetType));
+            textViewIdPetType.setText(String.valueOf(petType));
 
-            int idPetGender =  (int)bd.get("idPetGender");
+            String petGender =  (String)bd.get("petGender");
             TextView textViewIdPetGender = (TextView)findViewById(R.id.textViewIdPetGenderValue);
-            textViewIdPetGender.setText(String.valueOf(idPetGender));
+            textViewIdPetGender.setText(String.valueOf(petGender));
 
-            int idContexture =  (int)bd.get("idContexture");
+            String contexture =  (String)bd.get("contexture");
             TextView textViewIdContexture = (TextView)findViewById(R.id.textViewIdContextureValue);
-            textViewIdContexture.setText(String.valueOf(idContexture));
+            textViewIdContexture.setText(String.valueOf(contexture));
 
 
 

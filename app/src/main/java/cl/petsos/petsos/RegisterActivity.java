@@ -29,7 +29,7 @@ import cl.petsos.petsos.utils.PetSOSUtility;
 /**
  * Created by root on 13-07-16.
  */
-public class MainMainActivity extends AppCompatActivity
+public class RegisterActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private EditText usernameEditText;
@@ -86,7 +86,7 @@ public class MainMainActivity extends AppCompatActivity
 
         @Override
         public void onClick(View view) {
-            Intent homeIntent = new Intent(MainMainActivity.this, RegisterPetActivity.class);
+            Intent homeIntent = new Intent(RegisterActivity.this, RegisterPetActivity.class);
             startActivity(homeIntent);
         }
     };
@@ -101,7 +101,7 @@ public class MainMainActivity extends AppCompatActivity
 
         @Override
         public void onClick(View view) {
-            Intent homeIntent = new Intent(MainMainActivity.this, FoundLostActivity.class);
+            Intent homeIntent = new Intent(RegisterActivity.this, FoundLostActivity.class);
             startActivity(homeIntent);
         }
     };
@@ -116,10 +116,14 @@ public class MainMainActivity extends AppCompatActivity
         public void onClick(View view) {
             //check if we have all the information before save
             if(validateDataIsCompleted()) {
+
+
+
+
                 //TODO save user
                 Button addPetButton = (Button) findViewById(R.id.button_add_pet);
                 addPetButton.setVisibility(View.VISIBLE);
-                Toast.makeText(MainMainActivity.this,"Nombre: " + PrefUtils.getCurrentUser(MainMainActivity.this).getName(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(RegisterActivity.this,"Nombre: " + PrefUtils.getCurrentUser(RegisterActivity.this).getName(), Toast.LENGTH_SHORT).show();
             }
         }
     };
@@ -160,11 +164,12 @@ public class MainMainActivity extends AppCompatActivity
 
     private void setDataUser(String userName, String email, String genderMapped, String pass, String userReg, String userComuna ){
 
-            user=PrefUtils.getCurrentUser(MainMainActivity.this);
+            user=PrefUtils.getCurrentUser(RegisterActivity.this);
             user.setName(userName);
             user.setEmail(email);
             user.setGender(genderMapped);
             user.setPassword(pass);
+
 
             int userRegId = PetSOSUtility.getPetSOSUtility().getIdRegionByRegioName(userReg);
             int userComunaId = PetSOSUtility.getPetSOSUtility().getIdComunaByComunaName(userComuna);
@@ -176,13 +181,22 @@ public class MainMainActivity extends AppCompatActivity
             user.setUserComunas(mUserComunas);
             user.setId_person(1);
 
-            PrefUtils.setCurrentUser(user,MainMainActivity.this);
+            PrefUtils.setCurrentUser(user,RegisterActivity.this);
+            PetSOSUtility petSOSUtility = new PetSOSUtility();
+            petSOSUtility.preCreateUser(user);
+
+
+
+
+
+
+
     }
 
 
     private void setUserInformation() {
 
-        user=PrefUtils.getCurrentUser(MainMainActivity.this);
+        user=PrefUtils.getCurrentUser(RegisterActivity.this);
 
         LinearLayout linLay = (LinearLayout)findViewById(R.id.linLayRegUser);
         //set User fields
@@ -235,7 +249,7 @@ public class MainMainActivity extends AppCompatActivity
         mComunaSpinner = (Spinner) findViewById(R.id.comunaList);
         mComunaSpinner.setOnItemSelectedListener(comunaListener);
 
-        ArrayAdapter<String> regionAdapter = new ArrayAdapter<String>(MainMainActivity.this,
+        ArrayAdapter<String> regionAdapter = new ArrayAdapter<String>(RegisterActivity.this,
                 android.R.layout.simple_spinner_item, regionList);
         regionAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mRegionSpinner.setAdapter(regionAdapter);
@@ -257,7 +271,7 @@ public class MainMainActivity extends AppCompatActivity
             List<String> comunaList = new ArrayList<String>();
             comunaList = regionMap.get(selectedCountry);
 
-            ArrayAdapter<String> comunasAdapter = new ArrayAdapter<String>(MainMainActivity.this,
+            ArrayAdapter<String> comunasAdapter = new ArrayAdapter<String>(RegisterActivity.this,
                    android.R.layout.simple_spinner_item, comunaList);
             comunasAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             mComunaSpinner.setAdapter(comunasAdapter);
@@ -324,20 +338,20 @@ public class MainMainActivity extends AppCompatActivity
 
         switch (id) {
             case R.id.listPetsItem:
-                Intent i = new Intent(MainMainActivity.this,FoundLostActivity.class);
+                Intent i = new Intent(RegisterActivity.this,FoundLostActivity.class);
                 startActivity(i);
                 return true;
             case R.id.searchPetItem:
-                i = new Intent(MainMainActivity.this,FoundLostSearchActivity.class);
+                i = new Intent(RegisterActivity.this,FoundLostSearchActivity.class);
                 startActivity(i);
                 return true;
             case R.id.logoutItem:
-                //Toast.makeText(MainMainActivity.this,"logout",Toast.LENGTH_SHORT).show();
-                //i = new Intent(MainMainActivity.this,FoundLostSearchActivity.class);
+                //Toast.makeText(RegisterActivity.this,"logout",Toast.LENGTH_SHORT).show();
+                //i = new Intent(RegisterActivity.this,FoundLostSearchActivity.class);
                 //startActivity(i);
-                PrefUtils.clearCurrentUser(MainMainActivity.this);
+                PrefUtils.clearCurrentUser(RegisterActivity.this);
                 LoginManager.getInstance().logOut();
-                i= new Intent(MainMainActivity.this,MainActivity.class);
+                i= new Intent(RegisterActivity.this,MainActivity.class);
                 startActivity(i);
                 finish();
                 return true;
@@ -382,7 +396,7 @@ public class MainMainActivity extends AppCompatActivity
 
         }else if (id == R.id.foundLostItem) {
 
-            Intent i = new Intent(MainMainActivity.this,FoundLostActivity.class);
+            Intent i = new Intent(RegisterActivity.this,FoundLostActivity.class);
             startActivity(i);
         }
 
@@ -398,14 +412,14 @@ public class MainMainActivity extends AppCompatActivity
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PrefUtils.clearCurrentUser(MainMainActivity.this);
+                PrefUtils.clearCurrentUser(RegisterActivity.this);
 
 
                 // We can logout from facebook by calling following method
                 LoginManager.getInstance().logOut();
 
 
-                Intent i= new Intent(MainMainActivity.this,MainActivity.class);
+                Intent i= new Intent(RegisterActivity.this,MainActivity.class);
                 startActivity(i);
                 finish();
             }

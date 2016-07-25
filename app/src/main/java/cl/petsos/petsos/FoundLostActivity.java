@@ -9,29 +9,32 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import com.facebook.login.LoginManager;
-import android.widget.Spinner;
-import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class FoundLostActivity extends AppCompatActivity {
 
 
+
     private String SERVER_URL = "https://petsos.herokuapp.com";
     private String PORT_URL   = "8080";
-
-    //private String PET_URL = SERVER_URL + ":" + PORT_URL + "/pets/list";
     private String PET_URL = SERVER_URL + "/pets/list";
+
+
+    /*
+    private String SERVER_URL = "http://10.0.2.2";
+    private String PORT_URL   = "8080";
+    private String PET_URL = SERVER_URL + ":" + PORT_URL + "/pets/list";
+    */
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,11 +61,17 @@ public class FoundLostActivity extends AppCompatActivity {
                 PetResponse petResponse = (PetResponse)parent.getAdapter().getItem(position);
                 intent.putExtra("name", petResponse.name);
                 intent.putExtra("idColor", petResponse.idColor);
+                intent.putExtra("color", petResponse.color);
                 intent.putExtra("idSize", petResponse.idSize);
+                intent.putExtra("size", petResponse.size);
                 intent.putExtra("idBreed", petResponse.idBreed);
+                intent.putExtra("breed", petResponse.breed);
                 intent.putExtra("idPetType", petResponse.idPetType);
+                intent.putExtra("petType", petResponse.petType);
                 intent.putExtra("idPetGender", petResponse.idPetGender);
+                intent.putExtra("petGender", petResponse.petGender);
                 intent.putExtra("idContexture", petResponse.idContexture);
+                intent.putExtra("contexture", petResponse.contexture);
                 startActivity(intent);
             }
         });
@@ -80,7 +89,7 @@ public class FoundLostActivity extends AppCompatActivity {
                 startActivity(i);
                 return true;
             case R.id.profileItem:
-                i = new Intent(FoundLostActivity.this,MainMainActivity.class);
+                i = new Intent(FoundLostActivity.this,RegisterActivity.class);
                 startActivity(i);
                 return true;
 

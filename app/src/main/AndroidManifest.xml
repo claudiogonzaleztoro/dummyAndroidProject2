@@ -27,7 +27,7 @@
                 "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:label="@string/app_name" />
-        <activity android:name=".MainMainActivity"
+        <activity android:name=".RegisterActivity"
             android:label="User profile" />
         <activity android:name=".RegisterUserActivity"
             android:label="Registro de Usuario" />

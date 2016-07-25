@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent homeIntent = new Intent(MainActivity.this, FoundLostActivity.class);
                 startActivity(homeIntent);
             }else{
-                Intent homeIntent = new Intent(MainActivity.this, MainMainActivity.class);
+                Intent homeIntent = new Intent(MainActivity.this, RegisterActivity.class);
                 startActivity(homeIntent);
             }
 
@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
                                 e.printStackTrace();
                             }
                             Toast.makeText(MainActivity.this,"welcome "+user.getName(),Toast.LENGTH_LONG).show();
-                            Intent intent=new Intent(MainActivity.this,MainMainActivity.class);
+                            Intent intent=new Intent(MainActivity.this,RegisterActivity.class);
                             startActivity(intent);
                             finish();
                         }

@@ -1,10 +1,7 @@
 package cl.petsos.petsos;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,7 +12,6 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import java.util.HashMap;
 import java.util.List;
 
 import cl.petsos.petsos.utils.PetSOSUtility;
@@ -323,7 +319,7 @@ public class RegisterPetActivity extends AppCompatActivity {
                 startActivity(i);
                 return true;
             case R.id.profileItem:
-                i = new Intent(RegisterPetActivity.this,MainMainActivity.class);
+                i = new Intent(RegisterPetActivity.this,RegisterActivity.class);
                 startActivity(i);
                 return true;
         }

@@ -1,12 +1,28 @@
 package cl.petsos.petsos.utils;
 
+import android.annotation.TargetApi;
+import android.os.Build;
 import android.support.annotation.NonNull;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -19,6 +35,7 @@ import cl.petsos.petsos.Comuna;
 import cl.petsos.petsos.ContextureResponse;
 import cl.petsos.petsos.PetGenderResponse;
 import cl.petsos.petsos.PetTypeResponse;
+import cl.petsos.petsos.PrefUtils;
 import cl.petsos.petsos.Region;
 import cl.petsos.petsos.RelationshipResponse;
 import cl.petsos.petsos.SizeResponse;
@@ -32,6 +49,7 @@ public class PetSOSUtility {
     private static PetSOSUtility petUtility;
 
     private String SERVER_URL = "https://petsos.herokuapp.com";
+    //private String SERVER_URL = "http://172.17.100.170:8080";
     private String PORT_URL   = "8080";
     private String PET_GENDER_URL = SERVER_URL +  "/petGender/list";
     private String RELATIONSHIP_URL = SERVER_URL + "/relationship/list";
@@ -40,6 +58,7 @@ public class PetSOSUtility {
     private String COLOR_URL = SERVER_URL + "/colors/list";
     private String SIZE_URL = SERVER_URL + "/sizes/list";
     private String CONTEXTURE_URL = SERVER_URL + "/contextures/list";
+    private String CREATE_USER_URL = SERVER_URL +  "/persons/create";
 
     public static final String SELECTION = "Seleccione"; //TODO get this dynamically at the beggining
 
@@ -257,6 +276,8 @@ public class PetSOSUtility {
         }
         return null;
     }
+
+
 
     ///init Pet Relationship
     @NonNull
@@ -658,5 +679,83 @@ public class PetSOSUtility {
 
             return status;
     }
+
+    public void preCreateUser(final User user2){
+
+        Thread tcreateUser = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                PetSOSUtility petSOSUtility = new PetSOSUtility();
+                petSOSUtility.createUser(user2);
+            }
+        });
+        tcreateUser.start();
+    }
+
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    public Object createUser(User user) {
+
+        try {
+
+            URL url = new URL(CREATE_USER_URL);
+            String urlParameters  = "idPerson=claudita98@gmail.com";
+            byte[] postData       = urlParameters.getBytes( StandardCharsets.UTF_8 );
+            int    postDataLength = postData.length;
+            HttpURLConnection conn= (HttpURLConnection) url.openConnection();
+            conn.setDoOutput(true);
+            conn.setInstanceFollowRedirects( false );
+            conn.setRequestMethod( "POST" );
+            conn.setRequestProperty( "Content-Type", "application/x-www-form-urlencoded");
+            conn.setRequestProperty( "charset", "utf-8");
+            conn.setRequestProperty( "Content-Length", Integer.toString( postDataLength ));
+            conn.setUseCaches( false );
+
+            try( DataOutputStream wr = new DataOutputStream( conn.getOutputStream())) {
+                wr.write( postData );
+            }
+
+
+            /*
+            HttpClient httpclient = new DefaultHttpClient();
+            HttpPost httppost = new HttpPost(CREATE_USER_URL);
+            try {
+                // Add your data
+                List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
+                nameValuePairs.add(new BasicNameValuePair("idPerson", "12345"));
+                httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+                // Execute HTTP Post Request
+                HttpResponse response = httpclient.execute(httppost);
+
+            } catch (ClientProtocolException e) {
+                // TODO Auto-generated catch block
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+            }
+            */
+
+
+            return null;
+
+
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+     /*
+
+           runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    petBuildSpinner.setAdapter(adapter);
+                }
+            });
+
+            */
 
 }

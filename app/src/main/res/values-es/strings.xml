@@ -22,4 +22,5 @@
     <string name="text_view_gender">Género</string>
     <string name="text_view_contexture">Contextura</string>
     <string name="report_pet_button">REPORTAR MASCOTA</string>
+    <string name="save_button">GUARDAR</string>
 </resources>

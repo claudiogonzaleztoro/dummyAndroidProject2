@@ -2,17 +2,11 @@ package cl.petsos.petsos;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -458,7 +452,7 @@ public class FoundLostSearchActivity extends AppCompatActivity {
                 return true;
 
             case R.id.profileItem:
-                i = new Intent(FoundLostSearchActivity.this,MainMainActivity.class);
+                i = new Intent(FoundLostSearchActivity.this,RegisterActivity.class);
                 startActivity(i);
                 return true;
         }
