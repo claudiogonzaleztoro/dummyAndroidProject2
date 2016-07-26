@@ -27,6 +27,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
+
 import cl.petsos.petsos.BreedResponse;
 import cl.petsos.petsos.ColorResponse;
 import cl.petsos.petsos.Comuna;
@@ -278,10 +282,28 @@ public class PetSOSUtility {
             URL url = new URL(PET_GENDER_URL);
             URLConnection urlConnection = url.openConnection();
             HttpURLConnection connection = null;
+            //
+            SSLContext sslcontext = SSLContext.getInstance("TLSv1");
+
+            sslcontext.init(null,
+                    null,
+                    null);
+            SSLSocketFactory NoSSLv3Factory = new NoSSLv3SocketFactory(sslcontext.getSocketFactory());
+            HttpsURLConnection.setDefaultSSLSocketFactory(NoSSLv3Factory);
 
             if (urlConnection instanceof HttpURLConnection) {
                 connection = (HttpURLConnection) urlConnection;
-            } else {
+                System.out.println("Using HttpURLConnection for fetchPetGender.");
+            } else if(urlConnection instanceof HttpsURLConnection){
+                connection = (HttpsURLConnection) url.openConnection();
+                connection.connect();
+                System.out.println("*** Using HttpsURLConnection for fetchPetGender.****");
+            }
+
+/*
+            if (urlConnection instanceof HttpURLConnection) {
+                connection = (HttpURLConnection) urlConnection;
+            } */else {
                 System.out.println("Please enter an HTTP URL.");
                 return null;
             }
@@ -360,8 +382,22 @@ public class PetSOSUtility {
             URLConnection urlConnection = url.openConnection();
             HttpURLConnection connection = null;
 
+            //
+            SSLContext sslcontext = SSLContext.getInstance("TLSv1");
+
+            sslcontext.init(null,
+                    null,
+                    null);
+            SSLSocketFactory NoSSLv3Factory = new NoSSLv3SocketFactory(sslcontext.getSocketFactory());
+            HttpsURLConnection.setDefaultSSLSocketFactory(NoSSLv3Factory);
+
             if (urlConnection instanceof HttpURLConnection) {
                 connection = (HttpURLConnection) urlConnection;
+                System.out.println("Using HttpURLConnection for fetchRelationship.");
+            } else if(urlConnection instanceof HttpsURLConnection){
+                connection = (HttpsURLConnection) url.openConnection();
+                connection.connect();
+                System.out.println("*** Using HttpsURLConnection for fetchRelationship.****");
             } else {
                 System.out.println("Please enter an HTTP URL.");
                 return null;
@@ -438,10 +474,26 @@ public class PetSOSUtility {
             URL url = new URL(PET_TYPE_URL);
             URLConnection urlConnection = url.openConnection();
             HttpURLConnection connection = null;
+//
+            SSLContext sslcontext = SSLContext.getInstance("TLSv1");
+
+            sslcontext.init(null,
+                    null,
+                    null);
+            SSLSocketFactory NoSSLv3Factory = new NoSSLv3SocketFactory(sslcontext.getSocketFactory());
+            HttpsURLConnection.setDefaultSSLSocketFactory(NoSSLv3Factory);
 
             if (urlConnection instanceof HttpURLConnection) {
                 connection = (HttpURLConnection) urlConnection;
-            } else {
+                System.out.println("Using HttpURLConnection for fetchPetType.");
+            } else if(urlConnection instanceof HttpsURLConnection){
+                connection = (HttpsURLConnection) url.openConnection();
+                connection.connect();
+                System.out.println("*** Using HttpsURLConnection for fetchPetType.****");
+            }
+            /*if (urlConnection instanceof HttpURLConnection) {
+                connection = (HttpURLConnection) urlConnection;
+            }*/ else {
                 System.out.println("Please enter an HTTP URL.");
                 return null;
             }
@@ -519,10 +571,26 @@ public class PetSOSUtility {
             URL url = new URL(BREED_URL);
             URLConnection urlConnection = url.openConnection();
             HttpURLConnection connection = null;
+            //
+            SSLContext sslcontext = SSLContext.getInstance("TLSv1");
+
+            sslcontext.init(null,
+                    null,
+                    null);
+            SSLSocketFactory NoSSLv3Factory = new NoSSLv3SocketFactory(sslcontext.getSocketFactory());
+            HttpsURLConnection.setDefaultSSLSocketFactory(NoSSLv3Factory);
 
             if (urlConnection instanceof HttpURLConnection) {
                 connection = (HttpURLConnection) urlConnection;
-            } else {
+                System.out.println("Using HttpURLConnection for fetchBreed.");
+            } else if(urlConnection instanceof HttpsURLConnection){
+                connection = (HttpsURLConnection) url.openConnection();
+                connection.connect();
+                System.out.println("*** Using HttpsURLConnection for fetchBreed.****");
+            }
+            /*if (urlConnection instanceof HttpURLConnection) {
+                connection = (HttpURLConnection) urlConnection;
+            }*/ else {
                 System.out.println("Please enter an HTTP URL.");
                 return null;
             }
@@ -552,7 +620,7 @@ public class PetSOSUtility {
         colors.add(SELECTION);
         if(colorResponse !=null && colorResponse.length >0 ) {
             for (int i = 1; i <= colorResponse.length; i++) {
-                colors.add(colorResponse[i - 1].color);
+                colors.add(colorResponse[i - 1].nameColor);
             }
         }
         return colors;
@@ -583,7 +651,7 @@ public class PetSOSUtility {
         colorMap.put(0,SELECTION);
         if(colorResponse !=null && colorResponse.length >0 ) {
             for (int i = 1; i <= colorResponse.length; i++) {
-                colorMap.put(colorResponse[i - 1].idColor, colorResponse[i - 1].color);
+                colorMap.put(colorResponse[i - 1].idColor, colorResponse[i - 1].nameColor);
             }
         }
 
@@ -598,10 +666,26 @@ public class PetSOSUtility {
             URL url = new URL(COLOR_URL);
             URLConnection urlConnection = url.openConnection();
             HttpURLConnection connection = null;
+            //
+            SSLContext sslcontext = SSLContext.getInstance("TLSv1");
+
+            sslcontext.init(null,
+                    null,
+                    null);
+            SSLSocketFactory NoSSLv3Factory = new NoSSLv3SocketFactory(sslcontext.getSocketFactory());
+            HttpsURLConnection.setDefaultSSLSocketFactory(NoSSLv3Factory);
 
             if (urlConnection instanceof HttpURLConnection) {
                 connection = (HttpURLConnection) urlConnection;
-            } else {
+                System.out.println("Using HttpURLConnection for fetchColor.");
+            } else if(urlConnection instanceof HttpsURLConnection){
+                connection = (HttpsURLConnection) url.openConnection();
+                connection.connect();
+                System.out.println("*** Using HttpsURLConnection for fetchColor.****");
+            }
+            /*if (urlConnection instanceof HttpURLConnection) {
+                connection = (HttpURLConnection) urlConnection;
+            }*/ else {
                 System.out.println("Please enter an HTTP URL.");
                 return null;
             }
@@ -678,9 +762,27 @@ public class PetSOSUtility {
             URLConnection urlConnection = url.openConnection();
             HttpURLConnection connection = null;
 
+            //
+            SSLContext sslcontext = SSLContext.getInstance("TLSv1");
+
+            sslcontext.init(null,
+                    null,
+                    null);
+            SSLSocketFactory NoSSLv3Factory = new NoSSLv3SocketFactory(sslcontext.getSocketFactory());
+            HttpsURLConnection.setDefaultSSLSocketFactory(NoSSLv3Factory);
+
             if (urlConnection instanceof HttpURLConnection) {
                 connection = (HttpURLConnection) urlConnection;
-            } else {
+                System.out.println("Using HttpURLConnection for fetchSize.");
+            } else if(urlConnection instanceof HttpsURLConnection){
+                connection = (HttpsURLConnection) url.openConnection();
+                connection.connect();
+                System.out.println("*** Using HttpsURLConnection for fetchSize.****");
+            }
+
+            /*if (urlConnection instanceof HttpURLConnection) {
+                connection = (HttpURLConnection) urlConnection;
+            }*/ else {
                 System.out.println("Please enter an HTTP URL.");
                 return null;
             }
@@ -757,10 +859,26 @@ public class PetSOSUtility {
             URL url = new URL(CONTEXTURE_URL);
             URLConnection urlConnection = url.openConnection();
             HttpURLConnection connection = null;
+            //
+            SSLContext sslcontext = SSLContext.getInstance("TLSv1");
+
+            sslcontext.init(null,
+                    null,
+                    null);
+            SSLSocketFactory NoSSLv3Factory = new NoSSLv3SocketFactory(sslcontext.getSocketFactory());
+            HttpsURLConnection.setDefaultSSLSocketFactory(NoSSLv3Factory);
 
             if (urlConnection instanceof HttpURLConnection) {
                 connection = (HttpURLConnection) urlConnection;
-            } else {
+                System.out.println("Using HttpURLConnection for fetchContexture.");
+            } else if(urlConnection instanceof HttpsURLConnection){
+                connection = (HttpsURLConnection) url.openConnection();
+                connection.connect();
+                System.out.println("*** Using HttpsURLConnection for fetchContexture.****");
+            }
+            /*if (urlConnection instanceof HttpURLConnection) {
+                connection = (HttpURLConnection) urlConnection;
+            }*/ else {
                 System.out.println("Please enter an HTTP URL.");
                 return null;
             }
@@ -835,10 +953,26 @@ public class PetSOSUtility {
             URL url = new URL(STATUS_URL);
             URLConnection urlConnection = url.openConnection();
             HttpURLConnection connection = null;
+            //
+            SSLContext sslcontext = SSLContext.getInstance("TLSv1");
+
+            sslcontext.init(null,
+                    null,
+                    null);
+            SSLSocketFactory NoSSLv3Factory = new NoSSLv3SocketFactory(sslcontext.getSocketFactory());
+            HttpsURLConnection.setDefaultSSLSocketFactory(NoSSLv3Factory);
 
             if (urlConnection instanceof HttpURLConnection) {
                 connection = (HttpURLConnection) urlConnection;
-            } else {
+                System.out.println("Using HttpURLConnection for fetchPetStatus.");
+            } else if(urlConnection instanceof HttpsURLConnection){
+                connection = (HttpsURLConnection) url.openConnection();
+                connection.connect();
+                System.out.println("*** Using HttpsURLConnection for fetchPetStatus.****");
+            }
+            /*if (urlConnection instanceof HttpURLConnection) {
+                connection = (HttpURLConnection) urlConnection;
+            }*/ else {
                 System.out.println("Please enter an HTTP URL.");
                 return null;
             }
