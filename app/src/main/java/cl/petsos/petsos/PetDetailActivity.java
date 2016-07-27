@@ -96,7 +96,7 @@ public class PetDetailActivity extends AppCompatActivity {
     private View.OnClickListener reportPetFoundButtonListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            //which pet was found
+            //which pet was found to report
 
 
             //who found IdPerson
