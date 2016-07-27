@@ -26,6 +26,7 @@ public class PetDetailActivity extends AppCompatActivity {
     private Button petFoundButton;
     private static final int TAKE_PICTURE = 1;
     private Uri imageUri;
+    private ImageView imageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,12 +111,15 @@ public class PetDetailActivity extends AppCompatActivity {
 
 
     public void takePhoto(View view) {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        File photo = new File(Environment.getExternalStorageDirectory(),  "perrito.jpg");
-        intent.putExtra(MediaStore.EXTRA_OUTPUT,
-                Uri.fromFile(photo));
-        imageUri = Uri.fromFile(photo);
-        startActivityForResult(intent, TAKE_PICTURE);
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        File photo = null;
+        if(takePictureIntent.resolveActivity(getPackageManager())!=null){
+            photo = new File(Environment.getExternalStorageDirectory(),  "perrito.jpg");
+            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
+                    Uri.fromFile(photo));
+            imageUri = Uri.fromFile(photo);
+            startActivityForResult(takePictureIntent, TAKE_PICTURE);
+        }
     }
 
     @Override
@@ -126,7 +130,7 @@ public class PetDetailActivity extends AppCompatActivity {
                 if (resultCode == Activity.RESULT_OK) {
                     Uri selectedImage = imageUri;
                     getContentResolver().notifyChange(selectedImage, null);
-                    ImageView imageView = (ImageView) findViewById(R.id.lblDisplayImage);
+                    imageView = (ImageView) findViewById(R.id.imgDisplayImage);
                     ContentResolver cr = getContentResolver();
                     Bitmap bitmap;
                     try {
