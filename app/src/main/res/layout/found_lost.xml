@@ -8,6 +8,26 @@
     android:paddingLeft="10dp"
     android:paddingRight="10dp"
     >
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Reportar Mascota Perdida"
+            android:id="@+id/button_add_lost_pet"
+            android:textColor="#FFFFFF"
+            android:layout_margin="6dp"
+            android:background="#FFFFFF"
+            android:backgroundTint="@color/com_facebook_blue"
+            android:layout_alignParentTop="true"
+            android:gravity="center_vertical"
+            android:layout_centerHorizontal="true"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            />
+    </LinearLayout>
+
     <ListView
         android:paddingTop="20dp"
         android:layout_width="wrap_content"

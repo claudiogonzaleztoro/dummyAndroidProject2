@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import com.facebook.login.LoginManager;
 
@@ -27,7 +28,7 @@ public class FoundLostActivity extends AppCompatActivity {
     private String SERVER_URL = "https://petsos.herokuapp.com";
     private String PORT_URL   = "8080";
     private String PET_URL = SERVER_URL + "/pets/list";
-
+    private Button addLostPetButton;
 
     /*
     private String SERVER_URL = "http://10.0.2.2";
@@ -42,7 +43,7 @@ public class FoundLostActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         System.out.println("onCreate");
         setContentView(R.layout.found_lost);
-
+        addListenerOnButtonAddPet();
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -77,6 +78,20 @@ public class FoundLostActivity extends AppCompatActivity {
         });
 
     }
+
+    private void addListenerOnButtonAddPet() {
+        addLostPetButton = (Button)findViewById(R.id.button_add_lost_pet);
+        addLostPetButton.setOnClickListener(addPetButtonListener);
+    }
+
+    private View.OnClickListener addPetButtonListener = new View.OnClickListener(){
+
+        @Override
+        public void onClick(View view) {
+            Intent homeIntent = new Intent(FoundLostActivity.this, RegisterPetActivity.class);
+            startActivity(homeIntent);
+        }
+    };
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
