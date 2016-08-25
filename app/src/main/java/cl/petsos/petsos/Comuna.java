@@ -1,34 +1,39 @@
 package cl.petsos.petsos;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 /**
  * Created by root on 18-07-16.
  */
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Comuna {
-    private int idComuna;
-    private String comuna;
-    private int idRegion;
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    private Integer comunaId;
+    private String comunaName;
+    private Region region;
 
-    public int getIdComuna() {
-        return idComuna;
+    public Integer getComunaId() {
+        return comunaId;
     }
 
-    public void setIdComuna(int idComuna) {
-        this.idComuna = idComuna;
+    public void setComunaId(Integer comunaId) {
+        this.comunaId = comunaId;
     }
 
-    public String getComuna() {
-        return comuna;
+    public Region getRegion() {
+        return region;
     }
 
-    public void setComuna(String comuna) {
-        this.comuna = comuna;
+    public void setRegion(Region region) {
+        this.region = region;
     }
 
-    public int getIdRegion() {
-        return idRegion;
-    }
+    public String getComunaName() {  return comunaName;   }
 
-    public void setIdRegion(int idRegion) {
-        this.idRegion = idRegion;
-    }
+    public void setComunaName(String comunaName) {   this.comunaName = comunaName;   }
+
 }

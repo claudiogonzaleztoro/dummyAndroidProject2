@@ -1,12 +1,17 @@
 package cl.petsos.petsos;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import java.util.ArrayList;
 import java.util.List;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class User {
 
-    private int id_person;
+    private Integer userId;
 
     private String name;
 
@@ -14,7 +19,7 @@ public class User {
 
     private String facebookID;
 
-    private String gender;
+    private GenderUser gender;
 
     public String getPassword() {
         return password;
@@ -26,7 +31,7 @@ public class User {
 
     private String password;
 
-    private List<UserComuna> userComunas = new ArrayList<UserComuna>();
+    private Comuna comuna;
 
     public String getName() {
         return name;
@@ -52,27 +57,15 @@ public class User {
         this.facebookID = facebookID;
     }
 
-    public String getGender() {
-        return gender;
-    }
+    public GenderUser getGender() {     return gender;    }
 
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
+    public void setGender(GenderUser gender) {     this.gender = gender;   }
 
-    public int getId_person() {
-        return id_person;
-    }
+    public Integer getUserId() {       return userId;   }
 
-    public void setId_person(int id_person) {
-        this.id_person = id_person;
-    }
+    public void setUserId(Integer userId) {       this.userId = userId;   }
 
-    public List<UserComuna> getUserComunas() {
-        return userComunas;
-    }
+    public Comuna getComuna() {      return comuna;    }
 
-    public void setUserComunas(List<UserComuna> userComunas) {
-        this.userComunas = userComunas;
-    }
+    public void setComuna(Comuna comuna) {    this.comuna = comuna;   }
 }

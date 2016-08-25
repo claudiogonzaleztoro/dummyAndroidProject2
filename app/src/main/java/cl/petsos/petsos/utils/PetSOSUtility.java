@@ -2,6 +2,9 @@ package cl.petsos.petsos.utils;
 
 import android.support.annotation.NonNull;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
@@ -10,8 +13,10 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -20,6 +25,7 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,9 +51,7 @@ import cl.petsos.petsos.StatusPetResponse;
 import cl.petsos.petsos.User;
 import cl.petsos.petsos.Utils;
 
-/**
- * Created by root on 11-07-16.
- */
+
 public class PetSOSUtility {
     private static PetSOSUtility petUtility;
 
@@ -58,11 +62,11 @@ public class PetSOSUtility {
     private String RELATIONSHIP_URL = SERVER_URL + "/relationship/list";
     private String PET_TYPE_URL = SERVER_URL + "/petType/list";
     private String BREED_URL = SERVER_URL + "/breeds/list";
-    private String COLOR_URL = SERVER_URL + "/colors/list";
+    private String COLOR_URL = "http://10.0.2.2:8080/petsos/colorPet/getAllColorsPet";//"/colors/list";
     private String SIZE_URL = SERVER_URL + "/sizes/list";
     private String CONTEXTURE_URL = SERVER_URL + "/contextures/list";
     private String STATUS_URL = SERVER_URL + "/states/list";
-    private String CREATE_USER_URL = SERVER_URL +  "/persons/create";
+    private String CREATE_USER_URL = "http://10.0.2.2:8080/petsos/user/createuser"; //"/persons/create";
 
     public static final String SELECTION = "Seleccione"; //TODO get this dynamically at the beggining
 
@@ -75,6 +79,16 @@ public class PetSOSUtility {
     ContextureResponse[] buildsResponse;
     StatusPetResponse[] statusResponse;
 
+    private int responseCode;
+
+    public int getResponseCode() {
+        return responseCode;
+    }
+
+    public void setResponseCode(int responseCode) {
+        this.responseCode = responseCode;
+    }
+
     public  static PetSOSUtility getPetSOSUtility() {
         if (petUtility==null) {
             petUtility=new PetSOSUtility();
@@ -83,9 +97,9 @@ public class PetSOSUtility {
     }
 
     public static boolean isUserRegisterComplete(User user) {
-        if(user.getName() != null && !user.getName().trim().equals("")
+        if(user != null && user.getName() != null && !user.getName().trim().equals("")
                 && user.getEmail() != null && !user.getEmail().trim().equals("")
-                && user.getGender() != null && !user.getGender().trim().equals("")
+                && user.getGender() != null && !user.getGender().getGenderName().trim().equals("")
                 && user.getPassword() != null && !user.getPassword().trim().equals("")){
             return true;
         }
@@ -97,40 +111,51 @@ public class PetSOSUtility {
     public HashMap<Integer, Comuna> getComunas(){
 
         HashMap<Integer, Comuna> mComunas = new HashMap<Integer, Comuna>();
+
+        Region region15 = new Region();
+        region15.setRegionId(15);
+        region15.setRegionName("Arica y Parinacota");
+
         Comuna mComuna = new Comuna();
-        mComuna.setIdRegion(15);
-        mComuna.setComuna("Arica");
-        mComuna.setIdComuna(1);
+        mComuna.setComunaName("Arica");
+        mComuna.setComunaId(1);
+        mComuna.setRegion(region15);
 
-        mComunas.put(mComuna.getIdComuna(),mComuna);
 
-        mComuna = new Comuna();
-        mComuna.setIdRegion(15);
-        mComuna.setComuna("General Lagos");
-        mComuna.setIdComuna(2);
-
-        mComunas.put(mComuna.getIdComuna(),mComuna);
+        mComunas.put(mComuna.getComunaId(),mComuna);
 
         mComuna = new Comuna();
-        mComuna.setIdRegion(13);
-        mComuna.setComuna("Providencia");
-        mComuna.setIdComuna(1);
+        mComuna.setComunaName("General Lagos");
+        mComuna.setComunaId(2);
+        mComuna.setRegion(region15);
 
-        mComunas.put(mComuna.getIdComuna(),mComuna);
+        mComunas.put(mComuna.getComunaId(),mComuna);
 
-        mComuna = new Comuna();
-        mComuna.setIdRegion(13);
-        mComuna.setComuna("Las Condes");
-        mComuna.setIdComuna(2);
 
-        mComunas.put(mComuna.getIdComuna(),mComuna);
+        Region regionMetro = new Region();
+        region15.setRegionId(13);
+        region15.setRegionName("Metropolitana");
 
         mComuna = new Comuna();
-        mComuna.setIdRegion(13);
-        mComuna.setComuna("Ñuñoa");
-        mComuna.setIdComuna(3);
+        mComuna.setComunaName("Providencia");
+        mComuna.setComunaId(1);
+        mComuna.setRegion(regionMetro);
 
-        mComunas.put(mComuna.getIdComuna(),mComuna);
+        mComunas.put(mComuna.getComunaId(),mComuna);
+
+        mComuna = new Comuna();
+        mComuna.setComunaName("Las Condes");
+        mComuna.setComunaId(2);
+        mComuna.setRegion(regionMetro);
+
+        mComunas.put(mComuna.getComunaId(),mComuna);
+
+        mComuna = new Comuna();
+        mComuna.setComunaName("Ñuñoa");
+        mComuna.setComunaId(3);
+        mComuna.setRegion(regionMetro);
+
+        mComunas.put(mComuna.getComunaId(),mComuna);
 
         return mComunas;
     }
@@ -140,18 +165,16 @@ public class PetSOSUtility {
         HashMap<Integer, Region> regs = new HashMap<Integer, Region>();
 
         Region reg = new Region();
-        reg.setIdCountry(56);
-        reg.setIdRegion(15);
-        reg.setRegion("Arica y Parinacota");
+        reg.setRegionId(15);
+        reg.setRegionName("Arica y Parinacota");
 
-        regs.put(reg.getIdRegion(),reg);
+        regs.put(reg.getRegionId(),reg);
 
         reg = new Region();
-        reg.setIdCountry(56);
-        reg.setIdRegion(13);
-        reg.setRegion("Santiago");
+        reg.setRegionId(13);
+        reg.setRegionName("Santiago");
 
-        regs.put(reg.getIdRegion(),reg);
+        regs.put(reg.getRegionId(),reg);
 
         return regs;
     }
@@ -165,7 +188,7 @@ public class PetSOSUtility {
         while(it.hasNext()){
             Map.Entry e = (Map.Entry)it.next();
             Comuna mcomuna = (Comuna) e.getValue();
-            if(comunaName.equals(mcomuna.getComuna() )){
+            if(comunaName.equals(mcomuna.getComunaName() )){
                 idComuna = ((Integer)e.getKey()).intValue();
                 break;
             }
@@ -183,7 +206,7 @@ public class PetSOSUtility {
         while(it.hasNext()){
             Map.Entry e = (Map.Entry)it.next();
             Region reg = (Region) e.getValue();
-            if(regName.equals(reg.getRegion())){
+            if(regName.equals(reg.getRegionName())){
                 idReg = ((Integer)e.getKey()).intValue();
                 break;
             }
@@ -196,16 +219,18 @@ public class PetSOSUtility {
     public String getGenderUserMapper(String gender, String genderMapped) {
         List<String> gendersUser = getGendersUser();
         HashMap gendersMap = getGendersUserHashMap(gendersUser);
-        Iterator it = gendersMap.entrySet().iterator();
+        if(gendersMap !=null){
+            Iterator it = gendersMap.entrySet().iterator();
+            while(it.hasNext()){
+                Map.Entry e = (Map.Entry)it.next();
 
-        while(it.hasNext()){
-            Map.Entry e = (Map.Entry)it.next();
-
-            if(gender.equals(e.getValue())){
-                genderMapped = e.getKey().toString();
-                break;
+                if(gender.equals(e.getValue())){
+                    genderMapped = e.getKey().toString();
+                    break;
+                }
             }
         }
+
         return genderMapped;
     }
 
@@ -620,7 +645,7 @@ public class PetSOSUtility {
         colors.add(SELECTION);
         if(colorResponse !=null && colorResponse.length >0 ) {
             for (int i = 1; i <= colorResponse.length; i++) {
-                colors.add(colorResponse[i - 1].nameColor);
+                colors.add(colorResponse[i - 1].colorName);
             }
         }
         return colors;
@@ -651,7 +676,7 @@ public class PetSOSUtility {
         colorMap.put(0,SELECTION);
         if(colorResponse !=null && colorResponse.length >0 ) {
             for (int i = 1; i <= colorResponse.length; i++) {
-                colorMap.put(colorResponse[i - 1].idColor, colorResponse[i - 1].nameColor);
+                colorMap.put(colorResponse[i - 1].colorId, colorResponse[i - 1].colorName);
             }
         }
 
@@ -996,7 +1021,7 @@ public class PetSOSUtility {
 
 
     }
-
+/*
     public void preCreateUser(final User user2){
 
         Thread tcreateUser = new Thread(new Runnable() {
@@ -1007,73 +1032,72 @@ public class PetSOSUtility {
             }
         });
         tcreateUser.start();
-    }
+
+    }*/
 
 
-    public Object createUser(User user) {
+    public int createUser(User user) {
 
         try {
-
-            /*
             URL url = new URL(CREATE_USER_URL);
-            String urlParameters  = "idPerson=claudita98@gmail.com";
+            DataOutputStream out;
+            //InputStream input;
+            /*String urlParameters  = "idPerson=claudita98@gmail.com";
             byte[] postData       = urlParameters.getBytes( StandardCharsets.UTF_8 );
-            int    postDataLength = postData.length;
+            int    postDataLength = postData.length;*/
             HttpURLConnection conn= (HttpURLConnection) url.openConnection();
-            conn.setDoOutput(true);
-            conn.setInstanceFollowRedirects( false );
             conn.setRequestMethod( "POST" );
-            conn.setRequestProperty( "Content-Type", "application/x-www-form-urlencoded");
-            conn.setRequestProperty( "charset", "utf-8");
-            conn.setRequestProperty( "Content-Length", Integer.toString( postDataLength ));
-            conn.setUseCaches( false );
+            conn.setDoOutput(true);
+            conn.setDoInput(true);
+            conn.setRequestProperty( "Content-Type", "application/json; charset=UTF-8");
+            conn.connect();
 
-            try( DataOutputStream wr = new DataOutputStream( conn.getOutputStream())) {
-                wr.write( postData );
-            }
-            */
+            JSONObject jsonParam = new JSONObject();
 
 
-            HttpClient httpclient = new DefaultHttpClient();
-            HttpPost httppost = new HttpPost(CREATE_USER_URL);
-            try {
-                // Add your data
-                List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
-                nameValuePairs.add(new BasicNameValuePair("idPerson", "12345"));
-                httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+           /* Comuna myComuna = new Comuna();
+            myComuna.setComunaName("San Carlos");
+            user.setComuna(myComuna);*/
+            //String userStr = Utils.toJson(User.class, true);
 
-                // Execute HTTP Post Request
-                HttpResponse response = httpclient.execute(httppost);
+            ObjectMapper mapper = new ObjectMapper();
+            String jsonInString = mapper.writeValueAsString(user);
 
-            } catch (ClientProtocolException e) {
-                // TODO Auto-generated catch block
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-            }
+            //String urlString = "{\"name\":\"paolita\",\"email\":\"pppp@mail.com\",\"comuna\":\"{\\\"comunaName\\\":\\\"San Carlos\\\"}\",\"gender\":\"{\\\"genderName\\\":\\\"Masculino\\\"}\"}";
+
+
+            //convert string to json using jackson
+
+            //Utils.fromJson(urlString,User.class);
 
 
 
-            return null;
+            /*jsonParam.put("name",user.getName());
+            jsonParam.put("email", user.getEmail());*/
+           /* jsonParam.put("gender",null);*/
+          /*  JSONObject jsonParam2 = new JSONObject();
+            jsonParam2.put("comunaName",myComuna.getComunaName());
+            jsonParam.put("comuna",jsonParam2.toString());
 
+            JSONObject jsonParamGender = new JSONObject();
+            jsonParamGender.put("genderName","Masculino");
+            jsonParam.put("gender",jsonParamGender.toString());*/
+            //jsonParam.put("facebookId",null);
+            //jsonParam.put("password",null);
 
+            out = new DataOutputStream(conn.getOutputStream());
+            String str = jsonInString;//jsonParam.toString();
+            byte[] data= str.getBytes("UTF-8");
+            out.write(data);
+            out.flush();
+            out.close();
+            return conn.getResponseCode();
 
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        return 0;
     }
-
-
-     /*
-
-           runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    petBuildSpinner.setAdapter(adapter);
-                }
-            });
-
-            */
 
 }

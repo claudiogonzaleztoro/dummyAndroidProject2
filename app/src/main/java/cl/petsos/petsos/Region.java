@@ -5,31 +5,22 @@ package cl.petsos.petsos;
  */
 public class Region {
 
-    private int idRegion;
-    private String region;
-    private int idCountry;
+    private Integer regionId;
+    private String regionName;
 
-    public int getIdRegion() {
-        return idRegion;
+    public Integer getRegionId() {
+        return regionId;
     }
 
-    public void setIdRegion(int idRegion) {
-        this.idRegion = idRegion;
+    public void setRegionId(Integer regionId) {
+        this.regionId = regionId;
     }
 
-    public String getRegion() {
-        return region;
+    public String getRegionName() {
+        return regionName;
     }
 
-    public void setRegion(String region) {
-        this.region = region;
-    }
-
-    public int getIdCountry() {
-        return idCountry;
-    }
-
-    public void setIdCountry(int idCountry) {
-        this.idCountry = idCountry;
+    public void setRegionName(String regionName) {
+        this.regionName = regionName;
     }
 }

@@ -207,6 +207,22 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@string/update_button"
+            android:id="@+id/button_update_user_reg"
+            android:textColor="#FFFFFF"
+            android:layout_margin="6dp"
+            android:background="#FFFFFF"
+            android:backgroundTint="@color/com_facebook_blue"
+            android:layout_alignParentTop="true"
+            android:gravity="center_vertical"
+            android:layout_centerHorizontal="true"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:visibility="gone"
+            />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="Agregar Mascota"
             android:id="@+id/button_add_pet"
             android:textColor="#FFFFFF"
@@ -233,6 +249,7 @@
             android:id="@+id/searchPetsLink"
             android:textColorLink="#062457"
             android:text="Pet lost list"
+            android:visibility="gone"
             android:autoLink="web"/>
 
     </LinearLayout>

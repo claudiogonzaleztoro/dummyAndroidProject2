@@ -2,6 +2,7 @@ package cl.petsos.petsos;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -39,6 +40,7 @@ public class RegisterActivity extends AppCompatActivity
     private User user;
     private TextView btnLogout;
     private Button saveUserDataButton;
+    private Button updateUserDataButton;
     private Button addPetButton;
     private TextView searchPetsLinkTextView;
 
@@ -48,34 +50,59 @@ public class RegisterActivity extends AppCompatActivity
     private Spinner mGenderSpinner;
     private Spinner mRegionSpinner;
     private Spinner mComunaSpinner;
+    private boolean existingUser;
+    private User tempUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_main);
+        setContentView(R.layout.register_user);
+
+        existingUser = PrefUtils.isExistingUser(RegisterActivity.this);
+
+        usernameEditText = (EditText) findViewById(R.id.nameUserEditText);
+        emailEditText = (EditText)findViewById(R.id.emailUserEditText);
+
+        if(existingUser){
+            setCurrentUserInformation(usernameEditText,emailEditText);
+            User currentUser = PrefUtils.getCurrentUser(RegisterActivity.this);
+            boolean registroUsuarioCompleto = PetSOSUtility.getPetSOSUtility().isUserRegisterComplete(currentUser);
+            if(registroUsuarioCompleto){
+                addListenerOnButtonUpdateUserData();
+                addListenerOnButtonAddPet();
+                addListenerOnSearchPetsLink();
+            }
+            else{
+                addListenerOnButtonSaveUserData();
+            }
+        }
+        else{
+            setCleanUserInformation(usernameEditText,emailEditText);
+            addListenerOnButtonSaveUserData();
+        }
+
+        addItemsOnGenderSpinner();
+        addItemsOnRegionSpinner();
 
 
-        /*Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-        */
-
-
-
-        //process Current User to give to him a suitable screen
-        setUserInformation();
-        addListenerOnButtonSaveUserData();
-        addListenerOnButtonAddPet();
-        addListenerOnSearchPetsLink();
         logoutManager();
     }
+
+    private void addListenerOnButtonUpdateUserData() {
+        updateUserDataButton = (Button) findViewById(R.id.button_update_user_reg);
+        updateUserDataButton.setOnClickListener(updateUserDataButtonListener);
+        searchPetsLinkTextView = (TextView)findViewById(R.id.searchPetsLink);
+        searchPetsLinkTextView.setVisibility(View.VISIBLE);
+    }
+
+    private View.OnClickListener updateUserDataButtonListener = new View.OnClickListener(){
+
+        @Override
+        public void onClick(View view) {
+            //TODO
+            System.out.println("Lets update an existing user");
+        }
+    };
 
     private void addListenerOnButtonAddPet() {
         addPetButton = (Button)findViewById(R.id.button_add_pet);
@@ -94,7 +121,6 @@ public class RegisterActivity extends AppCompatActivity
     private void addListenerOnSearchPetsLink() {
         searchPetsLinkTextView = (TextView)findViewById(R.id.searchPetsLink);
         searchPetsLinkTextView.setOnClickListener(searchPetsLinkListener);
-
     }
 
     private View.OnClickListener searchPetsLinkListener = new View.OnClickListener(){
@@ -114,107 +140,112 @@ public class RegisterActivity extends AppCompatActivity
     private View.OnClickListener saveUserDataButtonListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            //check if we have all the information before save
             if(validateDataIsCompleted()) {
-
-
-
-
-                //TODO save user
-                Button addPetButton = (Button) findViewById(R.id.button_add_pet);
-                addPetButton.setVisibility(View.VISIBLE);
-                Toast.makeText(RegisterActivity.this,"Nombre: " + PrefUtils.getCurrentUser(RegisterActivity.this).getName(), Toast.LENGTH_SHORT).show();
+                StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+                StrictMode.setThreadPolicy(policy);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        int responseCode = PetSOSUtility.getPetSOSUtility().createUser(user);
+                        if(responseCode == 200){
+                            Toast.makeText(RegisterActivity.this,"User Created succesfully", Toast.LENGTH_SHORT).show();
+                            Button addPetButton = (Button) findViewById(R.id.button_add_pet);
+                            addPetButton.setVisibility(View.VISIBLE);
+                        }
+                        else{
+                            Toast.makeText(RegisterActivity.this,"Error When User tried to be Created", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+                //Toast.makeText(RegisterActivity.this,"Nombre: " + PrefUtils.getCurrentUser(RegisterActivity.this).getName(), Toast.LENGTH_SHORT).show();
             }
         }
     };
 
     private boolean validateDataIsCompleted(){
-        //name
         String userName = usernameEditText.getText().toString();
-        //email
         String email = emailEditText.getText().toString();
-        //password
         passwordEditText = (EditText)findViewById(R.id.passwordUserEditText); //()passwordEditText
         String pass = passwordEditText.getText().toString();
 
-        //gender
         String gender= mGenderSpinner.getSelectedItem().toString();
         String genderMapped = "";
         //transform the gender as facebook way (female/male)
         genderMapped = PetSOSUtility.getPetSOSUtility().getGenderUserMapper(gender, genderMapped);
 
-        //region
         String userReg= mRegionSpinner.getSelectedItem().toString();
-        //comuna
         String userComuna= mComunaSpinner.getSelectedItem().toString();
 
-        if(userName != null && !userName.trim().equals("")
-                && email != null && !email.trim().equals("")
-                && genderMapped != null && !genderMapped.trim().equals("") && !genderMapped.trim().equals("Seleccione")
-                && pass != null && !pass.trim().equals("")
-                && userReg != null && !userReg.trim().equals("") && !userReg.trim().equals("Seleccione")
-                && userComuna != null && !userComuna.trim().equals("") && !userComuna.trim().equals("Seleccione")){
-
-            setDataUser(userName,email, genderMapped, pass, userReg, userComuna );
-
+        if(allFieldsUserFormAreFilled(userName, email, pass, genderMapped, userReg, userComuna)){
+            setTempDataUser(userName,email, genderMapped, pass, userReg, userComuna );
             return true;
         }
         return false;
     }
 
-    private void setDataUser(String userName, String email, String genderMapped, String pass, String userReg, String userComuna ){
+    private void setTempDataUser(String userName, String email, String genderMapped, String pass, String userReg, String userComuna ){
 
-            user=PrefUtils.getCurrentUser(RegisterActivity.this);
+            user= getUserToSetFormData();
             user.setName(userName);
             user.setEmail(email);
-            user.setGender(genderMapped);
+            GenderUser myGender = new GenderUser();
+            myGender.setGenderName(genderMapped);
+            user.setGender(myGender);
             user.setPassword(pass);
 
 
             int userRegId = PetSOSUtility.getPetSOSUtility().getIdRegionByRegioName(userReg);
             int userComunaId = PetSOSUtility.getPetSOSUtility().getIdComunaByComunaName(userComuna);
-            UserComuna mUserComuna = new UserComuna();
-            mUserComuna.setIdComuna(userComunaId);
-            mUserComuna.setIdPerson(1);
-            List<UserComuna> mUserComunas = new ArrayList<UserComuna>();
-            mUserComunas.add(mUserComuna);
-            user.setUserComunas(mUserComunas);
-            user.setId_person(1);
 
-            PrefUtils.setCurrentUser(user,RegisterActivity.this);
+            Comuna myComuna = new Comuna();
+            myComuna.setComunaName(userComuna);
+            user.setComuna(myComuna);
+
+
+            /*PrefUtils.setCurrentUser(user,RegisterActivity.this);
             PetSOSUtility petSOSUtility = new PetSOSUtility();
-            petSOSUtility.preCreateUser(user);
-
-
-
-
-
-
+            petSOSUtility.preCreateUser(user);*/
 
     }
 
+    private User getUserToSetFormData(){
+        existingUser = PrefUtils.isExistingUser(RegisterActivity.this);
+        User user;
+        if(!existingUser){
+            user = new User();
+        }else{
+            user=PrefUtils.getCurrentUser(RegisterActivity.this);
+        }
+        return user;
+    }
 
-    private void setUserInformation() {
+    private boolean allFieldsUserFormAreFilled(String userName, String email, String pass, String genderMapped, String userReg, String userComuna) {
+        return userName != null && !userName.trim().equals("")
+                && email != null && !email.trim().equals("")
+                && genderMapped != null && !genderMapped.trim().equals("") && !genderMapped.trim().equals("Seleccione")
+                && pass != null && !pass.trim().equals("")
+                && userReg != null && !userReg.trim().equals("") && !userReg.trim().equals("Seleccione")
+                && userComuna != null && !userComuna.trim().equals("") && !userComuna.trim().equals("Seleccione");
+    }
 
+    private void setCurrentUserInformation(EditText usernameEditText, EditText emailEditText) {
         user=PrefUtils.getCurrentUser(RegisterActivity.this);
 
-        LinearLayout linLay = (LinearLayout)findViewById(R.id.linLayRegUser);
-        //set User fields
+        boolean existsCurrentUserName = user != null && user.getName() != null && !user.getName().trim().equals("");
+        boolean existsCurrentEmail = user != null && user.getEmail() != null && !user.getEmail().trim().equals("");
 
-        if(user.getName() != null && !user.getName().trim().equals("")){
-            usernameEditText = (EditText) findViewById(R.id.nameUserEditText);
+        if(existsCurrentUserName){
             usernameEditText.setText(user.getName());
         }
 
-        emailEditText = (EditText)findViewById(R.id.emailUserEditText);
-        emailEditText.setText(user.getEmail());
+        if(existsCurrentEmail){
+            emailEditText.setText(user.getEmail());
+        }
+    }
 
-        addItemsOnGenderSpinner();
-        addItemsOnRegionSpinner();
-
-        linLay.setVisibility(View.VISIBLE);
-
-        //setContentView(linLay);
+    private void setCleanUserInformation(EditText usernameEditText, EditText emailEditText){
+        usernameEditText.setText("");
+        emailEditText.setText("");
     }
 
     private void addItemsOnRegionSpinner() {
@@ -254,7 +285,7 @@ public class RegisterActivity extends AppCompatActivity
         regionAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mRegionSpinner.setAdapter(regionAdapter);
 
-        if ( user.getUserComunas().size() > 0 ) {
+        if (user !=null && user.getComuna() != null ) {
           //  int spinnerPosition = dataAdapter.getPosition((String)genderMap.get(user.getGender()));
           //  mGenderSpinner.setSelection(spinnerPosition);
         }
@@ -307,9 +338,14 @@ public class RegisterActivity extends AppCompatActivity
         HashMap<String, String> genderMap = PetSOSUtility.getPetSOSUtility().getGendersUserHashMap(genders);
 
         //setting the gender coming from facebook
-        if (!user.getGender().equals(null)) {
+        boolean existsCurrentUserGender = user != null && user.getGender() != null && !user.getGender().equals(null);
+
+        if (existsCurrentUserGender) {
             int spinnerPosition = dataAdapter.getPosition((String)genderMap.get(user.getGender()));
             mGenderSpinner.setSelection(spinnerPosition);
+        }
+        else{
+            mGenderSpinner.setSelection(0);
         }
 
     }

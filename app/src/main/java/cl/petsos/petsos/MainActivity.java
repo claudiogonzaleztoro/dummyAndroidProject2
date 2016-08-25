@@ -29,12 +29,24 @@ public class MainActivity extends AppCompatActivity {
     private TextView btnLogin;
     private ProgressDialog progressDialog;
     User user;
-
+    private TextView txtRegisterNewUser;
+    private boolean existingUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        txtRegisterNewUser = (TextView) findViewById(R.id.txtRegisterNewUser);
+        txtRegisterNewUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent homeIntent = new Intent(MainActivity.this, RegisterActivity.class);
+                startActivity(homeIntent);
+                existingUser = false;
+                PrefUtils.setExistingUser(existingUser, MainActivity.this);
+            }
+        });
 
         //process Current User to give to him a suitable screen
         User currentUser = PrefUtils.getCurrentUser(MainActivity.this);
@@ -50,10 +62,10 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(homeIntent);
             }
 
-
             finish();
         }
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -80,18 +92,31 @@ public class MainActivity extends AppCompatActivity {
         appCompatButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                User currentUser = PrefUtils.getCurrentUser(MainActivity.this);
+                boolean registroUsuarioCompleto = PetSOSUtility.getPetSOSUtility().isUserRegisterComplete(currentUser);
+                if(registroUsuarioCompleto){
+                    Intent homeIntent = new Intent(MainActivity.this, FoundLostActivity.class);
+                    startActivity(homeIntent);
+                }else{
+                    User user = new User();
+                    PrefUtils.setCurrentUser(user,MainActivity.this);
+                    Intent homeIntent = new Intent(MainActivity.this, RegisterActivity.class);
+                    startActivity(homeIntent);
+                }
+
+                /*finish();
                 Intent i = new Intent(MainActivity.this, FoundLostActivity.class);
-                startActivity(i);
+                startActivity(i);*/
             }
         });
-
-
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
+
     private FacebookCallback<LoginResult> mCallBack = new FacebookCallback<LoginResult>() {
         @Override
         public void onSuccess(LoginResult loginResult) {
@@ -110,7 +135,9 @@ public class MainActivity extends AppCompatActivity {
                                 user.setFacebookID(object.getString("id").toString());
                                 user.setEmail(object.getString("email").toString());
                                 user.setName(object.getString("name").toString());
-                                user.setGender(object.getString("gender").toString());
+                                GenderUser genderUser = new GenderUser();
+                                genderUser.setGenderName(object.getString("gender").toString());
+                                user.setGender(genderUser);
                                 PrefUtils.setCurrentUser(user,MainActivity.this);
                             }catch (Exception e){
                                 e.printStackTrace();

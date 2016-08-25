@@ -575,7 +575,7 @@ public class FoundLostSearchActivity extends AppCompatActivity {
         List<String> color = new ArrayList<String>();
 
         for(int i = 0; i < colorResponse.length; i++){
-            color.add(colorResponse[i].nameColor);
+            color.add(colorResponse[i].colorName);
         }
 
         final ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, color);

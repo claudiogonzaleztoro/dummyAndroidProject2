@@ -9,8 +9,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ColorResponse {
 
-    public int idColor;
-    public String nameColor;
+    public int colorId;
+    public String colorName;
     public int color;
 
     public ColorResponse(){
