@@ -63,22 +63,21 @@ public class RegisterActivity extends AppCompatActivity
         usernameEditText = (EditText) findViewById(R.id.nameUserEditText);
         emailEditText = (EditText)findViewById(R.id.emailUserEditText);
 
+        initializeListeners();
+
         if(existingUser){
             setCurrentUserInformation(usernameEditText,emailEditText);
             User currentUser = PrefUtils.getCurrentUser(RegisterActivity.this);
             boolean registroUsuarioCompleto = PetSOSUtility.getPetSOSUtility().isUserRegisterComplete(currentUser);
-            if(registroUsuarioCompleto){
-                addListenerOnButtonUpdateUserData();
-                addListenerOnButtonAddPet();
-                addListenerOnSearchPetsLink();
+           /* if(registroUsuarioCompleto){
+
             }
             else{
-                addListenerOnButtonSaveUserData();
-            }
+
+            }*/
         }
         else{
             setCleanUserInformation(usernameEditText,emailEditText);
-            addListenerOnButtonSaveUserData();
         }
 
         addItemsOnGenderSpinner();
@@ -86,6 +85,15 @@ public class RegisterActivity extends AppCompatActivity
 
 
         logoutManager();
+    }
+
+    private void initializeListeners() {
+
+        addListenerOnButtonUpdateUserData();
+        addListenerOnButtonAddPet();
+        addListenerOnSearchPetsLink();
+        addListenerOnButtonSaveUserData();
+
     }
 
     private void addListenerOnButtonUpdateUserData() {
@@ -148,9 +156,12 @@ public class RegisterActivity extends AppCompatActivity
                     public void run() {
                         int responseCode = PetSOSUtility.getPetSOSUtility().createUser(user);
                         if(responseCode == 200){
+                            PrefUtils.setCurrentUser(user, RegisterActivity.this);
                             Toast.makeText(RegisterActivity.this,"User Created succesfully", Toast.LENGTH_SHORT).show();
                             Button addPetButton = (Button) findViewById(R.id.button_add_pet);
                             addPetButton.setVisibility(View.VISIBLE);
+                            saveUserDataButton.setVisibility(View.GONE);
+                            updateUserDataButton.setVisibility(View.VISIBLE);
                         }
                         else{
                             Toast.makeText(RegisterActivity.this,"Error When User tried to be Created", Toast.LENGTH_SHORT).show();
@@ -193,19 +204,12 @@ public class RegisterActivity extends AppCompatActivity
             user.setGender(myGender);
             user.setPassword(pass);
 
-
-            int userRegId = PetSOSUtility.getPetSOSUtility().getIdRegionByRegioName(userReg);
-            int userComunaId = PetSOSUtility.getPetSOSUtility().getIdComunaByComunaName(userComuna);
+            /*int userRegId = PetSOSUtility.getPetSOSUtility().getIdRegionByRegioName(userReg);
+            int userComunaId = PetSOSUtility.getPetSOSUtility().getIdComunaByComunaName(userComuna);*/
 
             Comuna myComuna = new Comuna();
             myComuna.setComunaName(userComuna);
             user.setComuna(myComuna);
-
-
-            /*PrefUtils.setCurrentUser(user,RegisterActivity.this);
-            PetSOSUtility petSOSUtility = new PetSOSUtility();
-            petSOSUtility.preCreateUser(user);*/
-
     }
 
     private User getUserToSetFormData(){

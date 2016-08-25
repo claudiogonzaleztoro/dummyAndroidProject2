@@ -111,13 +111,6 @@
             android:id="@+id/genderList"
             >
         </Spinner>
-       <!-- <EditText
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.8"
-            android:background="@drawable/rounded_edittext"
-            android:id="@+id/genderdUserEditText"
-            />-->
     </LinearLayout>
     <LinearLayout
         android:layout_marginTop="10dp"
@@ -143,13 +136,6 @@
             android:id="@+id/regionList"
             >
         </Spinner>
-       <!-- <EditText
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.8"
-            android:background="@drawable/rounded_edittext"
-            android:id="@+id/regiondUserEditText"
-            />-->
     </LinearLayout>
     <LinearLayout
         android:layout_marginTop="10dp"
@@ -175,13 +161,6 @@
             android:id="@+id/comunaList"
             >
         </Spinner>
-       <!-- <EditText
-            android:layout_width="0dp"
-            android:background="@drawable/rounded_edittext"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.8"
-            android:id="@+id/comunadUserEditText"
-            />-->
     </LinearLayout>
     <LinearLayout
         android:orientation="horizontal"

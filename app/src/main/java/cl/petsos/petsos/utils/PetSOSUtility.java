@@ -1021,30 +1021,13 @@ public class PetSOSUtility {
 
 
     }
-/*
-    public void preCreateUser(final User user2){
-
-        Thread tcreateUser = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                PetSOSUtility petSOSUtility = new PetSOSUtility();
-                petSOSUtility.createUser(user2);
-            }
-        });
-        tcreateUser.start();
-
-    }*/
-
 
     public int createUser(User user) {
 
         try {
             URL url = new URL(CREATE_USER_URL);
             DataOutputStream out;
-            //InputStream input;
-            /*String urlParameters  = "idPerson=claudita98@gmail.com";
-            byte[] postData       = urlParameters.getBytes( StandardCharsets.UTF_8 );
-            int    postDataLength = postData.length;*/
+
             HttpURLConnection conn= (HttpURLConnection) url.openConnection();
             conn.setRequestMethod( "POST" );
             conn.setDoOutput(true);
@@ -1054,34 +1037,9 @@ public class PetSOSUtility {
 
             JSONObject jsonParam = new JSONObject();
 
-
-           /* Comuna myComuna = new Comuna();
-            myComuna.setComunaName("San Carlos");
-            user.setComuna(myComuna);*/
-            //String userStr = Utils.toJson(User.class, true);
-
             ObjectMapper mapper = new ObjectMapper();
             String jsonInString = mapper.writeValueAsString(user);
 
-            //String urlString = "{\"name\":\"paolita\",\"email\":\"pppp@mail.com\",\"comuna\":\"{\\\"comunaName\\\":\\\"San Carlos\\\"}\",\"gender\":\"{\\\"genderName\\\":\\\"Masculino\\\"}\"}";
-
-
-            //convert string to json using jackson
-
-            //Utils.fromJson(urlString,User.class);
-
-
-
-            /*jsonParam.put("name",user.getName());
-            jsonParam.put("email", user.getEmail());*/
-           /* jsonParam.put("gender",null);*/
-          /*  JSONObject jsonParam2 = new JSONObject();
-            jsonParam2.put("comunaName",myComuna.getComunaName());
-            jsonParam.put("comuna",jsonParam2.toString());
-
-            JSONObject jsonParamGender = new JSONObject();
-            jsonParamGender.put("genderName","Masculino");
-            jsonParam.put("gender",jsonParamGender.toString());*/
             //jsonParam.put("facebookId",null);
             //jsonParam.put("password",null);
 
@@ -1092,8 +1050,6 @@ public class PetSOSUtility {
             out.flush();
             out.close();
             return conn.getResponseCode();
-
-
         } catch (Exception e) {
             e.printStackTrace();
         }
