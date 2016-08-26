@@ -53,6 +53,11 @@ public class RegisterActivity extends AppCompatActivity
     private boolean existingUser;
     private User tempUser;
 
+    MenuItem menuItLProfile;
+    MenuItem menuItListPets;
+    MenuItem menuItSearchPet;
+    MenuItem menuItScanQrItem;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,7 +82,9 @@ public class RegisterActivity extends AppCompatActivity
             }*/
         }
         else{
+
             setCleanUserInformation(usernameEditText,emailEditText);
+
         }
 
         addItemsOnGenderSpinner();
@@ -87,14 +94,39 @@ public class RegisterActivity extends AppCompatActivity
         logoutManager();
     }
 
-    private void initializeListeners() {
+    private void setHiddenMenuItems() {
+        menuItLProfile.setVisible(false);
+        menuItListPets.setVisible(false);
+        menuItSearchPet.setVisible(false);
+        menuItScanQrItem.setVisible(false);
+    }
 
+    private void setShowedMenuItems() {
+        menuItLProfile.setVisible(true);
+        menuItListPets.setVisible(true);
+        menuItSearchPet.setVisible(true);
+        menuItScanQrItem.setVisible(true);
+    }
+
+
+    private void initializeListeners() {
         addListenerOnButtonUpdateUserData();
         addListenerOnButtonAddPet();
         addListenerOnSearchPetsLink();
         addListenerOnButtonSaveUserData();
 
+
+
     }
+
+    private void initializeMenuItems(Menu menu) {
+        menuItLProfile = menu.findItem(R.id.profileItem);
+        menuItListPets = menu.findItem(R.id.listPetsItem);
+        menuItSearchPet = menu.findItem(R.id.searchPetItem);
+        menuItScanQrItem = menu.findItem(R.id.scanQrItem);
+
+    }
+
 
     private void addListenerOnButtonUpdateUserData() {
         updateUserDataButton = (Button) findViewById(R.id.button_update_user_reg);
@@ -162,6 +194,9 @@ public class RegisterActivity extends AppCompatActivity
                             addPetButton.setVisibility(View.VISIBLE);
                             saveUserDataButton.setVisibility(View.GONE);
                             updateUserDataButton.setVisibility(View.VISIBLE);
+                            emailEditText.setEnabled(false);
+                            searchPetsLinkTextView.setVisibility(View.VISIBLE);
+                            setShowedMenuItems();
                         }
                         else{
                             Toast.makeText(RegisterActivity.this,"Error When User tried to be Created", Toast.LENGTH_SHORT).show();
@@ -250,6 +285,7 @@ public class RegisterActivity extends AppCompatActivity
     private void setCleanUserInformation(EditText usernameEditText, EditText emailEditText){
         usernameEditText.setText("");
         emailEditText.setText("");
+        searchPetsLinkTextView.setVisibility(View.GONE);
     }
 
     private void addItemsOnRegionSpinner() {
@@ -368,6 +404,13 @@ public class RegisterActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        existingUser = PrefUtils.isExistingUser(RegisterActivity.this);
+
+        initializeMenuItems(menu);
+
+        if(!existingUser){
+            setHiddenMenuItems();
+        }
         return true;
     }
 
