@@ -535,7 +535,7 @@ public class FoundLostSearchActivity extends AppCompatActivity {
         List<String> region = new ArrayList<String>();
 
         for(int i = 0; i < regionResponse.length; i++){
-            region.add(regionResponse[i].region);
+            region.add(regionResponse[i].getRegionName());
         }
 
         final ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, region);
@@ -555,7 +555,7 @@ public class FoundLostSearchActivity extends AppCompatActivity {
         List<String> comuna = new ArrayList<String>();
 
         for(int i = 0; i < comunaResponse.length; i++){
-            comuna.add(comunaResponse[i].comuna);
+            comuna.add(comunaResponse[i].getComunaName());
         }
 
         final ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, comuna);

@@ -27,9 +27,7 @@ import java.util.List;
 
 import cl.petsos.petsos.utils.PetSOSUtility;
 
-/**
- * Created by root on 13-07-16.
- */
+
 public class RegisterActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -38,6 +36,9 @@ public class RegisterActivity extends AppCompatActivity
     private EditText passwordEditText;
 
     private User user;
+    private Region regionUser;
+    private Comuna comunaUser;
+
     private TextView btnLogout;
     private Button saveUserDataButton;
     private Button updateUserDataButton;
@@ -51,72 +52,60 @@ public class RegisterActivity extends AppCompatActivity
     private Spinner mRegionSpinner;
     private Spinner mComunaSpinner;
     private boolean existingUser;
-    private User tempUser;
 
     MenuItem menuItLProfile;
     MenuItem menuItListPets;
     MenuItem menuItSearchPet;
     MenuItem menuItScanQrItem;
 
+    List<String> comunas  = new ArrayList<String>( );
+    List<String> genders = new ArrayList<String>( );
+    List<String> regionList = new ArrayList<String>();
+
+    ArrayAdapter<String> regionAdapter;
+    ArrayAdapter<String> comunasAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.register_user);
 
-        existingUser = PrefUtils.isExistingUser(RegisterActivity.this);
-
-        usernameEditText = (EditText) findViewById(R.id.nameUserEditText);
-        emailEditText = (EditText)findViewById(R.id.emailUserEditText);
-
+        initializeUserFormViews();
         initializeListeners();
 
+        existingUser = PrefUtils.isExistingUser(RegisterActivity.this);
+        user= getUserToSetFormData();
         if(existingUser){
             setCurrentUserInformation(usernameEditText,emailEditText);
             User currentUser = PrefUtils.getCurrentUser(RegisterActivity.this);
             boolean registroUsuarioCompleto = PetSOSUtility.getPetSOSUtility().isUserRegisterComplete(currentUser);
-           /* if(registroUsuarioCompleto){
 
+            if(registroUsuarioCompleto){
+               setExistingUserViews();
             }
             else{
-
-            }*/
+               setHiddenMenuItems();
+            }
         }
         else{
-
             setCleanUserInformation(usernameEditText,emailEditText);
-
         }
 
-        addItemsOnGenderSpinner();
-        addItemsOnRegionSpinner();
-
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                addItemsOnGenderSpinner();
+                addItemsOnRegionSpinner();
+            }
+        });
 
         logoutManager();
     }
 
-    private void setHiddenMenuItems() {
-        menuItLProfile.setVisible(false);
-        menuItListPets.setVisible(false);
-        menuItSearchPet.setVisible(false);
-        menuItScanQrItem.setVisible(false);
-    }
-
-    private void setShowedMenuItems() {
-        menuItLProfile.setVisible(true);
-        menuItListPets.setVisible(true);
-        menuItSearchPet.setVisible(true);
-        menuItScanQrItem.setVisible(true);
-    }
-
-
-    private void initializeListeners() {
-        addListenerOnButtonUpdateUserData();
-        addListenerOnButtonAddPet();
-        addListenerOnSearchPetsLink();
-        addListenerOnButtonSaveUserData();
-
-
-
+    private void initializeUserFormViews() {
+        usernameEditText = (EditText) findViewById(R.id.nameUserEditText);
+        emailEditText = (EditText)findViewById(R.id.emailUserEditText);
+        passwordEditText = (EditText)findViewById(R.id.passwordUserEditText);
     }
 
     private void initializeMenuItems(Menu menu) {
@@ -124,9 +113,7 @@ public class RegisterActivity extends AppCompatActivity
         menuItListPets = menu.findItem(R.id.listPetsItem);
         menuItSearchPet = menu.findItem(R.id.searchPetItem);
         menuItScanQrItem = menu.findItem(R.id.scanQrItem);
-
     }
-
 
     private void addListenerOnButtonUpdateUserData() {
         updateUserDataButton = (Button) findViewById(R.id.button_update_user_reg);
@@ -189,14 +176,11 @@ public class RegisterActivity extends AppCompatActivity
                         int responseCode = PetSOSUtility.getPetSOSUtility().createUser(user);
                         if(responseCode == 200){
                             PrefUtils.setCurrentUser(user, RegisterActivity.this);
+                            PrefUtils.setExistingUser(true,RegisterActivity.this);
                             Toast.makeText(RegisterActivity.this,"User Created succesfully", Toast.LENGTH_SHORT).show();
-                            Button addPetButton = (Button) findViewById(R.id.button_add_pet);
-                            addPetButton.setVisibility(View.VISIBLE);
-                            saveUserDataButton.setVisibility(View.GONE);
-                            updateUserDataButton.setVisibility(View.VISIBLE);
-                            emailEditText.setEnabled(false);
+                            setExistingUserViews();
                             searchPetsLinkTextView.setVisibility(View.VISIBLE);
-                            setShowedMenuItems();
+                            setVisibleMenuItems();
                         }
                         else{
                             Toast.makeText(RegisterActivity.this,"Error When User tried to be Created", Toast.LENGTH_SHORT).show();
@@ -208,10 +192,18 @@ public class RegisterActivity extends AppCompatActivity
         }
     };
 
+    private void setExistingUserViews() {
+        addPetButton = (Button) findViewById(R.id.button_add_pet);
+        addPetButton.setVisibility(View.VISIBLE);
+        saveUserDataButton.setVisibility(View.GONE);
+        updateUserDataButton.setVisibility(View.VISIBLE);
+        emailEditText.setEnabled(false);
+    }
+
     private boolean validateDataIsCompleted(){
         String userName = usernameEditText.getText().toString();
         String email = emailEditText.getText().toString();
-        passwordEditText = (EditText)findViewById(R.id.passwordUserEditText); //()passwordEditText
+
         String pass = passwordEditText.getText().toString();
 
         String gender= mGenderSpinner.getSelectedItem().toString();
@@ -231,7 +223,7 @@ public class RegisterActivity extends AppCompatActivity
 
     private void setTempDataUser(String userName, String email, String genderMapped, String pass, String userReg, String userComuna ){
 
-            user= getUserToSetFormData();
+            //user= getUserToSetFormData();
             user.setName(userName);
             user.setEmail(email);
             GenderUser myGender = new GenderUser();
@@ -239,11 +231,12 @@ public class RegisterActivity extends AppCompatActivity
             user.setGender(myGender);
             user.setPassword(pass);
 
-            /*int userRegId = PetSOSUtility.getPetSOSUtility().getIdRegionByRegioName(userReg);
-            int userComunaId = PetSOSUtility.getPetSOSUtility().getIdComunaByComunaName(userComuna);*/
-
             Comuna myComuna = new Comuna();
             myComuna.setComunaName(userComuna);
+
+            Region myReg = new Region();
+            myReg.setRegionName(userReg);
+            myComuna.setRegion(myReg);
             user.setComuna(myComuna);
     }
 
@@ -272,6 +265,7 @@ public class RegisterActivity extends AppCompatActivity
 
         boolean existsCurrentUserName = user != null && user.getName() != null && !user.getName().trim().equals("");
         boolean existsCurrentEmail = user != null && user.getEmail() != null && !user.getEmail().trim().equals("");
+        boolean existsCurrentPassword = user != null && user.getPassword() != null && !user.getPassword().trim().equals("");
 
         if(existsCurrentUserName){
             usernameEditText.setText(user.getName());
@@ -280,6 +274,11 @@ public class RegisterActivity extends AppCompatActivity
         if(existsCurrentEmail){
             emailEditText.setText(user.getEmail());
         }
+
+        if(existsCurrentPassword){
+            passwordEditText.setText(user.getPassword());
+        }
+
     }
 
     private void setCleanUserInformation(EditText usernameEditText, EditText emailEditText){
@@ -291,30 +290,43 @@ public class RegisterActivity extends AppCompatActivity
     private void addItemsOnRegionSpinner() {
 
         //init populate region comunas
-        List<String> comunas = new ArrayList<String>();
-        comunas.add("Seleccione");
-        regionMap.put("Seleccione",comunas);
+        if(comunas.size() == 0) {
+            comunas.add("Seleccione");
+            regionMap.put("Seleccione", comunas);
 
-        comunas = new ArrayList<String>();
-        comunas.add("Seleccione");
-        comunas.add("Arica");
-        comunas.add("General Lagos");
+        }/*    comunas = new ArrayList<String>();
+            comunas.add("Seleccione");
+            comunas.add("Arica");
+            comunas.add("General Lagos");
 
-        regionMap.put("Arica y Parinacota",comunas);
+            regionMap.put("Arica y Parinacota",comunas);
 
-        comunas = new ArrayList<String>();
-        comunas.add("Seleccione");
-        comunas.add("Providencia");
-        comunas.add("Santiago");
-        comunas.add("Las Condes");
-        regionMap.put("Santiago",comunas);
+            comunas = new ArrayList<String>();
+            comunas.add("Seleccione");
+            comunas.add("Providencia");
+            comunas.add("Santiago");
+            comunas.add("Las Condes");
+            regionMap.put("Santiago",comunas);
 
-        List<String> regionList = new ArrayList<String>();
-        for(String regionName: regionMap.keySet()){
-            regionList.add(regionName);
+        }*/
+
+        if(regionList.size() == 0){
+            /*for(String regionName: regionMap.keySet()){
+                regionList.add(regionName);
+            }*/
+            //runOnUiThread(new Runnable() {
+            Thread tRegiones = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    getRegionesForSpinner();
+                }
+            });
+            tRegiones.start();
         }
+
         //end populate region comunas
 
+        /**
         mRegionSpinner = (Spinner) findViewById(R.id.regionList);
         mRegionSpinner.setOnItemSelectedListener(regionListener);
         mComunaSpinner = (Spinner) findViewById(R.id.comunaList);
@@ -325,27 +337,138 @@ public class RegisterActivity extends AppCompatActivity
         regionAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mRegionSpinner.setAdapter(regionAdapter);
 
-        if (user !=null && user.getComuna() != null ) {
-          //  int spinnerPosition = dataAdapter.getPosition((String)genderMap.get(user.getGender()));
-          //  mGenderSpinner.setSelection(spinnerPosition);
+        ArrayAdapter<String> comunasAdapter = new ArrayAdapter<String>(RegisterActivity.this,
+                android.R.layout.simple_spinner_item, comunas);
+        comunasAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mComunaSpinner.setAdapter(comunasAdapter);
+
+        if (user !=null && user.getComuna() != null &&  user.getComuna().getComunaName() != null &&
+                user.getComuna().getRegion() != null && user.getComuna().getRegion().getRegionName()!=null) {
+            int regSpinnerPosition = regionAdapter.getPosition(user.getComuna().getRegion().getRegionName());
+            mRegionSpinner.setSelection(regSpinnerPosition);
+
+            int comSpinnerPosition = comunasAdapter.getPosition(user.getComuna().getComunaName());
+            mComunaSpinner.setSelection(comSpinnerPosition);
+
         }
         else{
             int spinnerPosition = regionAdapter.getPosition("Seleccione");
             mRegionSpinner.setSelection(spinnerPosition);
         }
+         **/
+    }
+
+    private void getRegionesForSpinner() {
+
+        List<String> regionList = PetSOSUtility.getPetSOSUtility().getAllRegiones();
+
+        mRegionSpinner = (Spinner) findViewById(R.id.regionList);
+        mRegionSpinner.setOnItemSelectedListener(regionListener);
+        mComunaSpinner = (Spinner) findViewById(R.id.comunaList);
+        mComunaSpinner.setOnItemSelectedListener(comunaListener);
+
+        regionAdapter = new ArrayAdapter<String>(RegisterActivity.this,
+                android.R.layout.simple_spinner_item, regionList);
+        regionAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        comunasAdapter = new ArrayAdapter<String>(RegisterActivity.this,
+                android.R.layout.simple_spinner_item, comunas);
+        comunasAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        //StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        //StrictMode.setThreadPolicy(policy);
+        //Thread tcomunas = new Thread(new Runnable() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mRegionSpinner.setAdapter(regionAdapter);
+
+                mComunaSpinner.setAdapter(comunasAdapter);
+
+                if (user !=null && user.getComuna() != null &&  user.getComuna().getComunaName() != null &&
+                        user.getComuna().getRegion() != null && user.getComuna().getRegion().getRegionName()!=null) {
+                    String regName = user.getComuna().getRegion().getRegionName();
+                    int regSpinnerPosition = regionAdapter.getPosition(regName);
+                    mRegionSpinner.setSelection(regSpinnerPosition);
+
+
+                    comunas = PetSOSUtility.getPetSOSUtility().getAllComunasByRegionName(regName);
+
+                    int comSpinnerPosition = comunasAdapter.getPosition(user.getComuna().getComunaName());
+                    mComunaSpinner.setSelection(comSpinnerPosition);
+
+                }
+                else{
+                    int spinnerPosition = regionAdapter.getPosition("Seleccione");
+                    mRegionSpinner.setSelection(spinnerPosition);
+                }
+            }
+        });
+
+        //tcomunas.start();
+
+
+
     }
 
     private AdapterView.OnItemSelectedListener regionListener = new AdapterView.OnItemSelectedListener() {
         @Override
         public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-            String selectedCountry = (String) adapterView.getItemAtPosition(i);
-            List<String> comunaList = new ArrayList<String>();
-            comunaList = regionMap.get(selectedCountry);
+            final String selectedRegion = (String) adapterView.getItemAtPosition(i);
+            if(!selectedRegion.equals("Seleccione")){
 
-            ArrayAdapter<String> comunasAdapter = new ArrayAdapter<String>(RegisterActivity.this,
-                   android.R.layout.simple_spinner_item, comunaList);
-            comunasAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                regionUser = new Region();
+                regionUser.setRegionName(selectedRegion);
+                comunaUser = new Comuna();
+                comunaUser.setRegion(regionUser);
+                user.setComuna(comunaUser);
+
+                StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+                StrictMode.setThreadPolicy(policy);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                    /*ArrayAdapter<String> comunasAdapter = new ArrayAdapter<String>(RegisterActivity.this,
+                            android.R.layout.simple_spinner_item, comunas);
+                    comunasAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+                    mComunaSpinner.setAdapter(comunasAdapter);*/
+
+                        int regSpinnerPosition = regionAdapter.getPosition(selectedRegion);
+                        mRegionSpinner.setSelection(regSpinnerPosition);
+
+                        comunas = PetSOSUtility.getPetSOSUtility().getAllComunasByRegionName(selectedRegion);
+
+                        comunasAdapter = new ArrayAdapter<String>(RegisterActivity.this,
+                                android.R.layout.simple_spinner_item, comunas);
+                        comunasAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        //mRegionSpinner.setAdapter(regionAdapter);
+
+                        mComunaSpinner.setAdapter(comunasAdapter);
+
+                        if(comunas.size() >0 && user != null && user.getComuna()!= null && user.getComuna().getComunaName() != null ){
+                            int comSpinnerPosition = comunasAdapter.getPosition(user.getComuna().getComunaName());
+                            mComunaSpinner.setSelection(comSpinnerPosition);
+                        }
+
+                        else{
+                            int spinnerPosition = comunasAdapter.getPosition("Seleccione");
+                            mComunaSpinner.setSelection(spinnerPosition);
+                        }
+                    }
+                });
+
+            }
+
+
+          /*  comunas = regionMap.get(selectedRegion);
+
+
             mComunaSpinner.setAdapter(comunasAdapter);
+            if (user !=null && user.getComuna() != null &&  user.getComuna().getComunaName() != null){
+                int comSpinnerPosition = comunasAdapter.getPosition(user.getComuna().getComunaName());
+                mComunaSpinner.setSelection(comSpinnerPosition);
+            }*/
         }
 
         @Override
@@ -368,20 +491,21 @@ public class RegisterActivity extends AppCompatActivity
 
     private void addItemsOnGenderSpinner() {
         mGenderSpinner = (Spinner)findViewById(R.id.genderList);
-        List<String> genders = PetSOSUtility.getPetSOSUtility().getGendersUser();
+        if( genders.size() == 0 )
+            genders = PetSOSUtility.getPetSOSUtility().getGendersUser();
 
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
+        ArrayAdapter<String> genderAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, genders);
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mGenderSpinner.setAdapter(dataAdapter);
+        genderAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mGenderSpinner.setAdapter(genderAdapter);
 
-        HashMap<String, String> genderMap = PetSOSUtility.getPetSOSUtility().getGendersUserHashMap(genders);
+        genderMap = PetSOSUtility.getPetSOSUtility().getGendersUserHashMap(genders);
 
         //setting the gender coming from facebook
         boolean existsCurrentUserGender = user != null && user.getGender() != null && !user.getGender().equals(null);
 
         if (existsCurrentUserGender) {
-            int spinnerPosition = dataAdapter.getPosition((String)genderMap.get(user.getGender()));
+            int spinnerPosition = genderAdapter.getPosition((String)genderMap.get(user.getGender().getGenderName()));
             mGenderSpinner.setSelection(spinnerPosition);
         }
         else{
@@ -509,4 +633,24 @@ public class RegisterActivity extends AppCompatActivity
         });
     }
 
+    private void setHiddenMenuItems() {
+        menuItLProfile.setVisible(false);
+        menuItListPets.setVisible(false);
+        menuItSearchPet.setVisible(false);
+        menuItScanQrItem.setVisible(false);
+    }
+
+    private void setVisibleMenuItems() {
+        menuItLProfile.setVisible(true);
+        menuItListPets.setVisible(true);
+        menuItSearchPet.setVisible(true);
+        menuItScanQrItem.setVisible(true);
+    }
+
+    private void initializeListeners() {
+        addListenerOnButtonUpdateUserData();
+        addListenerOnButtonAddPet();
+        addListenerOnSearchPetsLink();
+        addListenerOnButtonSaveUserData();
+    }
 }

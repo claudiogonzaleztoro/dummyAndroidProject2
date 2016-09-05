@@ -40,11 +40,13 @@ import javax.net.ssl.SSLSocketFactory;
 import cl.petsos.petsos.BreedResponse;
 import cl.petsos.petsos.ColorResponse;
 import cl.petsos.petsos.Comuna;
+import cl.petsos.petsos.ComunaResponse;
 import cl.petsos.petsos.ContextureResponse;
 import cl.petsos.petsos.PetGenderResponse;
 import cl.petsos.petsos.PetTypeResponse;
 import cl.petsos.petsos.PrefUtils;
 import cl.petsos.petsos.Region;
+import cl.petsos.petsos.RegionResponse;
 import cl.petsos.petsos.RelationshipResponse;
 import cl.petsos.petsos.SizeResponse;
 import cl.petsos.petsos.StatusPetResponse;
@@ -67,6 +69,9 @@ public class PetSOSUtility {
     private String CONTEXTURE_URL = SERVER_URL + "/contextures/list";
     private String STATUS_URL = SERVER_URL + "/states/list";
     private String CREATE_USER_URL = "http://10.0.2.2:8080/petsos/user/createuser"; //"/persons/create";
+    private String GENDER_USER_URL = "http://10.0.2.2:8080/petsos/genderuser/gellallgenderuser";
+    private String REGION_URL = "http://10.0.2.2:8080/petsos/region/getallregiones";
+    private String COMUNA_URL = "http://10.0.2.2:8080/petsos/comuna/getallcomunasbyregionname";
 
     public static final String SELECTION = "Seleccione"; //TODO get this dynamically at the beggining
 
@@ -78,6 +83,9 @@ public class PetSOSUtility {
     SizeResponse[] sizesResponse;
     ContextureResponse[] buildsResponse;
     StatusPetResponse[] statusResponse;
+    RegionResponse[] regionesResponse;
+    ComunaResponse[] comunasResponse;
+    HashMap gendersMap = new HashMap();
 
     private int responseCode;
 
@@ -89,7 +97,7 @@ public class PetSOSUtility {
         this.responseCode = responseCode;
     }
 
-    public  static PetSOSUtility getPetSOSUtility() {
+    public  static synchronized PetSOSUtility getPetSOSUtility() {
         if (petUtility==null) {
             petUtility=new PetSOSUtility();
         }
@@ -161,7 +169,7 @@ public class PetSOSUtility {
     }
 
     //TODO: populate the data from DB
-    public HashMap<Integer,Region> getRegiones(){
+    /*public HashMap<Integer,Region> getRegiones(){
         HashMap<Integer, Region> regs = new HashMap<Integer, Region>();
 
         Region reg = new Region();
@@ -177,7 +185,7 @@ public class PetSOSUtility {
         regs.put(reg.getRegionId(),reg);
 
         return regs;
-    }
+    }*/
 
     public int getIdComunaByComunaName(String comunaName){
         int idComuna = 0;
@@ -196,7 +204,7 @@ public class PetSOSUtility {
         return idComuna;
     }
 
-    public int getIdRegionByRegioName(String regName){
+    /*public int getIdRegionByRegioName(String regName){
         int idReg = 0;
 
         HashMap<Integer,Region> regs = getRegiones();
@@ -212,13 +220,14 @@ public class PetSOSUtility {
             }
         }
         return idReg;
-    }
+    }*/
 
     // Init User gender
     //returns female or male as facebook do to return the gender user
     public String getGenderUserMapper(String gender, String genderMapped) {
         List<String> gendersUser = getGendersUser();
-        HashMap gendersMap = getGendersUserHashMap(gendersUser);
+        if(gendersMap.size() == 0)
+            gendersMap = getGendersUserHashMap(gendersUser);
         if(gendersMap !=null){
             Iterator it = gendersMap.entrySet().iterator();
             while(it.hasNext()){
@@ -245,14 +254,40 @@ public class PetSOSUtility {
 
     @NonNull
     public HashMap<String, String> getGendersUserHashMap(List<String> genders) {
-        HashMap<String,String> genderMap = new HashMap<String,String>();
-        genderMap.put("Selection", genders.get(0));
-        genderMap.put("female", genders.get(1));
-        genderMap.put("male", genders.get(2));
-        return genderMap;
+        //HashMap<String,String> genderMap = new HashMap<String,String>();
+        gendersMap.put("Selection", genders.get(0));
+        gendersMap.put("female", genders.get(1));
+        gendersMap.put("male", genders.get(2));
+        return gendersMap;
     }
 
     // End User gender
+
+    public List<String> getAllRegiones(){
+        List<String> regiones = new ArrayList<String>();
+        regionesResponse = fetchAllRegiones();
+        regiones.add(SELECTION);
+        if(regionesResponse !=null && regionesResponse.length >0 ) {
+            for (int i = 1; i <= regionesResponse.length; i++) {
+                regiones.add(regionesResponse[i - 1].getRegionName());
+            }
+        }
+        return regiones;
+    }
+
+    public List<String> getAllComunasByRegionName(String regionName){
+        List<String> comunas = new ArrayList<String>();
+        comunasResponse = fetchAllComunasByRegionName(regionName);
+        comunas.add(SELECTION);
+        if(comunasResponse !=null && comunasResponse.length >0 ) {
+            for (int i = 1; i <= comunasResponse.length; i++) {
+                comunas.add(comunasResponse[i - 1].getComunaName());
+            }
+        }
+        return comunas;
+
+    }
+
 
     //init Pet gender
     @NonNull
@@ -300,6 +335,110 @@ public class PetSOSUtility {
 
         return genderMap;
     }
+
+
+    public ComunaResponse[] fetchAllComunasByRegionName(String regionName){
+        try {
+            String regNameEnc = URLEncoder.encode(regionName, "utf-8");
+            URL url = new URL(COMUNA_URL+"/"+regNameEnc);
+            URLConnection urlConnection = url.openConnection();
+            HttpURLConnection connection = null;
+            //
+            SSLContext sslcontext = SSLContext.getInstance("TLSv1");
+
+            sslcontext.init(null,
+                    null,
+                    null);
+            SSLSocketFactory NoSSLv3Factory = new NoSSLv3SocketFactory(sslcontext.getSocketFactory());
+            HttpsURLConnection.setDefaultSSLSocketFactory(NoSSLv3Factory);
+
+            if (urlConnection instanceof HttpURLConnection) {
+                connection = (HttpURLConnection) urlConnection;
+                System.out.println("Using HttpURLConnection for fetchAllRegiones.");
+            } else if(urlConnection instanceof HttpsURLConnection){
+                connection = (HttpsURLConnection) url.openConnection();
+                connection.connect();
+                System.out.println("*** Using HttpsURLConnection for fetchAllRegiones.****");
+            }
+
+/*
+            if (urlConnection instanceof HttpURLConnection) {
+                connection = (HttpURLConnection) urlConnection;
+            } */else {
+                System.out.println("Please enter an HTTP URL.");
+                return null;
+            }
+            String urlString = "";
+            BufferedReader in = new BufferedReader(
+                    new InputStreamReader(connection.getInputStream()));
+
+            String current;
+            while ((current = in.readLine()) != null) {
+                urlString += current;
+            }
+
+
+            ComunaResponse[] comunasArray = (ComunaResponse[]) Utils.fromJson(urlString,ComunaResponse[].class);
+            return comunasArray;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+
+    }
+
+    public RegionResponse[] fetchAllRegiones(){
+        try {
+
+            URL url = new URL(REGION_URL);
+            URLConnection urlConnection = url.openConnection();
+            HttpURLConnection connection = null;
+            //
+            SSLContext sslcontext = SSLContext.getInstance("TLSv1");
+
+            sslcontext.init(null,
+                    null,
+                    null);
+            SSLSocketFactory NoSSLv3Factory = new NoSSLv3SocketFactory(sslcontext.getSocketFactory());
+            HttpsURLConnection.setDefaultSSLSocketFactory(NoSSLv3Factory);
+
+            if (urlConnection instanceof HttpURLConnection) {
+                connection = (HttpURLConnection) urlConnection;
+                System.out.println("Using HttpURLConnection for fetchAllRegiones.");
+            } else if(urlConnection instanceof HttpsURLConnection){
+                connection = (HttpsURLConnection) url.openConnection();
+                connection.connect();
+                System.out.println("*** Using HttpsURLConnection for fetchAllRegiones.****");
+            }
+
+/*
+            if (urlConnection instanceof HttpURLConnection) {
+                connection = (HttpURLConnection) urlConnection;
+            } */else {
+                System.out.println("Please enter an HTTP URL.");
+                return null;
+            }
+            String urlString = "";
+            BufferedReader in = new BufferedReader(
+                    new InputStreamReader(connection.getInputStream()));
+
+            String current;
+            while ((current = in.readLine()) != null) {
+                urlString += current;
+            }
+
+
+            RegionResponse[] regionesArray = (RegionResponse[]) Utils.fromJson(urlString,RegionResponse[].class);
+            return regionesArray;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+
+    }
+
     public PetGenderResponse[] fetchPetGender() {
 
         try {
@@ -1035,7 +1174,7 @@ public class PetSOSUtility {
             conn.setRequestProperty( "Content-Type", "application/json; charset=UTF-8");
             conn.connect();
 
-            JSONObject jsonParam = new JSONObject();
+            //JSONObject jsonParam = new JSONObject();
 
             ObjectMapper mapper = new ObjectMapper();
             String jsonInString = mapper.writeValueAsString(user);
