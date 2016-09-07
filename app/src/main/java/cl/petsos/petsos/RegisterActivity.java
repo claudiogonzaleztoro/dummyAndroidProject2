@@ -294,27 +294,9 @@ public class RegisterActivity extends AppCompatActivity
             comunas.add("Seleccione");
             regionMap.put("Seleccione", comunas);
 
-        }/*    comunas = new ArrayList<String>();
-            comunas.add("Seleccione");
-            comunas.add("Arica");
-            comunas.add("General Lagos");
-
-            regionMap.put("Arica y Parinacota",comunas);
-
-            comunas = new ArrayList<String>();
-            comunas.add("Seleccione");
-            comunas.add("Providencia");
-            comunas.add("Santiago");
-            comunas.add("Las Condes");
-            regionMap.put("Santiago",comunas);
-
-        }*/
+        }
 
         if(regionList.size() == 0){
-            /*for(String regionName: regionMap.keySet()){
-                regionList.add(regionName);
-            }*/
-            //runOnUiThread(new Runnable() {
             Thread tRegiones = new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -324,38 +306,6 @@ public class RegisterActivity extends AppCompatActivity
             tRegiones.start();
         }
 
-        //end populate region comunas
-
-        /**
-        mRegionSpinner = (Spinner) findViewById(R.id.regionList);
-        mRegionSpinner.setOnItemSelectedListener(regionListener);
-        mComunaSpinner = (Spinner) findViewById(R.id.comunaList);
-        mComunaSpinner.setOnItemSelectedListener(comunaListener);
-
-        ArrayAdapter<String> regionAdapter = new ArrayAdapter<String>(RegisterActivity.this,
-                android.R.layout.simple_spinner_item, regionList);
-        regionAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mRegionSpinner.setAdapter(regionAdapter);
-
-        ArrayAdapter<String> comunasAdapter = new ArrayAdapter<String>(RegisterActivity.this,
-                android.R.layout.simple_spinner_item, comunas);
-        comunasAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mComunaSpinner.setAdapter(comunasAdapter);
-
-        if (user !=null && user.getComuna() != null &&  user.getComuna().getComunaName() != null &&
-                user.getComuna().getRegion() != null && user.getComuna().getRegion().getRegionName()!=null) {
-            int regSpinnerPosition = regionAdapter.getPosition(user.getComuna().getRegion().getRegionName());
-            mRegionSpinner.setSelection(regSpinnerPosition);
-
-            int comSpinnerPosition = comunasAdapter.getPosition(user.getComuna().getComunaName());
-            mComunaSpinner.setSelection(comSpinnerPosition);
-
-        }
-        else{
-            int spinnerPosition = regionAdapter.getPosition("Seleccione");
-            mRegionSpinner.setSelection(spinnerPosition);
-        }
-         **/
     }
 
     private void getRegionesForSpinner() {
@@ -375,9 +325,6 @@ public class RegisterActivity extends AppCompatActivity
                 android.R.layout.simple_spinner_item, comunas);
         comunasAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        //StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        //StrictMode.setThreadPolicy(policy);
-        //Thread tcomunas = new Thread(new Runnable() {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -388,11 +335,12 @@ public class RegisterActivity extends AppCompatActivity
                 if (user !=null && user.getComuna() != null &&  user.getComuna().getComunaName() != null &&
                         user.getComuna().getRegion() != null && user.getComuna().getRegion().getRegionName()!=null) {
                     String regName = user.getComuna().getRegion().getRegionName();
+                    Integer regId = user.getComuna().getRegion().getRegionId();
                     int regSpinnerPosition = regionAdapter.getPosition(regName);
                     mRegionSpinner.setSelection(regSpinnerPosition);
 
 
-                    comunas = PetSOSUtility.getPetSOSUtility().getAllComunasByRegionName(regName);
+                    comunas = PetSOSUtility.getPetSOSUtility().getAllComunasByRegionId(regId);
 
                     int comSpinnerPosition = comunasAdapter.getPosition(user.getComuna().getComunaName());
                     mComunaSpinner.setSelection(comSpinnerPosition);
@@ -405,10 +353,6 @@ public class RegisterActivity extends AppCompatActivity
             }
         });
 
-        //tcomunas.start();
-
-
-
     }
 
     private AdapterView.OnItemSelectedListener regionListener = new AdapterView.OnItemSelectedListener() {
@@ -419,6 +363,7 @@ public class RegisterActivity extends AppCompatActivity
 
                 regionUser = new Region();
                 regionUser.setRegionName(selectedRegion);
+                regionUser.setRegionId(PetSOSUtility.getPetSOSUtility().getIdRegionByRegioName(selectedRegion));
                 comunaUser = new Comuna();
                 comunaUser.setRegion(regionUser);
                 user.setComuna(comunaUser);
@@ -428,16 +373,11 @@ public class RegisterActivity extends AppCompatActivity
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                    /*ArrayAdapter<String> comunasAdapter = new ArrayAdapter<String>(RegisterActivity.this,
-                            android.R.layout.simple_spinner_item, comunas);
-                    comunasAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-                    mComunaSpinner.setAdapter(comunasAdapter);*/
 
                         int regSpinnerPosition = regionAdapter.getPosition(selectedRegion);
                         mRegionSpinner.setSelection(regSpinnerPosition);
 
-                        comunas = PetSOSUtility.getPetSOSUtility().getAllComunasByRegionName(selectedRegion);
+                        comunas = PetSOSUtility.getPetSOSUtility().getAllComunasByRegionId(regionUser.getRegionId());
 
                         comunasAdapter = new ArrayAdapter<String>(RegisterActivity.this,
                                 android.R.layout.simple_spinner_item, comunas);
@@ -460,15 +400,6 @@ public class RegisterActivity extends AppCompatActivity
 
             }
 
-
-          /*  comunas = regionMap.get(selectedRegion);
-
-
-            mComunaSpinner.setAdapter(comunasAdapter);
-            if (user !=null && user.getComuna() != null &&  user.getComuna().getComunaName() != null){
-                int comSpinnerPosition = comunasAdapter.getPosition(user.getComuna().getComunaName());
-                mComunaSpinner.setSelection(comSpinnerPosition);
-            }*/
         }
 
         @Override

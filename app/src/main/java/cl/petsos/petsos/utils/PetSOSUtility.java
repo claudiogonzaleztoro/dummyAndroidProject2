@@ -71,7 +71,7 @@ public class PetSOSUtility {
     private String CREATE_USER_URL = "http://10.0.2.2:8080/petsos/user/createuser"; //"/persons/create";
     private String GENDER_USER_URL = "http://10.0.2.2:8080/petsos/genderuser/gellallgenderuser";
     private String REGION_URL = "http://10.0.2.2:8080/petsos/region/getallregiones";
-    private String COMUNA_URL = "http://10.0.2.2:8080/petsos/comuna/getallcomunasbyregionname";
+    private String COMUNA_URL = "http://10.0.2.2:8080/petsos/comuna/getallcomunasbyregionid";
 
     public static final String SELECTION = "Seleccione"; //TODO get this dynamically at the beggining
 
@@ -86,6 +86,9 @@ public class PetSOSUtility {
     RegionResponse[] regionesResponse;
     ComunaResponse[] comunasResponse;
     HashMap gendersMap = new HashMap();
+    HashMap<Integer, Region> regs = new HashMap<Integer, Region>();
+    List<String> regiones = new ArrayList<String>();
+    List<String> comunas = new ArrayList<String>();
 
     private int responseCode;
 
@@ -169,23 +172,15 @@ public class PetSOSUtility {
     }
 
     //TODO: populate the data from DB
-    /*public HashMap<Integer,Region> getRegiones(){
-        HashMap<Integer, Region> regs = new HashMap<Integer, Region>();
-
+    public HashMap<Integer,Region> addToRegionesMap(RegionResponse oneRegionResponse){
         Region reg = new Region();
-        reg.setRegionId(15);
-        reg.setRegionName("Arica y Parinacota");
-
-        regs.put(reg.getRegionId(),reg);
-
-        reg = new Region();
-        reg.setRegionId(13);
-        reg.setRegionName("Santiago");
+        reg.setRegionId(oneRegionResponse.getRegionId());
+        reg.setRegionName(oneRegionResponse.getRegionName());
 
         regs.put(reg.getRegionId(),reg);
 
         return regs;
-    }*/
+    }
 
     public int getIdComunaByComunaName(String comunaName){
         int idComuna = 0;
@@ -204,10 +199,8 @@ public class PetSOSUtility {
         return idComuna;
     }
 
-    /*public int getIdRegionByRegioName(String regName){
+    public int getIdRegionByRegioName(String regName){
         int idReg = 0;
-
-        HashMap<Integer,Region> regs = getRegiones();
 
         Iterator it = regs.entrySet().iterator();
 
@@ -220,7 +213,7 @@ public class PetSOSUtility {
             }
         }
         return idReg;
-    }*/
+    }
 
     // Init User gender
     //returns female or male as facebook do to return the gender user
@@ -264,20 +257,21 @@ public class PetSOSUtility {
     // End User gender
 
     public List<String> getAllRegiones(){
-        List<String> regiones = new ArrayList<String>();
+        regiones = new ArrayList<String>();
         regionesResponse = fetchAllRegiones();
         regiones.add(SELECTION);
         if(regionesResponse !=null && regionesResponse.length >0 ) {
             for (int i = 1; i <= regionesResponse.length; i++) {
                 regiones.add(regionesResponse[i - 1].getRegionName());
+                addToRegionesMap(regionesResponse[i - 1]);
             }
         }
         return regiones;
     }
 
-    public List<String> getAllComunasByRegionName(String regionName){
-        List<String> comunas = new ArrayList<String>();
-        comunasResponse = fetchAllComunasByRegionName(regionName);
+    public List<String> getAllComunasByRegionId(Integer regionId){
+        comunas = new ArrayList<String>();
+        comunasResponse = fetchAllComunasByRegionId(regionId);
         comunas.add(SELECTION);
         if(comunasResponse !=null && comunasResponse.length >0 ) {
             for (int i = 1; i <= comunasResponse.length; i++) {
@@ -337,10 +331,10 @@ public class PetSOSUtility {
     }
 
 
-    public ComunaResponse[] fetchAllComunasByRegionName(String regionName){
+    public ComunaResponse[] fetchAllComunasByRegionId(Integer regionId){
         try {
-            String regNameEnc = URLEncoder.encode(regionName, "utf-8");
-            URL url = new URL(COMUNA_URL+"/"+regNameEnc);
+            //String regNameEnc = URLEncoder.encode(regionId, "utf-8");
+            URL url = new URL(COMUNA_URL+"/"+regionId);
             URLConnection urlConnection = url.openConnection();
             HttpURLConnection connection = null;
             //
