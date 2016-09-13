@@ -1,6 +1,7 @@
 package cl.petsos.petsos.utils;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
@@ -27,6 +28,8 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -89,6 +92,7 @@ public class PetSOSUtility {
     HashMap<Integer, Region> regs = new HashMap<Integer, Region>();
     List<String> regiones = new ArrayList<String>();
     List<String> comunas = new ArrayList<String>();
+    List<String> genders = new ArrayList<String>();
 
     private int responseCode;
 
@@ -117,59 +121,6 @@ public class PetSOSUtility {
         return false;
     }
 
-    //TODO: populate the data from DB
-
-    public HashMap<Integer, Comuna> getComunas(){
-
-        HashMap<Integer, Comuna> mComunas = new HashMap<Integer, Comuna>();
-
-        Region region15 = new Region();
-        region15.setRegionId(15);
-        region15.setRegionName("Arica y Parinacota");
-
-        Comuna mComuna = new Comuna();
-        mComuna.setComunaName("Arica");
-        mComuna.setComunaId(1);
-        mComuna.setRegion(region15);
-
-
-        mComunas.put(mComuna.getComunaId(),mComuna);
-
-        mComuna = new Comuna();
-        mComuna.setComunaName("General Lagos");
-        mComuna.setComunaId(2);
-        mComuna.setRegion(region15);
-
-        mComunas.put(mComuna.getComunaId(),mComuna);
-
-
-        Region regionMetro = new Region();
-        region15.setRegionId(13);
-        region15.setRegionName("Metropolitana");
-
-        mComuna = new Comuna();
-        mComuna.setComunaName("Providencia");
-        mComuna.setComunaId(1);
-        mComuna.setRegion(regionMetro);
-
-        mComunas.put(mComuna.getComunaId(),mComuna);
-
-        mComuna = new Comuna();
-        mComuna.setComunaName("Las Condes");
-        mComuna.setComunaId(2);
-        mComuna.setRegion(regionMetro);
-
-        mComunas.put(mComuna.getComunaId(),mComuna);
-
-        mComuna = new Comuna();
-        mComuna.setComunaName("Ñuñoa");
-        mComuna.setComunaId(3);
-        mComuna.setRegion(regionMetro);
-
-        mComunas.put(mComuna.getComunaId(),mComuna);
-
-        return mComunas;
-    }
 
     //TODO: populate the data from DB
     public HashMap<Integer,Region> addToRegionesMap(RegionResponse oneRegionResponse){
@@ -180,23 +131,6 @@ public class PetSOSUtility {
         regs.put(reg.getRegionId(),reg);
 
         return regs;
-    }
-
-    public int getIdComunaByComunaName(String comunaName){
-        int idComuna = 0;
-        HashMap<Integer,Comuna> regs = getComunas();
-
-        Iterator it = regs.entrySet().iterator();
-
-        while(it.hasNext()){
-            Map.Entry e = (Map.Entry)it.next();
-            Comuna mcomuna = (Comuna) e.getValue();
-            if(comunaName.equals(mcomuna.getComunaName() )){
-                idComuna = ((Integer)e.getKey()).intValue();
-                break;
-            }
-        }
-        return idComuna;
     }
 
     public int getIdRegionByRegioName(String regName){
@@ -238,7 +172,7 @@ public class PetSOSUtility {
 
     @NonNull
     public List<String> getGendersUser() {
-        List<String> genders = new ArrayList<String>();
+        genders = new ArrayList<String>();
         genders.add("Seleccione");
         genders.add("Femenino");
         genders.add("Masculino");
@@ -335,42 +269,8 @@ public class PetSOSUtility {
         try {
             //String regNameEnc = URLEncoder.encode(regionId, "utf-8");
             URL url = new URL(COMUNA_URL+"/"+regionId);
-            URLConnection urlConnection = url.openConnection();
-            HttpURLConnection connection = null;
-            //
-            SSLContext sslcontext = SSLContext.getInstance("TLSv1");
-
-            sslcontext.init(null,
-                    null,
-                    null);
-            SSLSocketFactory NoSSLv3Factory = new NoSSLv3SocketFactory(sslcontext.getSocketFactory());
-            HttpsURLConnection.setDefaultSSLSocketFactory(NoSSLv3Factory);
-
-            if (urlConnection instanceof HttpURLConnection) {
-                connection = (HttpURLConnection) urlConnection;
-                System.out.println("Using HttpURLConnection for fetchAllRegiones.");
-            } else if(urlConnection instanceof HttpsURLConnection){
-                connection = (HttpsURLConnection) url.openConnection();
-                connection.connect();
-                System.out.println("*** Using HttpsURLConnection for fetchAllRegiones.****");
-            }
-
-/*
-            if (urlConnection instanceof HttpURLConnection) {
-                connection = (HttpURLConnection) urlConnection;
-            } */else {
-                System.out.println("Please enter an HTTP URL.");
-                return null;
-            }
-            String urlString = "";
-            BufferedReader in = new BufferedReader(
-                    new InputStreamReader(connection.getInputStream()));
-
-            String current;
-            while ((current = in.readLine()) != null) {
-                urlString += current;
-            }
-
+            String urlString = getUrlString(url);
+            if (urlString == null) return null;
 
             ComunaResponse[] comunasArray = (ComunaResponse[]) Utils.fromJson(urlString,ComunaResponse[].class);
             return comunasArray;
@@ -382,46 +282,48 @@ public class PetSOSUtility {
 
     }
 
+    @Nullable
+    private String getUrlString(URL url) throws IOException, NoSuchAlgorithmException, KeyManagementException {
+        URLConnection urlConnection = url.openConnection();
+        HttpURLConnection connection = null;
+        //
+        SSLContext sslcontext = SSLContext.getInstance("TLSv1");
+
+        sslcontext.init(null,
+                null,
+                null);
+        SSLSocketFactory NoSSLv3Factory = new NoSSLv3SocketFactory(sslcontext.getSocketFactory());
+        HttpsURLConnection.setDefaultSSLSocketFactory(NoSSLv3Factory);
+
+        if (urlConnection instanceof HttpURLConnection) {
+            connection = (HttpURLConnection) urlConnection;
+            System.out.println("Using HttpURLConnection");
+        } else if(urlConnection instanceof HttpsURLConnection){
+            connection = (HttpsURLConnection) url.openConnection();
+            connection.connect();
+            System.out.println("*** Using HttpsURLConnection****");
+        }
+        else {
+            System.out.println("Please enter an HTTP URL.");
+            return null;
+        }
+        String urlString = "";
+        BufferedReader in = new BufferedReader(
+                new InputStreamReader(connection.getInputStream()));
+
+        String current;
+        while ((current = in.readLine()) != null) {
+            urlString += current;
+        }
+        return urlString;
+    }
+
     public RegionResponse[] fetchAllRegiones(){
         try {
 
             URL url = new URL(REGION_URL);
-            URLConnection urlConnection = url.openConnection();
-            HttpURLConnection connection = null;
-            //
-            SSLContext sslcontext = SSLContext.getInstance("TLSv1");
-
-            sslcontext.init(null,
-                    null,
-                    null);
-            SSLSocketFactory NoSSLv3Factory = new NoSSLv3SocketFactory(sslcontext.getSocketFactory());
-            HttpsURLConnection.setDefaultSSLSocketFactory(NoSSLv3Factory);
-
-            if (urlConnection instanceof HttpURLConnection) {
-                connection = (HttpURLConnection) urlConnection;
-                System.out.println("Using HttpURLConnection for fetchAllRegiones.");
-            } else if(urlConnection instanceof HttpsURLConnection){
-                connection = (HttpsURLConnection) url.openConnection();
-                connection.connect();
-                System.out.println("*** Using HttpsURLConnection for fetchAllRegiones.****");
-            }
-
-/*
-            if (urlConnection instanceof HttpURLConnection) {
-                connection = (HttpURLConnection) urlConnection;
-            } */else {
-                System.out.println("Please enter an HTTP URL.");
-                return null;
-            }
-            String urlString = "";
-            BufferedReader in = new BufferedReader(
-                    new InputStreamReader(connection.getInputStream()));
-
-            String current;
-            while ((current = in.readLine()) != null) {
-                urlString += current;
-            }
-
+            String urlString = getUrlString(url);
+            if (urlString == null) return null;
 
             RegionResponse[] regionesArray = (RegionResponse[]) Utils.fromJson(urlString,RegionResponse[].class);
             return regionesArray;

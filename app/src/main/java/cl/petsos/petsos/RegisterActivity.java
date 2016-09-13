@@ -310,7 +310,7 @@ public class RegisterActivity extends AppCompatActivity
 
     private void getRegionesForSpinner() {
 
-        List<String> regionList = PetSOSUtility.getPetSOSUtility().getAllRegiones();
+        regionList = PetSOSUtility.getPetSOSUtility().getAllRegiones();
 
         mRegionSpinner = (Spinner) findViewById(R.id.regionList);
         mRegionSpinner.setOnItemSelectedListener(regionListener);
