@@ -421,27 +421,45 @@ public class RegisterActivity extends AppCompatActivity
     };
 
     private void addItemsOnGenderSpinner() {
-        mGenderSpinner = (Spinner)findViewById(R.id.genderList);
-        if( genders.size() == 0 )
-            genders = PetSOSUtility.getPetSOSUtility().getGendersUser();
+        mGenderSpinner = (Spinner) findViewById(R.id.genderList);
+        if (genders.size() == 0) {
+            Thread tGenderUser = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    getGenderUserForSpinner();
+                }
+            });
+            tGenderUser.start();
+        }
+    }
 
-        ArrayAdapter<String> genderAdapter = new ArrayAdapter<String>(this,
+    private void getGenderUserForSpinner(){
+
+        genders = PetSOSUtility.getPetSOSUtility().getGendersUser();
+
+        final ArrayAdapter<String> genderAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, genders);
         genderAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mGenderSpinner.setAdapter(genderAdapter);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
 
-        genderMap = PetSOSUtility.getPetSOSUtility().getGendersUserHashMap(genders);
+                mGenderSpinner.setAdapter(genderAdapter);
+                genderMap = PetSOSUtility.getPetSOSUtility().getGendersUserHashMap(genders);
 
-        //setting the gender coming from facebook
-        boolean existsCurrentUserGender = user != null && user.getGender() != null && !user.getGender().equals(null);
+                //setting the gender coming from facebook
+                boolean existsCurrentUserGender = user != null && user.getGender() != null && !user.getGender().equals(null);
 
-        if (existsCurrentUserGender) {
-            int spinnerPosition = genderAdapter.getPosition((String)genderMap.get(user.getGender().getGenderName()));
-            mGenderSpinner.setSelection(spinnerPosition);
-        }
-        else{
-            mGenderSpinner.setSelection(0);
-        }
+                if (existsCurrentUserGender) {
+                    int spinnerPosition = genderAdapter.getPosition((String)genderMap.get(user.getGender().getGenderName()));
+                    mGenderSpinner.setSelection(spinnerPosition);
+                }
+                else{
+                    mGenderSpinner.setSelection(0);
+                }
+            }});
+
+
 
     }
 

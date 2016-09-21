@@ -12,6 +12,9 @@ public class GenderUser {
     private Integer genderuserId;
     private String genderName;
 
+    public GenderUser() {
+    }
+
     public Integer getGenderuserId() {
         return genderuserId;
     }

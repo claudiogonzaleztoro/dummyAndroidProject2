@@ -45,6 +45,7 @@ import cl.petsos.petsos.ColorResponse;
 import cl.petsos.petsos.Comuna;
 import cl.petsos.petsos.ComunaResponse;
 import cl.petsos.petsos.ContextureResponse;
+import cl.petsos.petsos.GenderUser;
 import cl.petsos.petsos.PetGenderResponse;
 import cl.petsos.petsos.PetTypeResponse;
 import cl.petsos.petsos.PrefUtils;
@@ -72,7 +73,7 @@ public class PetSOSUtility {
     private String CONTEXTURE_URL = SERVER_URL + "/contextures/list";
     private String STATUS_URL = SERVER_URL + "/states/list";
     private String CREATE_USER_URL = "http://10.0.2.2:8080/petsos/user/createuser"; //"/persons/create";
-    private String GENDER_USER_URL = "http://10.0.2.2:8080/petsos/genderuser/gellallgenderuser";
+    private String GENDER_USER_URL = "http://10.0.2.2:8080/petsos/genderuser/getallgendersuser";
     private String REGION_URL = "http://10.0.2.2:8080/petsos/region/getallregiones";
     private String COMUNA_URL = "http://10.0.2.2:8080/petsos/comuna/getallcomunasbyregionid";
 
@@ -93,6 +94,7 @@ public class PetSOSUtility {
     List<String> regiones = new ArrayList<String>();
     List<String> comunas = new ArrayList<String>();
     List<String> genders = new ArrayList<String>();
+    GenderUser[] gendersUserResponse;
 
     private int responseCode;
 
@@ -173,18 +175,28 @@ public class PetSOSUtility {
     @NonNull
     public List<String> getGendersUser() {
         genders = new ArrayList<String>();
-        genders.add("Seleccione");
+        gendersUserResponse = fetchAllGenderUser();
+        genders.add(SELECTION);
+        if(gendersUserResponse !=null && gendersUserResponse.length >0 ) {
+            for (int i = 1; i <= gendersUserResponse.length; i++) {
+                genders.add(gendersUserResponse[i - 1].getGenderName());
+                //gendersMap(gendersUserResponse[i - 1].getGenderuserId(),gendersUserResponse[i-1].getGenderName());
+            }
+        }
+        return genders;
+
+       /* genders.add("Seleccione");
         genders.add("Femenino");
         genders.add("Masculino");
-        return genders;
+        return genders;*/
     }
 
     @NonNull
     public HashMap<String, String> getGendersUserHashMap(List<String> genders) {
         //HashMap<String,String> genderMap = new HashMap<String,String>();
         gendersMap.put("Selection", genders.get(0));
-        gendersMap.put("female", genders.get(1));
-        gendersMap.put("male", genders.get(2));
+        gendersMap.put("male", genders.get(1));
+        gendersMap.put("female", genders.get(2));
         return gendersMap;
     }
 
@@ -264,10 +276,24 @@ public class PetSOSUtility {
         return genderMap;
     }
 
+    public GenderUser[] fetchAllGenderUser(){
+        try {
+            //String regNameEnc = URLEncoder.encode(regionId, "utf-8");
+            URL url = new URL(GENDER_USER_URL);
+            String urlString = getUrlString(url);
+            if (urlString == null) return null;
+
+            GenderUser[] genderUserArray = (GenderUser[]) Utils.fromJson(urlString,GenderUser[].class);
+            return genderUserArray;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     public ComunaResponse[] fetchAllComunasByRegionId(Integer regionId){
         try {
-            //String regNameEnc = URLEncoder.encode(regionId, "utf-8");
             URL url = new URL(COMUNA_URL+"/"+regionId);
             String urlString = getUrlString(url);
             if (urlString == null) return null;
